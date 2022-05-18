@@ -1,13 +1,69 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Importing Fonts*/
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&family=Roboto&display=swap');
+
+/* Basic General Style */
+:root {
+  --selection-color: #222;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: all 150ms ease-in-out;
+  -webkit-transition: all 150ms ease-in-out;
+  -moz-transition: all 150ms ease-in-out;
+  -ms-transition: all 150ms ease-in-out;
+  -o-transition: all 150ms ease-in-out;
 }
+
+::placeholder {
+  color: lightgray;
+  font-size: 15px;
+}
+
+::selection {
+  background-color: var(--selection-color, #222);
+  color: #fff;
+}
+
+/** To prevent :horizontal scrolling */
+html,
+body {
+  max-width: 100vw;
+  /*overflow-x: hidden;
+  */
+  scroll-behavior: smooth;
+  /* To make page width responseve without laging */
+  transition: initial;
+  -webkit-transition: initial;
+  -moz-transition: initial;
+  -ms-transition: initial;
+  -o-transition: initial;
+}
+
+html {
+  font-size: 62.5%; /*10px*/
+}
+
+body {
+  font: 400 1.6rem/1.5 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+  min-height: 100vh;
+}
+
+img,
+embed,
+video,
+object {
+  width: 100%;
+  display: inline-block;
+}
+
+button {
+  cursor: pointer;
+}
+
