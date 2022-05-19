@@ -1,38 +1,130 @@
-.App {
+.app {
+  --c-primary: #5ece7b;
+  --c-txt: #1d1f22;
+
+  --currency-symbol-size: 2rem;
+}
+/* NavBar start */
+.navbar {
+  padding: 2rem 9rem 0;
+  max-width: 100%;
+}
+
+.navbar .navbar__nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: max-content;
+}
+
+.navbar .nav__links {
+  display: flex;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.nav__links .nav-links__item {
+  padding: 0 15px 20px;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.nav__links .nav-links__item.active {
+  color: var(--c-primary, #5ece7b);
+  border-bottom: 2px solid var(--c-primary, #5ece7b);
+  font-weight: 600;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.navbar .logo {
+  width: 41px;
+  height: 41px;
+  /* To be totally centered visually */
+  transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+}
+
+.navbar .nav__utils {
   display: flex;
-  flex-direction: column;
+  gap: 1rem;
+  flex-flow: row wrap;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+}
+/* NavBar end */
+
+/* Logo Start */
+.navbar__nav .nav-item:last-child {
+  margin-left: 3rem;
 }
 
-.App-link {
-  color: #61dafb;
+.navbar__nav .nav-item:nth-child(2) {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* Logo End */
+
+/* Currency Start */
+.btn--currency {
+  font-size: var(--currency-symbol-size, 18px);
+  color: var(--c-txt, #222);
+  font-weight: 300;
+
+  display: flex;
+  gap: 9px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.btn--currency svg {
+  /* To make it aligned at the bottom like the figma design */
+  transform: translateY(100%);
+  -webkit-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -o-transform: translateY(100%);
+}
+/* Currency End */
+
+/* Responsiveness */
+/* Nav */
+@media (max-width: 610px) {
+  .navbar__nav {
+    flex-direction: column;
+    gap: 4rem;
   }
-  to {
-    transform: rotate(360deg);
+  .navbar__nav .nav-item:last-child {
+    margin-left: 0rem;
   }
 }
+@media (max-width: 760px) {
+  .navbar .logo {
+    transform: translateX(0);
+    -webkit-transform: translateX(0);
+    -moz-transform: translateX(0);
+    -ms-transform: translateX(0);
+    -o-transform: translateX(0);
+  }
+}
+@media (max-width: 268px) {
+  .navbar__nav {
+    padding: 2rem 0 0;
+  }
+
+  .nav__links {
+    flex-direction: column;
+    gap: 2.7rem;
+    width: 100%;
+  }
+  .nav__links .nav-links__item {
+    width: 100%;
+  }
+
+  .nav__links .nav-links__item a {
+    width: 95%;
+    display: inline-block;
+  }
+}
+
