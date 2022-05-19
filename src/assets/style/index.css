@@ -73,3 +73,15 @@ a {
   color: var(--c-txt, #222);
 }
 
+ul {
+  list-style: none;
+}
+
+.btn-reset {
+  background-color: transparent;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+

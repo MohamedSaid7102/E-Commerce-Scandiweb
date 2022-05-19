@@ -1,33 +1,35 @@
 .app {
   --c-primary: #5ece7b;
   --c-txt: #1d1f22;
+
+  --currency-symbol-size: 2rem;
 }
 /* NavBar start */
 .navbar {
+  padding: 2rem 9rem 0;
+  max-width: 100%;
+}
+
+.navbar .navbar__nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem 9rem 0;
-  max-width: 100%;
+  width: 100%;
   height: max-content;
 }
 
-.navbar ul {
-  list-style: none;
+.navbar .nav__links {
   display: flex;
   text-align: center;
 }
 
-.navbar a {
+.nav__links .nav-links__item {
+  padding: 0 15px 20px;
   text-decoration: none;
   text-transform: uppercase;
 }
 
-.navbar .nav__item {
-  padding: 0 15px 20px;
-}
-
-.navbar .nav__item.active {
+.nav__links .nav-links__item.active {
   color: var(--c-primary, #5ece7b);
   border-bottom: 2px solid var(--c-primary, #5ece7b);
   font-weight: 600;
@@ -44,11 +46,6 @@
   -o-transform: translateX(-100%);
 }
 
-.navbar .cart-btn {
-  background-color: transparent;
-  border: none;
-}
-
 .navbar .nav__utils {
   display: flex;
   gap: 1rem;
@@ -58,13 +55,48 @@
 }
 /* NavBar end */
 
+/* Logo Start */
+.navbar__nav .nav-item:last-child {
+  margin-left: 3rem;
+}
+
+.navbar__nav .nav-item:nth-child(2) {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* Logo End */
+
+/* Currency Start */
+.btn--currency {
+  font-size: var(--currency-symbol-size, 18px);
+  color: var(--c-txt, #222);
+  font-weight: 300;
+
+  display: flex;
+  gap: 9px;
+}
+
+.btn--currency svg {
+  /* To make it aligned at the bottom like the figma design */
+  transform: translateY(100%);
+  -webkit-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -o-transform: translateY(100%);
+}
+/* Currency End */
+
 /* Responsiveness */
 /* Nav */
 @media (max-width: 610px) {
-  .navbar {
+  .navbar__nav {
     flex-direction: column;
-    padding: 2rem 0 0;
     gap: 4rem;
+  }
+  .navbar__nav .nav-item:last-child {
+    margin-left: 0rem;
   }
 }
 @media (max-width: 760px) {
@@ -77,16 +109,20 @@
   }
 }
 @media (max-width: 268px) {
-  .navbar ul {
+  .navbar__nav {
+    padding: 2rem 0 0;
+  }
+
+  .nav__links {
     flex-direction: column;
     gap: 2.7rem;
     width: 100%;
   }
-  .navbar ul li {
+  .nav__links .nav-links__item {
     width: 100%;
   }
 
-  .navbar ul li a {
+  .nav__links .nav-links__item a {
     width: 95%;
     display: inline-block;
   }

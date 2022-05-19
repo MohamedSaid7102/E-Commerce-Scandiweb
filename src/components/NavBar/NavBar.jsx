@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 
 export class NavBar extends Component {
   render() {
-    return <nav className="navbar">{this.props.children}</nav>;
+    return (
+      <nav className="navbar">
+        <ul className="navbar__nav">{this.props.children}</ul>
+      </nav>
+    );
   }
 }
 

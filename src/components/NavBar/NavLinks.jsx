@@ -6,12 +6,12 @@ export class NavLinks extends Component {
   render() {
     const links = this.props.links;
     return (
-      <ul>
+      <ul className='nav__links'>
         {links.map((link) => (
           <li key={link.id}>
             <NavLink
               className={({ isActive }) =>
-                isActive ? 'nav__item active' : 'nav__item'
+                isActive ? 'nav-links__item active' : 'nav-links__item'
               }
               to={link.path}
             >
