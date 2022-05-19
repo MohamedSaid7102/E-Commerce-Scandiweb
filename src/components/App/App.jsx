@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 
-import '../../assets/style/app.css';
+import 'assets/style/app.css';
 import { NavBar } from '../NavBar/NavBar';
 
-import logo from '../../assets/images/logo.png';
-import NavLinks from '../NavBar/NavLinks';
-import Currency from '../common/Currency';
-import { Cart } from '../common/Cart';
-import Logo from '../common/Logo';
+import logo from 'assets/images/logo.png';
+import NavLinks from 'components/NavBar/NavLinks';
+import Currency from 'components/common/Currency';
+import { Cart } from 'components/common/Cart';
+import Logo from 'components/common/Logo';
 import NavItem from 'components/NavBar/NavItem';
+import DropdownMenu from 'components/common/DropdownMenu';
+import CurrencyDropdown from 'components/CurrencyDropdown';
 
 class App extends Component {
   state = {
@@ -39,7 +41,7 @@ class App extends Component {
       },
       {
         label: 'AUD',
-        symbol: 'A$',
+        symbol: '$',
       },
       {
         label: 'JPY',
@@ -67,7 +69,6 @@ class App extends Component {
           />
           {/* Currency */}
           <NavItem
-            Currencies={Currencies}
             open={this.state.currencyTabOpen}
             content={
               <Currency
@@ -79,7 +80,10 @@ class App extends Component {
                 onOpenCurrencyTab={this.handleOpenCurrencyTab}
               />
             }
-          ></NavItem>
+          >
+            {/* <DropdownMenu items={Currencies}></DropdownMenu> */}
+            <CurrencyDropdown currencies={Currencies} />
+          </NavItem>
           {/* Cart */}
           <NavItem content={<Cart />}></NavItem>
         </NavBar>
