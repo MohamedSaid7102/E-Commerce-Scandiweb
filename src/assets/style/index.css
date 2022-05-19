@@ -3,7 +3,8 @@
 
 /* Basic General Style */
 :root {
-  --selection-color: #222;
+  --c-selection: #222;
+  --c-txt: #1d1f22;
 }
 
 *,
@@ -25,7 +26,7 @@
 }
 
 ::selection {
-  background-color: var(--selection-color, #222);
+  background-color: var(--c-selection, #222);
   color: #fff;
 }
 
@@ -53,6 +54,7 @@ body {
     'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
     'Helvetica Neue', sans-serif;
   min-height: 100vh;
+  color: var(--c-txt, #222);
 }
 
 img,
@@ -65,5 +67,9 @@ object {
 
 button {
   cursor: pointer;
+}
+
+a {
+  color: var(--c-txt, #222);
 }
 
