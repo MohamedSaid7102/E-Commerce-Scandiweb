@@ -7,7 +7,7 @@ import { Currency } from './common/Currency';
 export class NavBar extends Component {
   render() {
     return (
-      <nav className="nav-bar">
+      <nav className="navbar">
         {/* Categories */}
         <ul>
           <li>

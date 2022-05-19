@@ -1,0 +1,13 @@
+@media (max-width: 610px) {
+  .navbar {
+    flex-direction: column;
+    padding: 2rem 0 0;
+    gap: 4rem;
+  }
+}
+@media (max-width: 268px) {
+  .navbar ul {
+    flex-direction: column;
+    gap: 2.7rem;
+  }
+}
