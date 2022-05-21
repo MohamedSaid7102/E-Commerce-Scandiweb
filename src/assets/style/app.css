@@ -57,6 +57,7 @@
 
 .navbar__nav .nav-item {
   position: relative;
+  z-index: 2; /* To make it clickable when model is visible */
 }
 
 .navbar__nav .nav-item:last-child {
@@ -81,15 +82,6 @@
   gap: 9px;
 }
 
-.btn--currency svg {
-  /* To make it aligned at the bottom like the figma design */
-  transform: translateY(100%);
-  -webkit-transform: translateY(100%);
-  -moz-transform: translateY(100%);
-  -ms-transform: translateY(100%);
-  -o-transform: translateY(100%);
-}
-
 .currencies-list {
   position: absolute;
   transform: translateX(-36%) translateY(4%);
@@ -103,6 +95,20 @@
   -moz-transform: translateX(-36%) translateY(4%);
   -ms-transform: translateX(-36%) translateY(4%);
   -o-transform: translateX(-36%) translateY(4%);
+  transition: all 0;
+  -webkit-transition: all 0;
+  -moz-transition: all 0;
+  -ms-transition: all 0;
+  -o-transition: all 0;
+  /* To be above model */
+  z-index: 2;
+  background-color: #fff;
+}
+
+.currencies-list.hidden {
+  visibility: hidden;
+  user-select: none;
+  pointer-events: none;
 }
 
 .currencies-list__item:hover,
