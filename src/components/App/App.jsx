@@ -9,15 +9,35 @@ import Currency from 'components/common/Currency';
 import { Cart } from 'components/common/Cart';
 import Logo from 'components/common/Logo';
 import NavItem from 'components/NavBar/NavItem';
-import DropdownMenu from 'components/common/DropdownMenu';
 import CurrencyDropdown from 'components/CurrencyDropdown';
 
 class App extends Component {
   state = {
-    currencyTabOpen: true,
+    currencyTabOpen: false,
   };
 
-  handleOpenCurrencyTab = () => {
+  // addOverlay = () => {
+  //   const body = document.getElementsByTagName('body')[0];
+  //   const overlay = document.createElement('div');
+  //   overlay.classList.add('dropdown-overlay');
+  //   overlay.setAttribute('onClick', '() => onCurrencyTabChange(false)');
+
+  //   body.appendChild(overlay);
+  // };
+
+  // removeOverlay = () => {
+  //   if (document.getElementsByClassName('dropdown-overlay').length !== 0)
+  //     document.getElementsByClassName('dropdown-overlay').remove();
+  // };
+
+  onCurrencyTabChange = (state) => {
+    // if (this.state.currencyTabOpen) this.addOverlay();
+    // if (!this.state.currencyTabOpen) this.removeOverlay();
+    if (typeof state === 'boolean') {
+      this.setState({ currencyTabOpen: state });
+      return;
+    }
+
     this.setState((oldState) => ({
       currencyTabOpen: !oldState.currencyTabOpen,
     }));
@@ -77,12 +97,14 @@ class App extends Component {
                   label: 'USD',
                   symbol: '$',
                 }}
-                onOpenCurrencyTab={this.handleOpenCurrencyTab}
+                onCurrencyTabChange={this.onCurrencyTabChange}
               />
             }
           >
-            {/* <DropdownMenu items={Currencies}></DropdownMenu> */}
-            <CurrencyDropdown currencies={Currencies} />
+            <CurrencyDropdown
+              onCurrencyTabChange={this.onCurrencyTabChange}
+              currencies={Currencies}
+            />
           </NavItem>
           {/* Cart */}
           <NavItem content={<Cart />}></NavItem>

@@ -5,12 +5,11 @@ import { ReactComponent as DownArrow } from 'assets/svgs/down-arrow.svg';
 
 export class Currency extends Component {
   render() {
-    const open = this.props.open;
-    const selectedCurrency = this.props.selectedCurrency;
+    const { open, selectedCurrency } = this.props;
     return (
       <button
         className="btn-reset btn--currency"
-        onClick={this.props.onOpenCurrencyTab}
+        onClick={this.props.onCurrencyTabChange}
       >
         {selectedCurrency.symbol}
         {open ? <TopArrow /> : <DownArrow />}
