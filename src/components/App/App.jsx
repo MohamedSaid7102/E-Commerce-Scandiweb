@@ -17,35 +17,68 @@ import { ReactComponent as CartSVG } from 'assets/svgs/cart.svg';
 class App extends Component {
   state = {
     currenciesDropdownOpen: false,
+    cartDropdownOpen: false,
     modal: { visible: false, dark: false },
   };
 
   // Whenever this component is mounted, loop over all the links and add event listender so that clicking them result in closing current opend drop down.
   // This is because we made .nav-link in css 'z-index=2', which is greater thatn dropdown 'z-index=1' so clicking outside the drop down will be in modal (which results in closing modal) or in .nav-links (and that is what we are handling here)
   componentDidMount() {
-    document.querySelectorAll('.nav-item').forEach((item) => {
-      if (!item.classList.contains('hhoho'))
-        item.addEventListener('click', (e) => {
-          this.handleModalClick();
-        });
+    // To make nav icons and links clickable and
+    document.querySelectorAll('.nav-links__item').forEach((item) => {
+      item.addEventListener('click', (e) => {
+        this.handleModalClick();
+      });
     });
   }
 
-  // When invoked, pass darkModal to specify it.
-  handleCurrenciesDropdownClick = (state, darkModal = false) => {
-    // If we pass false or true, so we know what we are doing, normaly we will be passing false to close the dropdown and hide the modal
-    if (typeof state === 'boolean') {
-      this.setState(
-        { currenciesDropdownOpen: state },
-        this.showmodal(state, darkModal)
+  // Function to loop over all drop downs and close them except provided one.
+  closeAllDropdownsExcept = (dropdownStateItem = '') => {
+    if (dropdownStateItem.length > 0) {
+      const state = { ...this.state };
+
+      for (const item in state) {
+        if (
+          item.toLocaleLowerCase().includes('dropdownopen') &&
+          item.toLocaleLowerCase() !== dropdownStateItem.toLocaleLowerCase()
+        )
+          this.setState({ [item]: false });
+      }
+    } else {
+      console.log(
+        `Please provide state item to use it in the condition. Error in closeAllDropdownsExcept function.`
       );
-      return;
     }
-    // Else: toggle the state of currenciesDropdownOpen and set the modal as that state, if currenciesDropdownOpen true so the dropdown is shown hence the modal should be shown to capture clicking outside the modal and vice versa.
-    this.setState((oldState) => ({
-      currenciesDropdownOpen: !oldState.currenciesDropdownOpen,
-      modal: { visible: !oldState.currenciesDropdownOpen, dark: darkModal },
-    }));
+  };
+  // When invoked, pass state item which correspond to opening and closing the dropdown, and it's state darkModal to specify it.
+  handleDropdownClick = (dropdownStateItem, state, darkModal = false) => {
+    // If user pass valid dropdownStateItem
+    if (this.state.hasOwnProperty(dropdownStateItem)) {
+      // If we pass false or true, so we know what we are doing, normaly we will be passing false to close the dropdown and hide the modal
+      if (typeof state === 'boolean') {
+        this.setState(
+          { [dropdownStateItem]: state },
+          this.showmodal(state, darkModal)
+        );
+        return;
+      }
+      // Else: toggle the state of currenciesDropdownOpen and set the modal as that state, if currenciesDropdownOpen true so the dropdown is shown hence the modal should be shown to capture clicking outside the modal and vice versa.
+      this.setState(
+        (oldState) => ({
+          [dropdownStateItem]: !oldState[dropdownStateItem],
+          modal: { visible: !oldState[dropdownStateItem], dark: darkModal },
+        }),
+        () =>
+          this.closeAllDropdownsExcept(
+            dropdownStateItem
+          ) /* Close all dropdowns except dropdownStateItem */
+      );
+    } else {
+      // If he doesn't pass valid dropdownStateItem
+      console.log(
+        `${dropdownStateItem} is not an item on the state..!, Check your dropdown handler.`
+      );
+    }
   };
 
   handleCurrencySelect = (currency) => {
@@ -118,12 +151,12 @@ class App extends Component {
             }
           />
           {/* Currency */}
-          <li className="nav-item hhoho">
+          <li className="nav-item currenciesDropdownListitem">
             <button
               className="btn-reset btn--currency"
               id="btn--currency"
               onClick={() => {
-                this.handleCurrenciesDropdownClick(null, true);
+                this.handleDropdownClick('currenciesDropdownOpen', null, false);
               }}
             >
               {
@@ -168,8 +201,13 @@ class App extends Component {
             />
           </NavItem> */}
           {/* Cart */}
-          <li className="nav-item">
-            <button className="btn-reset">
+          <li className="nav-item cartDropdownListitem">
+            <button
+              className="btn-reset"
+              onClick={() =>
+                this.handleDropdownClick('cartDropdownOpen', null, true)
+              }
+            >
               <CartSVG />
             </button>
           </li>

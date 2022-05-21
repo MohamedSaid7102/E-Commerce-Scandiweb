@@ -6,7 +6,11 @@ export class Logo extends Component {
   render() {
     return (
       <Link to="/">
-        <img src={this.props.logo} alt={this.props.logoAlt} className="logo" />
+        <img
+          src={this.props.logo}
+          alt={this.props.logoAlt}
+          className="logo nav-links__item"
+        />
       </Link>
     );
   }
