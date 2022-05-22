@@ -73,24 +73,52 @@
 /* NavBar end */
 
 /* Currency Start */
-.btn--currency {
+.btn--dropdown {
+  --badge-width: 20px;
+  --badge-height: 20px;
+
   font-size: var(--currency-symbol-size, 18px);
   color: var(--c-txt, #222);
   font-weight: 300;
 
   display: flex;
   gap: 9px;
+
+  position: relative;
+}
+
+.items-count-badge {
+  position: absolute;
+  color: #fff;
+  background-color: #000;
+  width: var(--badge-width);
+  height: var(--badge-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.4rem;
+  border-radius: 100%;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  -ms-border-radius: 100%;
+  -o-border-radius: 100%;
+  transform: translate(65%, -44%);
+  -webkit-transform: translate(65%, -44%);
+  -moz-transform: translate(65%, -44%);
+  -ms-transform: translate(65%, -44%);
+  -o-transform: translate(65%, -44%);
 }
 
 .currencies-list {
   position: absolute;
-  transform: translateX(-36%) translateY(4%);
   width: max-content;
   box-shadow: 0px 4px 35px rgba(92, 99, 106, 0.19);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   padding: 1rem 0;
+  transform: translateX(-36%) translateY(4%);
   -webkit-transform: translateX(-36%) translateY(4%);
   -moz-transform: translateX(-36%) translateY(4%);
   -ms-transform: translateX(-36%) translateY(4%);
@@ -100,7 +128,7 @@
   -moz-transition: all 0;
   -ms-transition: all 0;
   -o-transition: all 0;
-  /* To be above model */
+  /*Tobeabovemodel*/
   z-index: 2;
   background-color: #fff;
 }
@@ -126,15 +154,6 @@
 
 /* Responsiveness */
 /* Nav */
-@media (max-width: 610px) {
-  .navbar__nav {
-    flex-direction: column;
-    gap: 4rem;
-  }
-  .navbar__nav .nav-item:last-child {
-    margin-left: 0rem;
-  }
-}
 @media (max-width: 760px) {
   .navbar .logo {
     transform: translateX(0);
@@ -144,6 +163,30 @@
     -o-transform: translateX(0);
   }
 }
+
+@media (max-width: 642px) {
+  .navbar {
+    padding: 2rem 1rem;
+  }
+}
+
+@media (max-width: 610px) {
+  .navbar__nav {
+    gap: 4rem;
+    justify-content: center;
+    align-items: center;
+  }
+  .navbar__nav .nav-item:last-child {
+    margin-left: 0rem;
+  }
+}
+
+@media (max-width: 464px) {
+  .navbar__nav {
+    flex-direction: column;
+  }
+}
+
 @media (max-width: 268px) {
   .navbar__nav {
     padding: 2rem 0 0;

@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 
 export class NavLinks extends Component {
   render() {
-    const links = this.props.links;
+    const { links } = this.props;
+
     return (
-      <ul className='nav__links'>
+      <ul className="nav__links">
         {links.map((link) => (
           <li key={link.id}>
             <NavLink
