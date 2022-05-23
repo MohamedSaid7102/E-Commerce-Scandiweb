@@ -4,16 +4,8 @@ import { request } from 'graphql-request';
 import 'assets/style/app.css';
 import { NavBar } from '../NavBar/NavBar';
 
-import logo from 'assets/images/logo.png';
-import NavLinks from 'components/NavBar/NavLinks';
-import DropdownIcon from 'components/common/dropdown/DropdownIcon';
-import Logo from 'components/common/Logo';
-import NavItem from 'components/NavBar/NavItem';
-
-import { ReactComponent as CartSVG } from 'assets/svgs/cart.svg';
 import { Modal } from '../common/Modal';
-import { NavLink } from 'react-router-dom';
-import { GET_CATEGORIES, GET_CURRENCIES_AND_CATEGORIES } from 'GraphQL/Queries';
+import { GET_CURRENCIES_AND_CATEGORIES } from 'GraphQL/Queries';
 
 class App extends Component {
   state = {
@@ -136,108 +128,20 @@ class App extends Component {
 
     return (
       <div className="app">
-        <NavBar>
-          {/* Categories */}
-          <NavItem
-            onClick={this.closeAllDropdowns}
-            content={<NavLinks links={categories} />}
-          />
-          {/* Logo */}
-          <NavItem
-            onClick={this.closeAllDropdowns}
-            content={
-              <Logo
-                logo={logo}
-                logoAlt="Logo, Green bag with a white arrow inside"
-              />
-            }
-          />
-          {/* Currency */}
-          <NavItem
-            showChildren={currenciesDropdownList}
-            content={
-              <DropdownIcon
-                opened={currenciesDropdownList}
-                label={currencies.selectedCurrency.symbol}
-                onClick={() =>
-                  this.handleDropdownClick(
-                    'currenciesDropdownList',
-                    null,
-                    false
-                  )
-                }
-              />
-            }
-          >
-            {/* Drop down */}
-            {/* TODO: In the future try to extract this into 'DropdownMenu' component */}
-            <ul className={'currencies-list'}>
-              {currencies.currenciesList.map((currency, index) => (
-                <li key={index}>
-                  <button
-                    className="btn-reset currency-btn currencies-list__item"
-                    onClick={() => this.handleCurrencySelect(currency)}
-                  >
-                    {currency.symbol} {currency.label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </NavItem>
-          {/* Cart */}
-          <NavItem
-            showChildren={cartDropdownList}
-            content={
-              <DropdownIcon
-                showTopDownArrows={false}
-                itemsCount={cartItemsCount}
-                label={<CartSVG />}
-                onClick={() =>
-                  this.handleDropdownClick('cartDropdownList', null, true)
-                }
-              />
-            }
-          >
-            {/* Drop down */}
-            <div className="cart-items-list">
-              {/* Header */}
-              <p>
-                <b>My Bag</b>
-                {cartItemsCount === 0
-                  ? ''
-                  : cartItemsCount === 1 || cartItemsCount % 1000 === 0
-                  ? `, ${cartItemsCount} item`
-                  : `, ${cartItemsCount} items`}
-              </p>
-              {/* Cart items */}
-              <ul className="cart__dropdown-items">
-                <li></li>
-              </ul>
-              {/* Total */}
-              <p className="total">
-                <span className="total__label">Total</span>
-                <span>{currencies.selectedCurrency.symbol}200</span>
-              </p>
-              {/* Buttons */}
-              <div className="cart__btns">
-                <NavLink
-                  to="view-bag"
-                  className="btn-reset btn--outline"
-                  onClick={() => this.closeAllDropdowns()}
-                >
-                  View Bag
-                </NavLink>
-                <NavLink
-                  to="checkout"
-                  className="btn-reset btn--filled"
-                  onClick={() => this.closeAllDropdowns()}
-                >
-                  Check out
-                </NavLink>
-              </div>
-            </div>
-          </NavItem>
-        </NavBar>
+        <NavBar
+          categories={categories}
+          // cart
+          cartDropdownListState={cartDropdownList}
+          cartItemsCount={cartItemsCount}
+          // Currency
+          currencies={currencies}
+          currenciesDropdownListState={currenciesDropdownList}
+          selectedCurrency={currencies.selectedCurrency}
+          handleCurrencySelect={this.handleCurrencySelect}
+          // dropdown
+          closeAllDropdowns={this.closeAllDropdowns}
+          handleDropdownClick={this.handleDropdownClick}
+        />
         <main style={{ margin: 'var(--navbar-height) 0 0 0' }}>
           <Modal
             visible={modal.visible}

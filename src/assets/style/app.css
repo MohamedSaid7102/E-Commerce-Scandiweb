@@ -8,6 +8,8 @@
 }
 /* NavBar start */
 .navbar {
+  --gutter: 3rem;
+
   padding: 2rem 9rem 0;
   max-width: 100%;
   height: var(--navbar-height);
@@ -49,19 +51,11 @@
   width: 41px;
   height: 41px;
   /* To be totally centered visually */
-  transform: translateX(-100%);
+  /* transform: translateX(-100%);
   -webkit-transform: translateX(-100%);
   -moz-transform: translateX(-100%);
   -ms-transform: translateX(-100%);
-  -o-transform: translateX(-100%);
-}
-
-.navbar .nav__utils {
-  display: flex;
-  gap: 1rem;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: center;
+  -o-transform: translateX(-100%); */
 }
 
 .navbar__nav .nav-item {
@@ -69,18 +63,26 @@
   z-index: 2; /* To make it clickable when model is visible */
 }
 
-.navbar__nav .nav-item:last-child {
-  margin-left: 3rem;
+.navbar__nav .nav-item + .nav-item {
+  margin-left: var(--gutter, 3rem);
 }
 
-.navbar__nav .nav-item:nth-child(2) {
+.navbar__nav .nav-item.logo-wrapper {
   flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  margin-left: 0;
 }
 /* NavBar end */
 
+/* Dropdowns start */
+.dropdown {
+  --right-space: 7rem;
+
+  position: absolute;
+}
 /* Currency Start */
 .btn--dropdown {
   --badge-width: 20px;
@@ -122,32 +124,20 @@
 }
 
 .currencies-list {
-  position: absolute;
-  width: max-content;
+  top: calc(var(--navbar-height) * 0.85);
+  right: var(--right-space, 7rem);
+  width: 100%;
+  max-width: max-content;
   box-shadow: 0px 4px 35px rgba(92, 99, 106, 0.19);
   overflow: hidden;
+  /* position children */
   display: flex;
   flex-direction: column;
   padding: 1rem 0;
-  transform: translateX(-36%) translateY(4%);
-  -webkit-transform: translateX(-36%) translateY(4%);
-  -moz-transform: translateX(-36%) translateY(4%);
-  -ms-transform: translateX(-36%) translateY(4%);
-  -o-transform: translateX(-36%) translateY(4%);
-  transition: all 0;
-  -webkit-transition: all 0;
-  -moz-transition: all 0;
-  -ms-transition: all 0;
-  -o-transition: all 0;
+  transition-duration: 0;
   /*Tobeabovemodel*/
   z-index: 2;
   background-color: #fff;
-}
-
-.currencies-list.hidden {
-  visibility: hidden;
-  user-select: none;
-  pointer-events: none;
 }
 
 .currencies-list__item:hover,
@@ -155,6 +145,7 @@
 .currencies-list__item:focus-visible {
   background-color: var(--currency-dropdown-item-hover-clr, #eee);
 }
+
 .currency-btn {
   padding: 1rem 3.5rem 1rem 2.5rem;
 
@@ -167,40 +158,42 @@
 }
 /* Currency End */
 
-/* Cart Start */
-.cart-items-list {
+/* Cart dropdown Start */
+.cart-list {
   --gutter: 4rem;
+  /* Position */
+  position: absolute;
+  right: -33px;
+  top: var(--navbar-height);
+  right: var(--right-space, 7rem);
 
   background-color: #fff;
   padding: 4rem 2.3rem;
   font-size: 2rem;
-  position: absolute;
-  right: -33px;
-  top: 45px;
   border-top: 0.2px solid #d3d3d34a;
   width: max-content;
 }
 
-.cart-items-list .cart__dropdown-items {
+.cart-list .cart__dropdown-items {
   overflow: auto;
   max-height: 400px;
   max-width: 450px;
-  margin-top: var(--gutter);
+  margin-top: var(--gutter, 4rem);
   /* box-shadow: inset 0px 11px 8px -10px rgba(204, 204, 204, 0.52),
     inset 0px -11px 8px -10px rgba(204, 204, 204, 0.52); */
 }
 
-.cart-items-list .total {
+.cart-list .total {
   font-weight: bold;
   display: flex;
   justify-content: space-between;
 }
 
-.cart-items-list .cart__btns,
+.cart-list .cart__btns,
 .total {
-  margin-top: var(--gutter);
+  margin-top: var(--gutter, 4rem);
 }
-.cart-items-list .cart__btns {
+.cart-list .cart__btns {
   display: flex;
   justify-content: space-between;
   gap: 1.5rem;
@@ -208,7 +201,7 @@
   white-space: nowrap;
 }
 
-.cart-items-list a {
+.cart-list a {
   text-transform: uppercase;
   font-size: 2rem;
   text-decoration: none;
@@ -238,7 +231,8 @@
   color: #fff;
 }
 
-/* Cart End */
+/* Cart dropdown End */
+/* Dropdowns end */
 
 /* Responsiveness */
 /* Nav */
