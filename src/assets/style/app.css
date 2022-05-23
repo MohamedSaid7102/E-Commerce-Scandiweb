@@ -4,11 +4,20 @@
 
   --currency-symbol-size: 2rem;
   --currency-dropdown-item-hover-clr: #eeeeee;
+  --navbar-height: 80px;
 }
 /* NavBar start */
 .navbar {
   padding: 2rem 9rem 0;
   max-width: 100%;
+  height: var(--navbar-height);
+
+  position: fixed;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  background: #fff;
+  z-index: 2;
 }
 
 .navbar .navbar__nav {
@@ -80,6 +89,8 @@
   font-size: var(--currency-symbol-size, 18px);
   color: var(--c-txt, #222);
   font-weight: 300;
+  border: none;
+  background-color: transparent;
 
   display: flex;
   gap: 9px;
@@ -149,8 +160,85 @@
 
   font-size: 18px;
   font-weight: 300;
+
+  border: none;
+  background-color: transparent;
+  width: 100%;
 }
 /* Currency End */
+
+/* Cart Start */
+.cart-items-list {
+  --gutter: 4rem;
+
+  background-color: #fff;
+  padding: 4rem 2.3rem;
+  font-size: 2rem;
+  position: absolute;
+  right: -33px;
+  top: 45px;
+  border-top: 0.2px solid #d3d3d34a;
+  width: max-content;
+}
+
+.cart-items-list .cart__dropdown-items {
+  overflow: auto;
+  max-height: 400px;
+  max-width: 450px;
+  margin-top: var(--gutter);
+  /* box-shadow: inset 0px 11px 8px -10px rgba(204, 204, 204, 0.52),
+    inset 0px -11px 8px -10px rgba(204, 204, 204, 0.52); */
+}
+
+.cart-items-list .total {
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cart-items-list .cart__btns,
+.total {
+  margin-top: var(--gutter);
+}
+.cart-items-list .cart__btns {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cart-items-list a {
+  text-transform: uppercase;
+  font-size: 2rem;
+  text-decoration: none;
+}
+
+.btn--outline,
+.btn--filled {
+  padding: 1.7rem 5rem;
+  border: none;
+}
+.btn--outline:active,
+.btn--filled:active {
+  transform: scale(0.95);
+  -webkit-transform: scale(0.95);
+  -moz-transform: scale(0.95);
+  -ms-transform: scale(0.95);
+  -o-transform: scale(0.95);
+}
+
+.btn--outline {
+  border: 2px solid #222;
+  background-color: transparent;
+}
+
+.btn--filled {
+  background-color: var(--c-primary);
+  color: #fff;
+}
+
+/* Cart End */
 
 /* Responsiveness */
 /* Nav */

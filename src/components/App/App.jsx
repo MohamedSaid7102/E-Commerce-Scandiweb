@@ -11,6 +11,7 @@ import NavItem from 'components/NavBar/NavItem';
 
 import { ReactComponent as CartSVG } from 'assets/svgs/cart.svg';
 import { Modal } from '../common/Modal';
+import { NavLink } from 'react-router-dom';
 
 class App extends Component {
   state = {
@@ -23,6 +24,8 @@ class App extends Component {
     // Cart
     cartDropdownList: false,
     cartItems: [],
+    // cartItemsCount is the count for all items repetetion, if you have 2 prodcuts in the cart by 2 items from product 1 so totall number should be 3 not 2
+    cartItemsCount: 2,
     modal: { visible: false, dark: false },
   };
 
@@ -88,8 +91,8 @@ class App extends Component {
     }
   };
 
-  handleCurrencySelect = (currency) => {
-    console.log(currency);
+  handleCurrencySelect = (selectedCurrency) => {
+    this.setState({ selectedCurrency });
     this.closeAllDropdowns(); /* Close all dropdowns & remove the modal */
   };
 
@@ -134,17 +137,11 @@ class App extends Component {
       selectedCurrency,
       currenciesDropdownList,
       cartDropdownList,
-      cartItems,
+      cartItemsCount,
     } = this.state;
 
     return (
       <div className="app">
-        <Modal
-          visible={modal.visible}
-          dark={modal.dark}
-          onClick={this.closeAllDropdowns}
-        />
-
         <NavBar>
           {/* Categories */}
           <NavItem
@@ -199,7 +196,7 @@ class App extends Component {
             content={
               <DropdownIcon
                 showTopDownArrows={false}
-                itemsCount={cartItems.length}
+                itemsCount={cartItemsCount}
                 label={<CartSVG />}
                 onClick={() =>
                   this.handleDropdownClick('cartDropdownList', null, true)
@@ -208,9 +205,324 @@ class App extends Component {
             }
           >
             {/* Drop down */}
-            <h1 style={{ position: 'absolute' }}>Cart</h1>
+            <div className="cart-items-list">
+              {/* Header */}
+              <p>
+                <b>My Bag</b>
+                {cartItemsCount === 0
+                  ? ''
+                  : cartItemsCount === 1 || cartItemsCount % 1000 === 0
+                  ? `, ${cartItemsCount} item`
+                  : `, ${cartItemsCount} items`}
+              </p>
+              {/* Cart items */}
+              <ul className="cart__dropdown-items">
+                <li>
+                  
+                </li>
+              </ul>
+              {/* Total */}
+              <p className="total">
+                <span className="total__label">Total</span>
+                <span>{selectedCurrency.symbol}200</span>
+              </p>
+              {/* Buttons */}
+              <div className="cart__btns">
+                <NavLink
+                  to="view-bag"
+                  className="btn-reset btn--outline"
+                  onClick={() => this.closeAllDropdowns()}
+                >
+                  View Bag
+                </NavLink>
+                <NavLink
+                  to="checkout"
+                  className="btn-reset btn--filled"
+                  onClick={() => this.closeAllDropdowns()}
+                >
+                  Check out
+                </NavLink>
+              </div>
+            </div>
           </NavItem>
         </NavBar>
+        <main style={{ margin: 'var(--navbar-height) 0 0 0' }}>
+          <Modal
+            visible={modal.visible}
+            dark={modal.dark}
+            onClick={this.closeAllDropdowns}
+          />
+          <h1>hello world</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel maiores
+            itaque necessitatibus reprehenderit facilis, molestias qui pariatur
+            natus velit soluta!
+          </p>
+          <ul>
+            <li> List 1</li>
+            <li> List 2</li>
+            <li> List 3</li>
+            <li> List 4</li>
+            <li> List 5</li>
+            <li> List 6</li>
+            <li> List 7</li>
+            <li> List 8</li>
+            <li> List 9</li>
+            <li> List 10</li>
+          </ul>
+          <h1>hello world</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel maiores
+            itaque necessitatibus reprehenderit facilis, molestias qui pariatur
+            natus velit soluta!
+          </p>
+          <ul>
+            <li> List 1</li>
+            <li> List 2</li>
+            <li> List 3</li>
+            <li> List 4</li>
+            <li> List 5</li>
+            <li> List 6</li>
+            <li> List 7</li>
+            <li> List 8</li>
+            <li> List 9</li>
+            <li> List 10</li>
+          </ul>
+          <h1>hello world</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel maiores
+            itaque necessitatibus reprehenderit facilis, molestias qui pariatur
+            natus velit soluta!
+          </p>
+          <ul>
+            <li> List 1</li>
+            <li> List 2</li>
+            <li> List 3</li>
+            <li> List 4</li>
+            <li> List 5</li>
+            <li> List 6</li>
+            <li> List 7</li>
+            <li> List 8</li>
+            <li> List 9</li>
+            <li> List 10</li>
+          </ul>
+          <h1>hello world</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel maiores
+            itaque necessitatibus reprehenderit facilis, molestias qui pariatur
+            natus velit soluta!
+          </p>
+          <ul>
+            <li> List 1</li>
+            <li> List 2</li>
+            <li> List 3</li>
+            <li> List 4</li>
+            <li> List 5</li>
+            <li> List 6</li>
+            <li> List 7</li>
+            <li> List 8</li>
+            <li> List 9</li>
+            <li> List 10</li>
+          </ul>
+          <h1>hello world</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel maiores
+            itaque necessitatibus reprehenderit facilis, molestias qui pariatur
+            natus velit soluta!
+          </p>
+          <ul>
+            <li> List 1</li>
+            <li> List 2</li>
+            <li> List 3</li>
+            <li> List 4</li>
+            <li> List 5</li>
+            <li> List 6</li>
+            <li> List 7</li>
+            <li> List 8</li>
+            <li> List 9</li>
+            <li> List 10</li>
+          </ul>
+          <h1>hello world</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel maiores
+            itaque necessitatibus reprehenderit facilis, molestias qui pariatur
+            natus velit soluta!
+          </p>
+          <ul>
+            <li> List 1</li>
+            <li> List 2</li>
+            <li> List 3</li>
+            <li> List 4</li>
+            <li> List 5</li>
+            <li> List 6</li>
+            <li> List 7</li>
+            <li> List 8</li>
+            <li> List 9</li>
+            <li> List 10</li>
+          </ul>
+          <h1>hello world</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel maiores
+            itaque necessitatibus reprehenderit facilis, molestias qui pariatur
+            natus velit soluta!
+          </p>
+          <ul>
+            <li> List 1</li>
+            <li> List 2</li>
+            <li> List 3</li>
+            <li> List 4</li>
+            <li> List 5</li>
+            <li> List 6</li>
+            <li> List 7</li>
+            <li> List 8</li>
+            <li> List 9</li>
+            <li> List 10</li>
+          </ul>
+          <h1>hello world</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel maiores
+            itaque necessitatibus reprehenderit facilis, molestias qui pariatur
+            natus velit soluta!
+          </p>
+          <ul>
+            <li> List 1</li>
+            <li> List 2</li>
+            <li> List 3</li>
+            <li> List 4</li>
+            <li> List 5</li>
+            <li> List 6</li>
+            <li> List 7</li>
+            <li> List 8</li>
+            <li> List 9</li>
+            <li> List 10</li>
+          </ul>
+          <h1>hello world</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel maiores
+            itaque necessitatibus reprehenderit facilis, molestias qui pariatur
+            natus velit soluta!
+          </p>
+          <ul>
+            <li> List 1</li>
+            <li> List 2</li>
+            <li> List 3</li>
+            <li> List 4</li>
+            <li> List 5</li>
+            <li> List 6</li>
+            <li> List 7</li>
+            <li> List 8</li>
+            <li> List 9</li>
+            <li> List 10</li>
+          </ul>
+          <h1>hello world</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel maiores
+            itaque necessitatibus reprehenderit facilis, molestias qui pariatur
+            natus velit soluta!
+          </p>
+          <ul>
+            <li> List 1</li>
+            <li> List 2</li>
+            <li> List 3</li>
+            <li> List 4</li>
+            <li> List 5</li>
+            <li> List 6</li>
+            <li> List 7</li>
+            <li> List 8</li>
+            <li> List 9</li>
+            <li> List 10</li>
+          </ul>
+          <h1>hello world</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel maiores
+            itaque necessitatibus reprehenderit facilis, molestias qui pariatur
+            natus velit soluta!
+          </p>
+          <ul>
+            <li> List 1</li>
+            <li> List 2</li>
+            <li> List 3</li>
+            <li> List 4</li>
+            <li> List 5</li>
+            <li> List 6</li>
+            <li> List 7</li>
+            <li> List 8</li>
+            <li> List 9</li>
+            <li> List 10</li>
+          </ul>
+          <h1>hello world</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel maiores
+            itaque necessitatibus reprehenderit facilis, molestias qui pariatur
+            natus velit soluta!
+          </p>
+          <ul>
+            <li> List 1</li>
+            <li> List 2</li>
+            <li> List 3</li>
+            <li> List 4</li>
+            <li> List 5</li>
+            <li> List 6</li>
+            <li> List 7</li>
+            <li> List 8</li>
+            <li> List 9</li>
+            <li> List 10</li>
+          </ul>
+          <h1>hello world</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel maiores
+            itaque necessitatibus reprehenderit facilis, molestias qui pariatur
+            natus velit soluta!
+          </p>
+          <ul>
+            <li> List 1</li>
+            <li> List 2</li>
+            <li> List 3</li>
+            <li> List 4</li>
+            <li> List 5</li>
+            <li> List 6</li>
+            <li> List 7</li>
+            <li> List 8</li>
+            <li> List 9</li>
+            <li> List 10</li>
+          </ul>
+          <h1>hello world</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel maiores
+            itaque necessitatibus reprehenderit facilis, molestias qui pariatur
+            natus velit soluta!
+          </p>
+          <ul>
+            <li> List 1</li>
+            <li> List 2</li>
+            <li> List 3</li>
+            <li> List 4</li>
+            <li> List 5</li>
+            <li> List 6</li>
+            <li> List 7</li>
+            <li> List 8</li>
+            <li> List 9</li>
+            <li> List 10</li>
+          </ul>
+          <h1>hello world</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel maiores
+            itaque necessitatibus reprehenderit facilis, molestias qui pariatur
+            natus velit soluta!
+          </p>
+          <ul>
+            <li> List 1</li>
+            <li> List 2</li>
+            <li> List 3</li>
+            <li> List 4</li>
+            <li> List 5</li>
+            <li> List 6</li>
+            <li> List 7</li>
+            <li> List 8</li>
+            <li> List 9</li>
+            <li> List 10</li>
+          </ul>
+        </main>
       </div>
     );
   }
