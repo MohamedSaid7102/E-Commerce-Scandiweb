@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { request } from 'graphql-request';
 
 import 'assets/style/app.css';
 import { NavBar } from '../NavBar/NavBar';
@@ -12,14 +13,16 @@ import NavItem from 'components/NavBar/NavItem';
 import { ReactComponent as CartSVG } from 'assets/svgs/cart.svg';
 import { Modal } from '../common/Modal';
 import { NavLink } from 'react-router-dom';
+import { GET_CATEGORIES, GET_CURRENCIES_AND_CATEGORIES } from 'GraphQL/Queries';
 
 class App extends Component {
   state = {
+    categories: [],
     // Currency
     currenciesDropdownList: false,
-    selectedCurrency: {
-      label: 'USD',
-      symbol: '$',
+    currencies: {
+      currenciesList: [],
+      selectedCurrency: {},
     },
     // Cart
     cartDropdownList: false,
@@ -28,6 +31,20 @@ class App extends Component {
     cartItemsCount: 2,
     modal: { visible: false, dark: false },
   };
+
+  componentDidMount() {
+    request('http://localhost:4000', GET_CURRENCIES_AND_CATEGORIES).then(
+      (data) =>
+        this.setState((oldState) => ({
+          ...oldState,
+          categories: data.categories,
+          currencies: {
+            currenciesList: data.currencies,
+            selectedCurrency: data.currencies[0],
+          },
+        }))
+    );
+  }
 
   closeAllDropdowns = () => {
     /* Close all dropdowns */
@@ -92,7 +109,12 @@ class App extends Component {
   };
 
   handleCurrencySelect = (selectedCurrency) => {
-    this.setState({ selectedCurrency });
+    this.setState((oldState) => ({
+      currencies: {
+        ...oldState.currencies,
+        selectedCurrency,
+      },
+    }));
     this.closeAllDropdowns(); /* Close all dropdowns & remove the modal */
   };
 
@@ -103,38 +125,10 @@ class App extends Component {
   };
 
   render() {
-    const links = [
-      { label: 'Women', path: 'women', id: '1' },
-      { label: 'Men', path: 'men', id: '2' },
-      { label: 'Kids', path: 'kids', id: '3' },
-    ];
-
-    const Currencies = [
-      {
-        label: 'USD',
-        symbol: '$',
-      },
-      {
-        label: 'GBP',
-        symbol: '£',
-      },
-      {
-        label: 'AUD',
-        symbol: '$',
-      },
-      {
-        label: 'JPY',
-        symbol: '¥',
-      },
-      {
-        label: 'RUB',
-        symbol: '₽',
-      },
-    ];
-
     const {
+      categories,
+      currencies,
       modal,
-      selectedCurrency,
       currenciesDropdownList,
       cartDropdownList,
       cartItemsCount,
@@ -146,7 +140,7 @@ class App extends Component {
           {/* Categories */}
           <NavItem
             onClick={this.closeAllDropdowns}
-            content={<NavLinks links={links} />}
+            content={<NavLinks links={categories} />}
           />
           {/* Logo */}
           <NavItem
@@ -164,7 +158,7 @@ class App extends Component {
             content={
               <DropdownIcon
                 opened={currenciesDropdownList}
-                label={selectedCurrency.symbol}
+                label={currencies.selectedCurrency.symbol}
                 onClick={() =>
                   this.handleDropdownClick(
                     'currenciesDropdownList',
@@ -178,8 +172,8 @@ class App extends Component {
             {/* Drop down */}
             {/* TODO: In the future try to extract this into 'DropdownMenu' component */}
             <ul className={'currencies-list'}>
-              {Currencies.map((currency, index) => (
-                <li key={currency.id || index}>
+              {currencies.currenciesList.map((currency, index) => (
+                <li key={index}>
                   <button
                     className="btn-reset currency-btn currencies-list__item"
                     onClick={() => this.handleCurrencySelect(currency)}
@@ -217,14 +211,12 @@ class App extends Component {
               </p>
               {/* Cart items */}
               <ul className="cart__dropdown-items">
-                <li>
-                  
-                </li>
+                <li></li>
               </ul>
               {/* Total */}
               <p className="total">
                 <span className="total__label">Total</span>
-                <span>{selectedCurrency.symbol}200</span>
+                <span>{currencies.selectedCurrency.symbol}200</span>
               </p>
               {/* Buttons */}
               <div className="cart__btns">
