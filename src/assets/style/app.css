@@ -19,7 +19,7 @@
   top: 0;
   left: 0;
   background: #fff;
-  z-index: 2;
+  z-index: calc(var(--modal-z-index, 1) + 1);
 }
 
 .navbar .navbar__nav {
@@ -56,11 +56,6 @@
   -moz-transform: translateX(-100%);
   -ms-transform: translateX(-100%);
   -o-transform: translateX(-100%); */
-}
-
-.navbar__nav .nav-item {
-  position: relative;
-  z-index: 2; /* To make it clickable when model is visible */
 }
 
 .navbar__nav .nav-item + .nav-item {
@@ -172,6 +167,8 @@
   font-size: 2rem;
   border-top: 0.2px solid #d3d3d34a;
   width: max-content;
+
+  z-index: calc(var(--modal-z-index, 1) + 1); /* To be top */
 }
 
 .cart-list .cart__dropdown-items {

@@ -5,116 +5,210 @@ import Logo from 'components/common/Logo';
 import DropdownButton from 'components/common/dropdown/DropdownButton';
 import logo from 'assets/images/logo.png';
 import NavLinks from 'components/NavBar/NavLinks';
-import { NavLink } from 'react-router-dom';
+import { GET_CURRENCIES_AND_CATEGORIES } from 'GraphQL/Queries';
+import request from 'graphql-request';
+import Modal from 'components/common/Modal';
+import CurrenciesDropdown from 'components/CurrenciesDropdown';
+import CartDropdown from 'components/CartDropdown';
 
 export class NavBar extends Component {
-  render() {
-    const {
-      closeAllDropdowns,
-      categories,
-      // Cart
-      cartDropdownListState,
-      cartItemsCount,
-      // Currency
-      currenciesDropdownListState,
-      currencies,
-      selectedCurrency,
-      handleDropdownClick,
-      handleCurrencySelect
-    } = this.props;
-    return (
-      <nav className="navbar">
-        <ul className="navbar__nav">
-          {/* Categories */}
-          <li className='nav-item' onClick={closeAllDropdowns}>
-            <NavLinks links={categories} />
-          </li>
-          {/* Logo */}
-          <li className='nav-item logo-wrapper' onClick={closeAllDropdowns}>
-            <Logo
-              logo={logo}
-              logoAlt="Logo, Green bag with a white arrow inside"
-            />
-          </li>
-          {/* Currency dropdown button */}
-          <li className='nav-item'>
-            <DropdownButton
-              showTopDownArrows={true}
-              opened={currenciesDropdownListState}
-              label={selectedCurrency.symbol}
-              onClick={() =>
-                handleDropdownClick('currenciesDropdownList', null, false)
-              }
-            />
-          </li>
-          {/* Cart dropdown button */}
-          <li className='nav-item'>
-            <DropdownButton
-              itemsCount={cartItemsCount}
-              label={<CartSVG />}
-              onClick={() =>
-                handleDropdownClick('cartDropdownList', null, true)
-              }
-            />
-          </li>
-        </ul>
+  state = {
+    cartDropdownListState: false,
+    currenciesDropdownListState: false,
+    currencies: [],
+    categories: [],
+    selectedCurrency: {},
+    selectedCategory: {},
+    modal: { visible: false, dark: false },
+  };
 
-        {/* Currency Dropdown */}
-        {currenciesDropdownListState && (
-          <ul className={'dropdown currencies-list'}>
-            {currencies.currenciesList.map((currency, index) => (
-              <li key={index}>
-                <button
-                  className="btn-reset currency-btn currencies-list__item"
-                  onClick={() => handleCurrencySelect(currency)}
-                >
-                  {currency.symbol} {currency.label}
-                </button>
-              </li>
-            ))}
+  componentDidMount() {
+    request('http://localhost:4000', GET_CURRENCIES_AND_CATEGORIES).then(
+      (data) =>
+        // Set currencies & categories first
+        this.setState(
+          {
+            currencies: data.currencies,
+            categories: data.categories,
+          },
+          // then set selectedItems as the first item in the array
+          () =>
+            this.setState(
+              (oldState) => ({
+                ...oldState,
+                selectedCategory: oldState.categories[0],
+                selectedCurrency: oldState.currencies[0],
+              }),
+              // then update app state with selection
+              () =>
+                this.props.updateMainStateWithSelection(
+                  this.state.selectedCategory,
+                  this.state.selectedCurrency
+                )
+            )
+        )
+    );
+  }
+
+  handleLinkClick = (selectedCategory) => {
+    this.closeAllDropdowns();
+    this.setState({ selectedCategory }, () =>
+      this.props.updateMainStateWithSelection(
+        this.state.selectedCategory,
+        this.state.selectedCurrency
+      )
+    );
+  };
+
+  handleCurrencySelect = (selectedCurrency) => {
+    this.setState({ selectedCurrency }, () => {
+      // Update app state with new selections
+      this.props.updateMainStateWithSelection(
+        this.state.cartDropdownListState,
+        this.state.currenciesDropdownListState
+      );
+      this.closeAllDropdowns(); /* Close all dropdowns & remove the modal */
+    });
+  };
+
+  closeAllDropdowns = () => {
+    /* Close all dropdowns */
+    const state = { ...this.state };
+
+    for (const item in state) {
+      if (item.toLocaleLowerCase().includes('dropdownliststate'))
+        this.setState({ [item]: false });
+    }
+    /* remove the modal */
+    this.showmodal(false, false);
+  };
+
+  // Function to loop over all drop downs and close them except provided one.
+  closeAllDropdownsExcept = (dropdownStateItem = '') => {
+    // close all in case doesn't provide any stateItem
+    if (dropdownStateItem.length === 0) {
+      this.closeAllDropdowns();
+      return;
+    }
+
+    const state = { ...this.state };
+
+    for (const item in state) {
+      if (
+        item.toLocaleLowerCase().includes('dropdownliststate') &&
+        item.toLocaleLowerCase() !== dropdownStateItem.toLocaleLowerCase()
+      )
+        this.setState({ [item]: false });
+    }
+  };
+
+  // When invoked, pass state item which correspond to opening and closing the dropdown, and it's state darkModal to specify it.
+  handleDropdownClick = (dropdownStateItem, darkModal = false) => {
+    // If user pass valid dropdownStateItem
+    if (this.state.hasOwnProperty(dropdownStateItem)) {
+      // Toggle the state of dropdownStateItem and set the modal like that state, if dropdownStateItem true so the dropdown is shown hence the modal should be shown to capture clicking outside the modal and vice versa.
+      this.setState(
+        (oldState) => ({
+          [dropdownStateItem]: !oldState[dropdownStateItem],
+        }),
+        () => {
+          this.showmodal(this.state[dropdownStateItem], darkModal);
+          this.closeAllDropdownsExcept(
+            dropdownStateItem
+          ); /* Close all dropdowns except dropdownStateItem */
+        }
+      );
+    } else {
+      // If he doesn't pass valid dropdownStateItem
+      console.log(
+        `${dropdownStateItem} is not an item on the state..!, Check your dropdown handler.`
+      );
+    }
+  };
+
+  // Default is true to show, and false if we pass false to hide
+  showmodal = (visible = true, dark = false) => {
+    if (typeof visible === 'boolean')
+      this.setState({ modal: { visible, dark } });
+  };
+
+  render() {
+    const { cartItemsCount } = this.props;
+
+    const {
+      currenciesDropdownListState,
+      cartDropdownListState,
+      currencies,
+      categories,
+      selectedCurrency,
+      modal,
+    } = this.state;
+    return (
+      <>
+        {/* 1. Modal: visible on dropdown active */}
+        <Modal
+          visible={modal.visible}
+          dark={modal.dark}
+          onClick={this.closeAllDropdowns}
+        />
+        {/* 2. Nav bar icons */}
+        <nav className="navbar">
+          <ul className="navbar__nav">
+            {/* 2.1. Categories */}
+            <li className="nav-item">
+              <NavLinks links={categories} onClick={this.handleLinkClick} />
+            </li>
+            {/* 2.2. Logo */}
+            <li
+              className="nav-item logo-wrapper"
+              onClick={this.closeAllDropdowns}
+            >
+              <Logo
+                onClick={this.handleLinkClick}
+                logo={logo}
+                logoAlt="Logo, Green bag with a white arrow inside"
+              />
+            </li>
+            {/* 2.3. Currency dropdown button */}
+            <li className="nav-item">
+              <DropdownButton
+                showTopDownArrows={true}
+                opened={currenciesDropdownListState}
+                label={selectedCurrency.symbol}
+                onClick={() =>
+                  this.handleDropdownClick('currenciesDropdownListState', false)
+                }
+              />
+            </li>
+            {/* 2.4. Cart dropdown button */}
+            <li className="nav-item">
+              <DropdownButton
+                itemsCount={cartItemsCount}
+                label={<CartSVG />}
+                onClick={() =>
+                  this.handleDropdownClick('cartDropdownListState', true)
+                }
+              />
+            </li>
           </ul>
+        </nav>
+        {/* 3. Dropdowns */}
+        {/* 3.1. Currency Dropdown */}
+        {currenciesDropdownListState && (
+          <CurrenciesDropdown
+            currencies={currencies}
+            handleCurrencySelect={this.handleCurrencySelect}
+          />
         )}
-        {/* Cart Dropdown */}
+        {/* 3.2. Cart Dropdown */}
         {cartDropdownListState && (
-          <div className="dropdown cart-list">
-            {/* Header */}
-            <p>
-              <b>My Bag</b>
-              {cartItemsCount === 0
-                ? ''
-                : cartItemsCount === 1 || cartItemsCount % 1000 === 0
-                ? `, ${cartItemsCount} item`
-                : `, ${cartItemsCount} items`}
-            </p>
-            {/* Cart items */}
-            <ul className="cart__dropdown-items">
-              <li></li>
-            </ul>
-            {/* Total */}
-            <p className="total">
-              <span className="total__label">Total</span>
-              <span>{currencies.selectedCurrency.symbol}200</span>
-            </p>
-            {/* Buttons */}
-            <div className="cart__btns">
-              <NavLink
-                to="view-bag"
-                className="btn-reset btn--outline"
-                onClick={() => closeAllDropdowns()}
-              >
-                View Bag
-              </NavLink>
-              <NavLink
-                to="checkout"
-                className="btn-reset btn--filled"
-                onClick={() => closeAllDropdowns()}
-              >
-                Check out
-              </NavLink>
-            </div>
-          </div>
+          <CartDropdown
+            cartItemsCount={cartItemsCount}
+            selectedCurrency={selectedCurrency}
+            closeAllDropdowns={this.closeAllDropdowns}
+          />
         )}
-      </nav>
+      </>
     );
   }
 }

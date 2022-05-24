@@ -5,6 +5,7 @@
 :root {
   --c-selection: #222;
   --c-txt: #1d1f22;
+  --modal-z-index: 1;
 }
 
 *,
@@ -100,7 +101,9 @@ ul {
   width: 100vw;
   height: 100vh;
   position: fixed;
-  z-index: 1;
+  top: 0;
+  left: 0;
+  z-index: var(--modal-z-index, 1);
 }
 
 #modal.dark {
