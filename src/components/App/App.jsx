@@ -1,88 +1,37 @@
 import React, { Component } from 'react';
-
-import '../../assets/style/app.css';
+import { Route, Routes } from 'react-router-dom';
+import MainPage from 'pages/MainPage';
 import { NavBar } from '../NavBar/NavBar';
 
-import logo from '../../assets/images/logo.png';
-import NavLinks from '../NavBar/NavLinks';
-import Currency from '../common/Currency';
-import { Cart } from '../common/Cart';
-import Logo from '../common/Logo';
-import NavItem from 'components/NavBar/NavItem';
+import 'assets/style/app.css';
 
 class App extends Component {
   state = {
-    currencyTabOpen: true,
+    selectedCategory: {},
+    selectedCurrency: {},
+    cartItems: [],
+    cartItemsCount: 2,
   };
 
-  handleOpenCurrencyTab = () => {
-    this.setState((oldState) => ({
-      currencyTabOpen: !oldState.currencyTabOpen,
-    }));
+  getSelectedCategoryAndCurrency = (
+    selectedCategory = this.state.selectedCategory,
+    selectedCurrency = this.state.selectedCurrency
+  ) => {
+    this.setState({ selectedCategory, selectedCurrency });
   };
 
   render() {
-    const links = [
-      { label: 'Women', path: 'women', id: '1' },
-      { label: 'Men', path: 'men', id: '2' },
-      { label: 'Kids', path: 'kids', id: '3' },
-    ];
-
-    const Currencies = [
-      {
-        label: 'USD',
-        symbol: '$',
-      },
-      {
-        label: 'GBP',
-        symbol: '£',
-      },
-      {
-        label: 'AUD',
-        symbol: 'A$',
-      },
-      {
-        label: 'JPY',
-        symbol: '¥',
-      },
-      {
-        label: 'RUB',
-        symbol: '₽',
-      },
-    ];
+    const { cartItemsCount } = this.state;
 
     return (
       <div className="app">
-        <NavBar>
-          {/* Categories */}
-          <NavItem content={<NavLinks links={links} />} />
-          {/* Logo */}
-          <NavItem
-            content={
-              <Logo
-                logo={logo}
-                logoAlt="Logo, Green bag with a white arrow inside"
-              />
-            }
-          />
-          {/* Currency */}
-          <NavItem
-            Currencies={Currencies}
-            open={this.state.currencyTabOpen}
-            content={
-              <Currency
-                open={this.state.currencyTabOpen}
-                selectedCurrency={{
-                  label: 'USD',
-                  symbol: '$',
-                }}
-                onOpenCurrencyTab={this.handleOpenCurrencyTab}
-              />
-            }
-          ></NavItem>
-          {/* Cart */}
-          <NavItem content={<Cart />}></NavItem>
-        </NavBar>
+        <NavBar
+          cartItemsCount={cartItemsCount}
+          updateMainStateWithSelection={this.getSelectedCategoryAndCurrency}
+        />
+        <Routes>
+          <Route path="/" element={<MainPage />} ></Route>
+        </Routes>
       </div>
     );
   }

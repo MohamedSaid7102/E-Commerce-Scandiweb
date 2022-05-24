@@ -4,9 +4,14 @@ import PropTypes from 'prop-types';
 
 export class Logo extends Component {
   render() {
+    const { onClick } = this.props;
     return (
-      <Link to="/">
-        <img src={this.props.logo} alt={this.props.logoAlt} className="logo" />
+      <Link to="/" onClick={() => onClick({ name: '/' })}>
+        <img
+          src={this.props.logo}
+          alt={this.props.logoAlt}
+          className="logo nav-links__item"
+        />
       </Link>
     );
   }

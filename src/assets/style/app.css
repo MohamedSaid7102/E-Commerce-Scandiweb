@@ -3,11 +3,23 @@
   --c-txt: #1d1f22;
 
   --currency-symbol-size: 2rem;
+  --currency-dropdown-item-hover-clr: #eeeeee;
+  --navbar-height: 80px;
 }
 /* NavBar start */
 .navbar {
+  --gutter: 3rem;
+
   padding: 2rem 9rem 0;
   max-width: 100%;
+  height: var(--navbar-height);
+
+  position: fixed;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  background: #fff;
+  z-index: calc(var(--modal-z-index, 1) + 1);
 }
 
 .navbar .navbar__nav {
@@ -39,66 +51,188 @@
   width: 41px;
   height: 41px;
   /* To be totally centered visually */
-  transform: translateX(-100%);
+  /* transform: translateX(-100%);
   -webkit-transform: translateX(-100%);
   -moz-transform: translateX(-100%);
   -ms-transform: translateX(-100%);
-  -o-transform: translateX(-100%);
+  -o-transform: translateX(-100%); */
 }
 
-.navbar .nav__utils {
-  display: flex;
-  gap: 1rem;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: center;
-}
-/* NavBar end */
-
-/* Logo Start */
-.navbar__nav .nav-item:last-child {
-  margin-left: 3rem;
+.navbar__nav .nav-item + .nav-item {
+  margin-left: var(--gutter, 3rem);
 }
 
-.navbar__nav .nav-item:nth-child(2) {
+.navbar__nav .nav-item.logo-wrapper {
   flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-/* Logo End */
 
+  margin-left: 0;
+}
+/* NavBar end */
+
+/* Dropdowns start */
+.dropdown {
+  --right-space: 7rem;
+
+  position: absolute;
+}
 /* Currency Start */
-.btn--currency {
+.btn--dropdown {
+  --badge-width: 20px;
+  --badge-height: 20px;
+
   font-size: var(--currency-symbol-size, 18px);
   color: var(--c-txt, #222);
   font-weight: 300;
+  border: none;
+  background-color: transparent;
 
   display: flex;
   gap: 9px;
+
+  position: relative;
 }
 
-.btn--currency svg {
-  /* To make it aligned at the bottom like the figma design */
-  transform: translateY(100%);
-  -webkit-transform: translateY(100%);
-  -moz-transform: translateY(100%);
-  -ms-transform: translateY(100%);
-  -o-transform: translateY(100%);
+.items-count-badge {
+  position: absolute;
+  color: #fff;
+  background-color: #000;
+  width: var(--badge-width);
+  height: var(--badge-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.4rem;
+  border-radius: 100%;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  -ms-border-radius: 100%;
+  -o-border-radius: 100%;
+  transform: translate(65%, -44%);
+  -webkit-transform: translate(65%, -44%);
+  -moz-transform: translate(65%, -44%);
+  -ms-transform: translate(65%, -44%);
+  -o-transform: translate(65%, -44%);
+}
+
+.currencies-list {
+  top: calc(var(--navbar-height) * 0.85);
+  right: var(--right-space, 7rem);
+  width: 100%;
+  max-width: max-content;
+  box-shadow: 0px 4px 35px rgba(92, 99, 106, 0.19);
+  overflow: hidden;
+  /* position children */
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+  transition-duration: 0;
+  /*Tobeabovemodel*/
+  z-index: 2;
+  background-color: #fff;
+}
+
+.currencies-list__item:hover,
+.currencies-list__item:focus,
+.currencies-list__item:focus-visible {
+  background-color: var(--currency-dropdown-item-hover-clr, #eee);
+}
+
+.currency-btn {
+  padding: 1rem 3.5rem 1rem 2.5rem;
+
+  font-size: 18px;
+  font-weight: 300;
+
+  border: none;
+  background-color: transparent;
+  width: 100%;
 }
 /* Currency End */
 
+/* Cart dropdown Start */
+.cart-list {
+  --gutter: 4rem;
+  /* Position */
+  position: absolute;
+  right: -33px;
+  top: var(--navbar-height);
+  right: var(--right-space, 7rem);
+
+  background-color: #fff;
+  padding: 4rem 2.3rem;
+  font-size: 2rem;
+  border-top: 0.2px solid #d3d3d34a;
+  width: max-content;
+
+  z-index: calc(var(--modal-z-index, 1) + 1); /* To be top */
+}
+
+.cart-list .cart__dropdown-items {
+  overflow: auto;
+  max-height: 400px;
+  max-width: 450px;
+  margin-top: var(--gutter, 4rem);
+  /* box-shadow: inset 0px 11px 8px -10px rgba(204, 204, 204, 0.52),
+    inset 0px -11px 8px -10px rgba(204, 204, 204, 0.52); */
+}
+
+.cart-list .total {
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cart-list .cart__btns,
+.total {
+  margin-top: var(--gutter, 4rem);
+}
+.cart-list .cart__btns {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cart-list a {
+  text-transform: uppercase;
+  font-size: 2rem;
+  text-decoration: none;
+}
+
+.btn--outline,
+.btn--filled {
+  padding: 1.7rem 5rem;
+  border: none;
+}
+.btn--outline:active,
+.btn--filled:active {
+  transform: scale(0.95);
+  -webkit-transform: scale(0.95);
+  -moz-transform: scale(0.95);
+  -ms-transform: scale(0.95);
+  -o-transform: scale(0.95);
+}
+
+.btn--outline {
+  border: 2px solid #222;
+  background-color: transparent;
+}
+
+.btn--filled {
+  background-color: var(--c-primary);
+  color: #fff;
+}
+
+/* Cart dropdown End */
+/* Dropdowns end */
+
 /* Responsiveness */
 /* Nav */
-@media (max-width: 610px) {
-  .navbar__nav {
-    flex-direction: column;
-    gap: 4rem;
-  }
-  .navbar__nav .nav-item:last-child {
-    margin-left: 0rem;
-  }
-}
 @media (max-width: 760px) {
   .navbar .logo {
     transform: translateX(0);
@@ -108,6 +242,30 @@
     -o-transform: translateX(0);
   }
 }
+
+@media (max-width: 642px) {
+  .navbar {
+    padding: 2rem 1rem;
+  }
+}
+
+@media (max-width: 610px) {
+  .navbar__nav {
+    gap: 4rem;
+    justify-content: center;
+    align-items: center;
+  }
+  .navbar__nav .nav-item:last-child {
+    margin-left: 0rem;
+  }
+}
+
+@media (max-width: 464px) {
+  .navbar__nav {
+    flex-direction: column;
+  }
+}
+
 @media (max-width: 268px) {
   .navbar__nav {
     padding: 2rem 0 0;
