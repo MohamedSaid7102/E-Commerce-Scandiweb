@@ -4,14 +4,14 @@ import PropTypes from 'prop-types';
 import { ReactComponent as TopArrow } from 'assets/svgs/top-arrow.svg';
 import { ReactComponent as DownArrow } from 'assets/svgs/down-arrow.svg';
 
-export class DropdownIcon extends Component {
+export class DropdownButton extends Component {
   render() {
     const {
       onClick,
       opened,
       label,
       itemsCount,
-      showTopDownArrows = true,
+      showTopDownArrows = false,
     } = this.props;
     return (
       <button className="btn-reset btn--dropdown" onClick={onClick}>
@@ -25,9 +25,9 @@ export class DropdownIcon extends Component {
   }
 }
 
-DropdownIcon.propTypes = {
+DropdownButton.propTypes = {
   onClick: PropTypes.func.isRequired,
   itemsCount: PropTypes.number,
 };
 
-export default DropdownIcon;
+export default DropdownButton;

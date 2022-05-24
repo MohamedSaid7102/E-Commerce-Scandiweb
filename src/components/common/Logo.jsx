@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 
 export class Logo extends Component {
   render() {
+    const { onClick } = this.props;
     return (
-      <Link to="/">
+      <Link to="/" onClick={() => onClick({ name: '/' })}>
         <img
           src={this.props.logo}
           alt={this.props.logoAlt}

@@ -4,12 +4,7 @@ import PropTypes from 'prop-types';
 
 export class NavLinks extends Component {
   render() {
-    const { links } = this.props;
-    // const links = [
-    //   { label: 'Women', path: 'women', id: '1' },
-    //   { label: 'Men', path: 'men', id: '2' },
-    //   { label: 'Kids', path: 'kids', id: '3' },
-    // ];
+    const { links, onClick } = this.props;
     return (
       <ul className="nav__links">
         {links.map((link, index) => (
@@ -19,6 +14,7 @@ export class NavLinks extends Component {
                 isActive ? 'nav-links__item active' : 'nav-links__item'
               }
               to={link.name}
+              onClick={() => onClick(link)}
             >
               {link.name}
             </NavLink>
