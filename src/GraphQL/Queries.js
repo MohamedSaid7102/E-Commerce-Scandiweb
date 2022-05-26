@@ -28,3 +28,37 @@ export const GET_CURRENCIES_AND_CATEGORIES = gql`
     }
   }
 `;
+
+export const GET_ALL_PRODUCTS = gql`
+  query {
+    categories {
+      name
+      products {
+        id
+        name
+        inStock
+        gallery
+        brand
+        description
+        category
+        prices {
+          currency {
+            label
+            symbol
+          }
+          amount
+        }
+        attributes {
+          id
+          name
+          type
+          items {
+            id
+            displayValue
+            value
+          }
+        }
+      }
+    }
+  }
+`;

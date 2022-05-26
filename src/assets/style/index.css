@@ -88,13 +88,11 @@ ul {
   cursor: pointer;
 }
 
-.dropdown-overlay {
-  background-color: rgba(21, 20, 20, 0.19);
-  width: 100vw;
-  height: 100vh;
-  z-index: 100;
-  position: absolute;
+.container-block {
+  max-width: 11400px;
+  margin: auto;
 }
+
 
 /* Others */
 #modal {

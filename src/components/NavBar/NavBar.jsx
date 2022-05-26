@@ -30,42 +30,34 @@ export class NavBar extends Component {
           {
             currencies: data.currencies,
             categories: data.categories,
-          },
-          // then set selectedItems as the first item in the array
+            selectedCurrency: data.currencies[0],
+            selectedCategory: data.categories[0],
+          }, // then update app state with selection
           () =>
-            this.setState(
-              (oldState) => ({
-                ...oldState,
-                selectedCategory: oldState.categories[0],
-                selectedCurrency: oldState.currencies[0],
-              }),
-              // then update app state with selection
-              () =>
-                this.props.updateMainStateWithSelection(
-                  this.state.selectedCategory,
-                  this.state.selectedCurrency
-                )
+            this.props.updateMainStateWithSelection(
+              this.state.selectedCategory,
+              this.state.selectedCurrency
             )
         )
     );
   }
 
   handleLinkClick = (selectedCategory) => {
-    this.closeAllDropdowns();
     this.setState({ selectedCategory }, () =>
       this.props.updateMainStateWithSelection(
         this.state.selectedCategory,
         this.state.selectedCurrency
       )
     );
+    this.closeAllDropdowns(); /* Close all dropdowns & remove the modal */
   };
 
   handleCurrencySelect = (selectedCurrency) => {
     this.setState({ selectedCurrency }, () => {
       // Update app state with new selections
       this.props.updateMainStateWithSelection(
-        this.state.cartDropdownListState,
-        this.state.currenciesDropdownListState
+        this.state.selectedCategory,
+        this.state.selectedCurrency
       );
       this.closeAllDropdowns(); /* Close all dropdowns & remove the modal */
     });
@@ -170,7 +162,7 @@ export class NavBar extends Component {
               />
             </li>
             {/* 2.3. Currency dropdown button */}
-            <li className="nav-item">
+            <li className="nav-item currency-wrapper">
               <DropdownButton
                 showTopDownArrows={true}
                 opened={currenciesDropdownListState}
@@ -181,7 +173,7 @@ export class NavBar extends Component {
               />
             </li>
             {/* 2.4. Cart dropdown button */}
-            <li className="nav-item">
+            <li className="nav-item cart-wrapper">
               <DropdownButton
                 itemsCount={cartItemsCount}
                 label={<CartSVG />}
@@ -191,23 +183,23 @@ export class NavBar extends Component {
               />
             </li>
           </ul>
+          {/* 3. Dropdowns */}
+          {/* 3.1. Currency Dropdown */}
+          {currenciesDropdownListState && (
+            <CurrenciesDropdown
+              currencies={currencies}
+              handleCurrencySelect={this.handleCurrencySelect}
+            />
+          )}
+          {/* 3.2. Cart Dropdown */}
+          {cartDropdownListState && (
+            <CartDropdown
+              cartItemsCount={cartItemsCount}
+              selectedCurrency={selectedCurrency}
+              closeAllDropdowns={this.closeAllDropdowns}
+            />
+          )}
         </nav>
-        {/* 3. Dropdowns */}
-        {/* 3.1. Currency Dropdown */}
-        {currenciesDropdownListState && (
-          <CurrenciesDropdown
-            currencies={currencies}
-            handleCurrencySelect={this.handleCurrencySelect}
-          />
-        )}
-        {/* 3.2. Cart Dropdown */}
-        {cartDropdownListState && (
-          <CartDropdown
-            cartItemsCount={cartItemsCount}
-            selectedCurrency={selectedCurrency}
-            closeAllDropdowns={this.closeAllDropdowns}
-          />
-        )}
       </>
     );
   }
