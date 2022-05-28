@@ -136,71 +136,70 @@ export class NavBar extends Component {
       modal,
     } = this.state;
     return (
-      <>
-        {/* 1. Modal: visible on dropdown active */}
+      <nav className="navbar">
+        {/* 1. Nav bar icons */}
+        {/* 2. Modal: rendered as a portal as a sibiling to root, 
+                      visible on dropdown active */}
         <Modal
           visible={modal.visible}
           dark={modal.dark}
           onClick={this.closeAllDropdowns}
         />
-        {/* 2. Nav bar icons */}
-        <nav className="navbar">
-          <ul className="navbar__nav">
-            {/* 2.1. Categories */}
-            <li className="nav-item">
-              <NavLinks links={categories} onClick={this.handleLinkClick} />
-            </li>
-            {/* 2.2. Logo */}
-            <li
-              className="nav-item logo-wrapper"
-              onClick={this.closeAllDropdowns}
-            >
-              <Logo
-                onClick={this.handleLinkClick}
-                logo={logo}
-                logoAlt="Logo, Green bag with a white arrow inside"
-              />
-            </li>
-            {/* 2.3. Currency dropdown button */}
-            <li className="nav-item currency-wrapper">
-              <DropdownButton
-                showTopDownArrows={true}
-                opened={currenciesDropdownListState}
-                label={selectedCurrency.symbol}
-                onClick={() =>
-                  this.handleDropdownClick('currenciesDropdownListState', false)
-                }
-              />
-            </li>
-            {/* 2.4. Cart dropdown button */}
-            <li className="nav-item cart-wrapper">
-              <DropdownButton
-                itemsCount={cartItemsCount}
-                label={<CartSVG />}
-                onClick={() =>
-                  this.handleDropdownClick('cartDropdownListState', true)
-                }
-              />
-            </li>
-          </ul>
-          {/* 3. Dropdowns */}
-          {/* 3.1. Currency Dropdown */}
-          {currenciesDropdownListState && (
-            <CurrenciesDropdown
-              currencies={currencies}
-              handleCurrencySelect={this.handleCurrencySelect}
+        <ul className="navbar__nav">
+          {/* 1.1. Categories */}
+          <li className="nav-item">
+            <NavLinks links={categories} onClick={this.handleLinkClick} />
+          </li>
+          {/* 1.2. Logo */}
+          <li
+            className="nav-item logo-wrapper"
+            onClick={this.closeAllDropdowns}
+          >
+            <Logo
+              onClick={this.handleLinkClick}
+              logo={logo}
+              logoAlt="Logo, Green bag with a white arrow inside"
             />
-          )}
-          {/* 3.2. Cart Dropdown */}
-          {cartDropdownListState && (
-            <CartDropdown
-              cartItemsCount={cartItemsCount}
-              selectedCurrency={selectedCurrency}
-              closeAllDropdowns={this.closeAllDropdowns}
+          </li>
+          {/* 1.3. Currency dropdown button */}
+          <li className="nav-item currency-wrapper">
+            <DropdownButton
+              showTopDownArrows={true}
+              opened={currenciesDropdownListState}
+              label={selectedCurrency.symbol}
+              onClick={() =>
+                this.handleDropdownClick('currenciesDropdownListState', false)
+              }
             />
-          )}
-        </nav>
-      </>
+          </li>
+          {/* 1.4. Cart dropdown button */}
+          <li className="nav-item cart-wrapper">
+            <DropdownButton
+              itemsCount={cartItemsCount}
+              label={<CartSVG />}
+              onClick={() =>
+                this.handleDropdownClick('cartDropdownListState', true)
+              }
+            />
+          </li>
+        </ul>
+        {/* 3. Dropdowns */}
+        {/* 3.1. Currency Dropdown */}
+        {currenciesDropdownListState && (
+          <CurrenciesDropdown
+            currencies={currencies}
+            handleCurrencySelect={this.handleCurrencySelect}
+          />
+        )}
+        {/* 3.2. Cart Dropdown */}
+        {cartDropdownListState && (
+          <CartDropdown
+            cartItemsCount={cartItemsCount}
+            selectedCurrency={selectedCurrency}
+            closeAllDropdowns={this.closeAllDropdowns}
+          />
+        )}
+      </nav>
     );
   }
 }

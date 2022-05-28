@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+
 import PropTypes from 'prop-types';
 
 export class Modal extends Component {
   render() {
     const { visible, dark, onClick } = this.props;
-    return visible ? (
-      <div id="modal" className={dark ? 'dark' : ''} onClick={onClick}></div>
-    ) : null;
+    return ReactDOM.createPortal(
+      visible ? (
+        <div id="modal" className={dark ? 'dark' : ''} onClick={onClick}></div>
+      ) : null,
+      document.getElementById('modal-container')
+    );
   }
 }
 
