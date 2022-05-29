@@ -5,6 +5,7 @@ import PLP from 'pages/PLP';
 import { NavBar } from '../NavBar/NavBar';
 
 import 'assets/style/app.css';
+import PageNotFound from 'pages/PageNotFound';
 
 class App extends Component {
   state = {
@@ -30,13 +31,14 @@ class App extends Component {
           cartItemsCount={cartItemsCount}
           updateMainStateWithSelection={this.getSelectedCategoryAndCurrency}
         />
-        <PLP selectedCurrency={selectedCurrency} />
-        {/* <Routes>
-          <Route
+        {/* <PLP selectedCurrency={selectedCurrency} /> */}
+        <Routes>
+          {/* <Route
             path="/"
             element={}
-          ></Route>
-        </Routes> */}
+          ></Route> */}
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
       </div>
     );
   }

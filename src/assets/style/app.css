@@ -349,6 +349,37 @@
 
 /* PLP end */
 
+/* Page Not Found Start */
+.not-found__hedding {
+  text-align: center;
+  font-weight: 300;
+  margin-bottom: 3rem;
+}
+.not-found__btn {
+  display: inline-block;
+  max-width: max-content;
+  margin: auto;
+  border: 1px solid var(--c-primary);
+  padding: 15px 30px;
+  background-color: var(--c-primary);
+  color: #fff;
+  font-weight: 300;
+  font-size: 2rem;
+  text-decoration: none;
+}
+.not-found__btn:hover {
+  background-color: transparent;
+  color: var(--c-primary);
+  box-shadow: 0 5px 10px rgba(154, 160, 185, 0.05),
+    0 15px 40px rgba(166, 173, 201, 0.2);
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+/* Page Not Found End */
+
 /* Responsiveness */
 /* Nav */
 @media (max-width: 760px) {
