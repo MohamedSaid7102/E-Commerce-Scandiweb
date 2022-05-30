@@ -8,8 +8,8 @@ import NavLinks from 'components/NavBar/NavLinks';
 import { GET_CURRENCIES_AND_CATEGORIES } from 'GraphQL/Queries';
 import request from 'graphql-request';
 import Modal from 'components/common/Modal';
-import CurrenciesDropdown from 'components/CurrenciesDropdown';
-import CartDropdown from 'components/CartDropdown';
+import CurrenciesDropdown from 'components/common/dropdown/CurrenciesDropdown';
+import CartDropdown from 'components/common/dropdown/CartDropdown';
 
 export class NavBar extends Component {
   state = {

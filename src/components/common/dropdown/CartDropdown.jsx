@@ -27,7 +27,7 @@ export class CartDropdown extends Component {
         {/* Buttons */}
         <div className="cart__btns">
           <NavLink
-            to="view-bag"
+            to="cart"
             className="btn-reset btn--outline"
             onClick={() => closeAllDropdowns()}
           >

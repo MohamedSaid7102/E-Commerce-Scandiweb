@@ -6,8 +6,8 @@ export class PageNotFound extends Component {
   render() {
     return (
       <div>
-        <h1 className="not-found__hedding">LoL, You are LOST..!</h1>
-        <PageNotFoundSVG style={{ width: '100%', padding: '2rem' }} />
+        <h1 className="hedding--light">LoL, You are LOST..!</h1>
+        <PageNotFoundSVG className="svg-responsiveness" />
         <Link to="/" className="btn-reset not-found__btn">
           Back To Home
         </Link>

@@ -2,13 +2,18 @@ import React, { Component } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import request from 'graphql-request';
 
-import PLP from 'pages/PLP';
-import PageNotFound from 'pages/NotFound';
-import ProductsList from 'components/common/Product/List';
 import { NavBar } from '../NavBar/NavBar';
 import { GET_ALL_PRODUCTS } from 'GraphQL/Queries';
-
+// Assets
 import 'assets/style/app.css';
+// Pages
+import ProdcutsList from 'components/common/Product/List';
+import Loading from 'components/common/Loading';
+const LazyPageNotFound = React.lazy(() => import('pages/NotFound'));
+const LazyCheckout = React.lazy(() => import('pages/Checkout'));
+const LazyCart = React.lazy(() => import('pages/Cart'));
+const LazyPLP = React.lazy(() => import('pages/PLP'));
+
 class App extends Component {
   state = {
     selectedCategory: {},
@@ -53,48 +58,79 @@ class App extends Component {
           <Route
             path="/"
             element={
-              <PLP>
-                <ProductsList
-                  products={allProducts}
-                  currency={selectedCurrency}
-                />
-              </PLP>
+              <React.Suspense fallback={<Loading />}>
+                <LazyPLP>
+                  <ProdcutsList
+                    products={allProducts}
+                    currency={selectedCurrency}
+                  />
+                </LazyPLP>
+              </React.Suspense>
             }
           />
           <Route
             path="all-products"
             element={
-              <PLP title="All">
-                <ProductsList
-                  products={allProducts}
-                  currency={selectedCurrency}
-                />
-              </PLP>
+              <React.Suspense fallback={<Loading />}>
+                <LazyPLP title="All">
+                  <ProdcutsList
+                    products={allProducts}
+                    currency={selectedCurrency}
+                  />
+                </LazyPLP>
+              </React.Suspense>
             }
           />
           <Route
             path="clothes-products"
             element={
-              <PLP title="Clothes">
-                <ProductsList
-                  products={clothesProducts}
-                  currency={selectedCurrency}
-                />
-              </PLP>
+              <React.Suspense fallback={<Loading />}>
+                <LazyPLP title="Clothes">
+                  <ProdcutsList
+                    products={clothesProducts}
+                    currency={selectedCurrency}
+                  />
+                </LazyPLP>
+              </React.Suspense>
             }
           />
           <Route
             path="tech-products"
             element={
-              <PLP title="Tech">
-                <ProductsList
-                  products={techProducts}
-                  currency={selectedCurrency}
-                />
-              </PLP>
+              <React.Suspense fallback={<Loading />}>
+                <LazyPLP title="Tech">
+                  <ProdcutsList
+                    products={techProducts}
+                    currency={selectedCurrency}
+                  />
+                </LazyPLP>
+              </React.Suspense>
             }
           />
-          <Route path="*" element={<PageNotFound />} />
+          <Route
+            path="checkout"
+            element={
+              <React.Suspense fallback={<Loading />}>
+                <LazyCheckout />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path="cart"
+            element={
+              <React.Suspense fallback={<Loading />}>
+                <LazyCart />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <React.Suspense fallback={<Loading />}>
+                <LazyPageNotFound />
+              </React.Suspense>
+            }
+          />
         </Routes>
       </div>
     );
