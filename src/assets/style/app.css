@@ -234,13 +234,25 @@
 /* Dropdowns end */
 
 /* PLP Start */
-.prodcuts-list {
+.plp-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 9rem;
+}
+.plp__heading {
+  font-weight: 400;
+  font-size: 5rem;
+  text-transform: uppercase;
+}
+
+.products-list {
   --gutter-y: 8rem;
   --gutter-x: 4rem;
-  --prodcut-card-width: 386px;
-  --prodcut-card-height: 444px;
+  --product-card-width: 386px;
+  --product-card-height: 444px;
 
-  margin-top: calc(var(--navbar-height) * 2);
+  margin-top: var(--navbar-height);
   display: flex;
   flex-flow: row wrap;
   gap: var(--gutter-y, 8rem) var(--gutter-x, 3rem);
@@ -248,13 +260,13 @@
   align-items: center;
 }
 
-.prodcut-card {
+.product-card {
   --cart-btn-width: 50px;
   --cart-btn-height: 50px;
 
   position: relative;
-  max-width: var(--prodcut-card-width, 386px);
-  max-height: var(--prodcut-card-height, 444px);
+  max-width: var(--product-card-width, 386px);
+  max-height: var(--product-card-height, 444px);
   padding: 1.5rem;
   overflow: hidden;
   display: flex;
@@ -266,14 +278,14 @@
   fill: #fff;
 }
 
-.prodcut-card:hover,
-.prodcut-card:focus,
-.prodcut-card:focus-visible {
+.product-card:hover,
+.product-card:focus,
+.product-card:focus-visible {
   box-shadow: 0 5px 10px rgba(154, 160, 185, 0.2),
     0 15px 40px rgba(154, 160, 185, 0.2);
 }
 
-.prodcut-card .product__img {
+.product-card .product__img {
   position: relative;
   max-height: 60%;
   overflow: hidden;
@@ -302,7 +314,7 @@
   font-weight: 400;
 }
 
-.prodcut-card .prodcut__info {
+.product-card .product__info {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -335,15 +347,15 @@
   display: none;
 }
 
-.prodcut-card.out-of-stock img,
-.prodcut-card.out-of-stock .prodcut__info {
+.product-card.out-of-stock img,
+.product-card.out-of-stock .product__info {
   opacity: 0.5;
 }
 
-.prodcut-card .product__title {
+.product-card .product__title {
   font-weight: 300;
 }
-.prodcut-card .prodcut__price {
+.product-card .product__price {
   font-weight: 500;
 }
 
@@ -431,6 +443,9 @@
 }
 
 @media (max-width: 525px) {
+  .plp-wrapper {
+    padding-left: 0.5rem;
+  }
   .navbar__nav {
     --position-gutter: 20px;
 
