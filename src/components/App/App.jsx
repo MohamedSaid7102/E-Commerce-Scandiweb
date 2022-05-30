@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import request from 'graphql-request';
 
 import PLP from 'pages/PLP';
-import { NavBar } from '../NavBar/NavBar';
-
-import 'assets/style/app.css';
 import PageNotFound from 'pages/NotFound';
-import request from 'graphql-request';
+import ProductsList from 'components/common/Product/List';
+import { NavBar } from '../NavBar/NavBar';
 import { GET_ALL_PRODUCTS } from 'GraphQL/Queries';
 
+import 'assets/style/app.css';
 class App extends Component {
   state = {
     selectedCategory: {},
@@ -39,8 +39,8 @@ class App extends Component {
       cartItemsCount,
       selectedCurrency,
       allProducts,
-      clothesProducts,
       techProducts,
+      clothesProducts,
     } = this.state;
 
     return (
@@ -53,37 +53,45 @@ class App extends Component {
           <Route
             path="/"
             element={
-              <PLP selectedCurrency={selectedCurrency} products={allProducts} />
+              <PLP>
+                <ProductsList
+                  products={allProducts}
+                  currency={selectedCurrency}
+                />
+              </PLP>
             }
           />
           <Route
-            path="/all-products"
+            path="all-products"
             element={
-              <PLP
-                selectedCurrency={selectedCurrency}
-                prodcutsCategory="All"
-                products={allProducts}
-              />
+              <PLP title="All">
+                <ProductsList
+                  products={allProducts}
+                  currency={selectedCurrency}
+                />
+              </PLP>
             }
           />
           <Route
-            path="/clothes-products"
+            path="clothes-products"
             element={
-              <PLP
-                selectedCurrency={selectedCurrency}
-                prodcutsCategory="Clothes"
-                products={clothesProducts}
-              />
+              <PLP title="Clothes">
+                <ProductsList
+                  products={clothesProducts}
+                  currency={selectedCurrency}
+                />
+              </PLP>
             }
           />
           <Route
-            path="/tech-products"
+            path="tech-products"
             element={
-              <PLP
-                selectedCurrency={selectedCurrency}
-                prodcutsCategory="Tech"
-                products={techProducts}
-              />
+              <PLP title="Tech">
+                <ProductsList
+                  products={techProducts}
+                  currency={selectedCurrency}
+                />
+              </PLP>
             }
           />
           <Route path="*" element={<PageNotFound />} />
