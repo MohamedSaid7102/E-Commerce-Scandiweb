@@ -7,30 +7,125 @@ import { GET_ALL_PRODUCTS } from 'GraphQL/Queries';
 // Assets
 import 'assets/style/app.css';
 // Pages
-import ProdcutsList from 'components/common/Product/List';
+import ProductsList from 'components/common/Product/List';
 import Loading from 'components/common/Loading';
+import { checkObjectsEquality } from 'utils/utilityFunctions';
+import { ThemeProvider } from 'styled-components';
 const LazyPageNotFound = React.lazy(() => import('pages/NotFound'));
 const LazyCheckout = React.lazy(() => import('pages/Checkout'));
 const LazyCart = React.lazy(() => import('pages/Cart'));
 const LazyPLP = React.lazy(() => import('pages/PLP'));
 
+// qty => quantity
 class App extends Component {
   state = {
     selectedCategory: {},
     selectedCurrency: {},
     cartItems: [],
-    cartItemsCount: 2,
+    cartItemsCount: 0 /* This is not cartItems.length, because cartItems might contain more than one item */,
     allProducts: [],
     techProducts: [],
     clothesProducts: [],
     loading: true,
   };
 
+  setDefaults = (product) => {
+    // set qty if not set
+    if (!product.qty) product.qty = 1;
+    // If it's already exists return prodcut as it is.
+    if (product.selectedAttributes) return product;
+
+    let selectedAttributes = [];
+
+    // If it doesn't has any attributes, make selectedAttributes = [].
+    if (product.attributes.length === 0)
+      return { ...product, selectedAttributes };
+
+    // If it doese has attributes, make selectedAttributes the first selected from each attribute.
+    product.attributes.forEach((attribute) =>
+      selectedAttributes.push({ ...attribute, items: attribute.items[0] })
+    );
+
+    return { ...product, selectedAttributes };
+  };
+
+  incrementCartItemsCount = () => {
+    this.setState((prevState) => ({
+      cartItemsCount: prevState.cartItemsCount + 1,
+    }));
+  };
+
+  // Add item to cart
+  addToCart = (product) => {
+    // Set the default selected attributes if prodcut doesn't has one.
+    product = this.setDefaults(product);
+
+    let cartItems = [...this.state.cartItems];
+    const productIndex = cartItems.findIndex((item) => product.id === item.id);
+
+    // If this is a new item, it doesn't exists in cartItems
+    if (productIndex === -1) {
+      this.setState(
+        (prevState) => ({
+          ...prevState,
+          cartItems: [...prevState.cartItems, product],
+        }),
+        // Increment cart items count every time we add a new product
+        () => this.incrementCartItemsCount()
+      );
+      return;
+    }
+
+    // If prodcut exists with the same attributes, we just want to increase the quantity 'qty'
+    let objectExistsWithSameSelectedAttributes = true;
+    for (let i = 0; i < product.selectedAttributes.length; i++)
+      if (
+        !checkObjectsEquality(
+          product.selectedAttributes[i],
+          cartItems[productIndex].selectedAttributes[i]
+        )
+      )
+        objectExistsWithSameSelectedAttributes = false;
+
+    if (objectExistsWithSameSelectedAttributes) cartItems[productIndex].qty++;
+
+    this.setState(
+      (prevState) => ({
+        ...prevState,
+        cartItems,
+      }),
+      // Increment cart items count every time we add a new product
+      () => this.incrementCartItemsCount()
+    );
+  };
+
+  updateCartItems = (cartItems, product) => {
+    console.table(cartItems, product);
+
+    product = {
+      ...product,
+      qty: product.qty ? product.qty + 1 : 1,
+    };
+    for (let index = 0; index < cartItems.length; index++)
+      if (cartItems[index].id === product.id) {
+        console.log(`Equality here!`);
+
+        cartItems = cartItems.splice(index - 1, 1, product);
+      }
+
+    console.table('after: ', cartItems);
+
+    return cartItems;
+  };
+
   componentDidMount() {
     request('http://localhost:4000', GET_ALL_PRODUCTS).then((data) => {
       data.categories.forEach((category) => {
         const categoryName = category.name.toLowerCase() + 'Products';
-        this.setState({ [categoryName]: category.products, loading: false });
+        this.setState({
+          [categoryName]: category.products,
+          loading: false,
+        });
       });
     });
   }
@@ -62,9 +157,10 @@ class App extends Component {
             element={
               <React.Suspense fallback={<Loading />}>
                 <LazyPLP>
-                  <ProdcutsList
+                  <ProductsList
                     products={allProducts}
                     currency={selectedCurrency}
+                    onClick={this.addToCart}
                   />
                 </LazyPLP>
               </React.Suspense>
@@ -75,9 +171,10 @@ class App extends Component {
             element={
               <React.Suspense fallback={<Loading />}>
                 <LazyPLP title="All">
-                  <ProdcutsList
+                  <ProductsList
                     products={allProducts}
                     currency={selectedCurrency}
+                    onClick={this.addToCart}
                   />
                 </LazyPLP>
               </React.Suspense>
@@ -88,9 +185,10 @@ class App extends Component {
             element={
               <React.Suspense fallback={<Loading />}>
                 <LazyPLP title="Clothes">
-                  <ProdcutsList
+                  <ProductsList
                     products={clothesProducts}
                     currency={selectedCurrency}
+                    onClick={this.addToCart}
                   />
                 </LazyPLP>
               </React.Suspense>
@@ -101,9 +199,10 @@ class App extends Component {
             element={
               <React.Suspense fallback={<Loading />}>
                 <LazyPLP title="Tech">
-                  <ProdcutsList
+                  <ProductsList
                     products={techProducts}
                     currency={selectedCurrency}
+                    onClick={this.addToCart}
                   />
                 </LazyPLP>
               </React.Suspense>
