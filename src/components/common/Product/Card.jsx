@@ -3,8 +3,19 @@ import React, { Component } from 'react';
 import { ReactComponent as CartSVG } from 'assets/svgs/cart.svg';
 import { deepEqual } from 'utils/utilityFunctions';
 export class ProductCard extends Component {
+  state = {
+    showAddToCartBtn: false,
+  };
+
+  handleMouseEnter = () => {
+    this.setState({ showAddToCartBtn: true });
+  };
+  handleMouseLeave = () => {
+    this.setState({ showAddToCartBtn: false });
+  };
   render() {
-    const { product, currency } = this.props;
+    const { product, currency, onClick } = this.props;
+    const { showAddToCartBtn } = this.state;
     // Compose full name
     const fullName = product.brand + ', ' + product.name;
     // pick product currency according to selected currency
@@ -14,6 +25,8 @@ export class ProductCard extends Component {
     return (
       <div
         key={product.id}
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
         className={
           product.inStock ? 'product-card' : 'product-card out-of-stock'
         }
@@ -23,9 +36,14 @@ export class ProductCard extends Component {
           <img src={product.gallery?.[0]} alt={fullName} />
         </div>
         <div className="product__info">
-          <button className="btn-reset cart-btn">
-            <CartSVG />
-          </button>
+          {showAddToCartBtn && (
+            <button
+              className="btn-reset cart-btn"
+              onClick={() => onClick(product)}
+            >
+              <CartSVG />
+            </button>
+          )}
           <div className="product__title">{fullName}</div>
           <div className="product__price">
             <span className="price">
