@@ -15,13 +15,17 @@
   padding: 2rem 9rem 0;
   max-width: 100%;
   height: var(--navbar-height);
-
   position: fixed;
   width: 100vw;
   top: 0;
   left: 0;
-  background: #fff;
+  box-shadow: 0 0 10px #51515169;
+  backdrop-filter: blur(3px);
+  background: #f1f1f136;
   z-index: calc(var(--modal-z-index, 1) + 1);
+}
+.navbar.navbar--solid-white {
+  background-color: #fff;
 }
 
 .navbar .navbar__nav {

@@ -136,7 +136,7 @@ export class NavBar extends Component {
       modal,
     } = this.state;
     return (
-      <nav className="navbar">
+      <nav className={cartDropdownListState? "navbar--solid-white navbar":"navbar"}>
         {/* 1. Nav bar icons */}
         {/* 2. Modal: rendered as a portal as a sibiling to root, 
                       visible on dropdown active */}

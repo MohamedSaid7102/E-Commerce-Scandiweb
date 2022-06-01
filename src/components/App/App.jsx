@@ -23,13 +23,14 @@ class App extends Component {
     allProducts: [],
     techProducts: [],
     clothesProducts: [],
+    loading: true,
   };
 
   componentDidMount() {
     request('http://localhost:4000', GET_ALL_PRODUCTS).then((data) => {
       data.categories.forEach((category) => {
         const categoryName = category.name.toLowerCase() + 'Products';
-        this.setState({ [categoryName]: category.products });
+        this.setState({ [categoryName]: category.products, loading: false });
       });
     });
   }
@@ -46,8 +47,9 @@ class App extends Component {
       allProducts,
       techProducts,
       clothesProducts,
+      loading,
     } = this.state;
-
+    if (loading) return <Loading />;
     return (
       <div className="app">
         <NavBar

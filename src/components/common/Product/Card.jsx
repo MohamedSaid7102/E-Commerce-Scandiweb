@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import { ReactComponent as CartSVG } from 'assets/svgs/cart.svg';
 import { deepEqual } from 'utils/utilityFunctions';
-
 export class ProductCard extends Component {
   render() {
     const { product, currency } = this.props;
@@ -26,7 +25,7 @@ export class ProductCard extends Component {
         <div className="product__info">
           <button className="btn-reset cart-btn">
             <CartSVG />
-          </button> 
+          </button>
           <div className="product__title">{fullName}</div>
           <div className="product__price">
             <span className="price">
