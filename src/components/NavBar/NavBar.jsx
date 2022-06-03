@@ -125,7 +125,7 @@ export class NavBar extends Component {
   };
 
   render() {
-    const { cartItemsCount } = this.props;
+    const { cartItems, cartItemsCount } = this.props;
 
     const {
       currenciesDropdownListState,
@@ -136,7 +136,11 @@ export class NavBar extends Component {
       modal,
     } = this.state;
     return (
-      <nav className={cartDropdownListState? "navbar--solid-white navbar":"navbar"}>
+      <nav
+        className={
+          cartDropdownListState ? 'navbar--solid-white navbar' : 'navbar'
+        }
+      >
         {/* 1. Nav bar icons */}
         {/* 2. Modal: rendered as a portal as a sibiling to root, 
                       visible on dropdown active */}
@@ -194,6 +198,7 @@ export class NavBar extends Component {
         {/* 3.2. Cart Dropdown */}
         {cartDropdownListState && (
           <CartDropdown
+            cartItems={cartItems}
             cartItemsCount={cartItemsCount}
             selectedCurrency={selectedCurrency}
             closeAllDropdowns={this.closeAllDropdowns}
