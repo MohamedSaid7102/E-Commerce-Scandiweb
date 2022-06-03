@@ -64,6 +64,7 @@ video,
 object {
   width: 100%;
   display: inline-block;
+  object-fit: contain;
 }
 
 button {

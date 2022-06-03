@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { ReactComponent as CartSVG } from 'assets/svgs/cart.svg';
-import { checkObjectsEquality } from 'utils/utilityFunctions';
+import { getPrice } from 'utils/utilityFunctions';
 export class ProductCard extends Component {
   state = {
     showAddToCartBtn: false,
@@ -19,9 +19,7 @@ export class ProductCard extends Component {
     // Compose full name
     const fullName = product.brand + ', ' + product.name;
     // pick product currency according to selected currency
-    const selectedPrice = product.prices.filter((price) =>
-      checkObjectsEquality(price.currency, currency)
-    )[0];
+    const selectedPrice = getPrice(product.prices, currency);
     return (
       <div
         key={product.id}
