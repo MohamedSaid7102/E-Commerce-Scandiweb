@@ -11,3 +11,9 @@ export function checkObjectsEquality(x, y) {
 export function checkArraysEquality(firstArr, secondArr) {
   return firstArr.toString() === secondArr.toString();
 }
+
+export function getPrice(prices, currency) {
+  return prices.filter((price) =>
+    checkObjectsEquality(price.currency, currency)
+  )[0];
+}
