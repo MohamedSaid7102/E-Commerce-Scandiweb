@@ -13,7 +13,7 @@ export class NavLinks extends Component {
               className={({ isActive }) =>
                 isActive ? 'nav-links__item active' : 'nav-links__item'
               }
-              to={link.name}
+              to={link.name + '-products'}
               onClick={() => onClick(link)}
             >
               {link.name}

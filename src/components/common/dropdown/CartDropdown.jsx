@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import CartDropdownItem from 'components/common/dropdown/CartDropdownItem';
+import { getPrice } from 'utils/utilityFunctions';
 
 export class CartDropdown extends Component {
   render() {
-    const { cartItemsCount, selectedCurrency, closeAllDropdowns } = this.props;
+    const { cartItems, cartItemsCount, selectedCurrency, closeAllDropdowns } =
+      this.props;
     return (
       <div className="dropdown cart-list">
         {/* Header */}
@@ -17,7 +20,18 @@ export class CartDropdown extends Component {
         </p>
         {/* Cart items */}
         <ul className="cart__dropdown-items">
-          <li></li>
+          {cartItems.map((item, index) => (
+            <CartDropdownItem
+              key={item.id || index}
+              brand={item.brand}
+              name={item.name}
+              price={getPrice(item.prices, selectedCurrency)}
+              gallery={item.gallery}
+              attributes={item.attributes}
+              selectedAttributes={item.selectedAttributes}
+              qty={item.qty}
+            />
+          ))}
         </ul>
         {/* Total */}
         <p className="total">
@@ -27,7 +41,7 @@ export class CartDropdown extends Component {
         {/* Buttons */}
         <div className="cart__btns">
           <NavLink
-            to="view-bag"
+            to="cart"
             className="btn-reset btn--outline"
             onClick={() => closeAllDropdowns()}
           >

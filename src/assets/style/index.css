@@ -64,6 +64,7 @@ video,
 object {
   width: 100%;
   display: inline-block;
+  object-fit: contain;
 }
 
 button {
@@ -88,12 +89,20 @@ ul {
   cursor: pointer;
 }
 
-.dropdown-overlay {
-  background-color: rgba(21, 20, 20, 0.19);
-  width: 100vw;
-  height: 100vh;
-  z-index: 100;
-  position: absolute;
+.container-block {
+  max-width: 11400px;
+  margin: auto;
+}
+
+.svg-responsiveness {
+  width: 100%;
+  padding: 2rem;
+}
+
+.hedding--light {
+  text-align: center;
+  font-weight: 300;
+  margin-bottom: 3rem;
 }
 
 /* Others */

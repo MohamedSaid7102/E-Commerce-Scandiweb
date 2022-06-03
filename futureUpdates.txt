@@ -1,2 +1,5 @@
+TODO: Search params for currency
+
 TODO: Make border bottom for categoris links active in fancy way
 
+TODO: Add your utils to seperate folder to access it later
