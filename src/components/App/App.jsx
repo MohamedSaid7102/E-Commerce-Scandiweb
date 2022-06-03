@@ -10,7 +10,6 @@ import 'assets/style/app.css';
 import ProductsList from 'components/common/Product/List';
 import Loading from 'components/common/Loading';
 import { checkObjectsEquality } from 'utils/utilityFunctions';
-import { ThemeProvider } from 'styled-components';
 const LazyPageNotFound = React.lazy(() => import('pages/NotFound'));
 const LazyCheckout = React.lazy(() => import('pages/Checkout'));
 const LazyCart = React.lazy(() => import('pages/Cart'));
@@ -28,6 +27,18 @@ class App extends Component {
     clothesProducts: [],
     loading: true,
   };
+
+  componentDidMount() {
+    request('http://localhost:4000', GET_ALL_PRODUCTS).then((data) => {
+      data.categories.forEach((category) => {
+        const categoryName = category.name.toLowerCase() + 'Products';
+        this.setState({
+          [categoryName]: category.products,
+          loading: false,
+        });
+      });
+    });
+  }
 
   setDefaults = (product) => {
     // set qty if not set
@@ -99,37 +110,6 @@ class App extends Component {
     );
   };
 
-  updateCartItems = (cartItems, product) => {
-    console.table(cartItems, product);
-
-    product = {
-      ...product,
-      qty: product.qty ? product.qty + 1 : 1,
-    };
-    for (let index = 0; index < cartItems.length; index++)
-      if (cartItems[index].id === product.id) {
-        console.log(`Equality here!`);
-
-        cartItems = cartItems.splice(index - 1, 1, product);
-      }
-
-    console.table('after: ', cartItems);
-
-    return cartItems;
-  };
-
-  componentDidMount() {
-    request('http://localhost:4000', GET_ALL_PRODUCTS).then((data) => {
-      data.categories.forEach((category) => {
-        const categoryName = category.name.toLowerCase() + 'Products';
-        this.setState({
-          [categoryName]: category.products,
-          loading: false,
-        });
-      });
-    });
-  }
-
   // Update App state on (category || currency) change in NavBar.
   getSelectedCategoryAndCurrency = (selectedCategory, selectedCurrency) => {
     this.setState({ selectedCategory, selectedCurrency });
@@ -137,6 +117,7 @@ class App extends Component {
 
   render() {
     const {
+      cartItems,
       cartItemsCount,
       selectedCurrency,
       allProducts,
@@ -149,6 +130,7 @@ class App extends Component {
       <div className="app">
         <NavBar
           cartItemsCount={cartItemsCount}
+          cartItems={cartItems}
           updateMainStateWithSelection={this.getSelectedCategoryAndCurrency}
         />
         <Routes>

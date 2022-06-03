@@ -2,9 +2,12 @@
 
 ## Entry React developer TEST
 
-## Currently under development 👷
+## Under development 👷
 
-## Expected to be finished by the end of May.
+## Things I added:
+
+- blurred transparent navbar.
+- bottom border for dropdown cart items.
 
 ---
 
@@ -23,6 +26,7 @@ Instead of dividing style into multiple style sheets, I mad basic general styles
 
 // Hello End
 ```
+
 and included responsiveness as a sepert file
 so remember to search with the component name for easy access.
 
