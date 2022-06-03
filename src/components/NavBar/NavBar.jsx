@@ -11,7 +11,7 @@ import Modal from 'components/common/Modal';
 import CurrenciesDropdown from 'components/common/dropdown/CurrenciesDropdown';
 import CartDropdown from 'components/common/dropdown/CartDropdown';
 
-export class NavBar extends Component {
+class NavBar extends Component {
   state = {
     cartDropdownListState: false,
     currenciesDropdownListState: false,

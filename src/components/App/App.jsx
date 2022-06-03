@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import request from 'graphql-request';
 
-import { NavBar } from '../NavBar/NavBar';
+import NavBar from 'components/NavBar';
 import { GET_ALL_PRODUCTS } from 'GraphQL/Queries';
 // Assets
 import 'assets/style/app.css';
