@@ -10,6 +10,7 @@ import 'assets/style/app.css';
 import ProductsList from 'components/common/Product/List';
 import Loading from 'components/common/Loading';
 import { checkObjectsEquality } from 'utils/utilityFunctions';
+import Modal from 'components/common/Modal';
 const LazyPageNotFound = React.lazy(() => import('pages/NotFound'));
 const LazyCheckout = React.lazy(() => import('pages/Checkout'));
 const LazyCart = React.lazy(() => import('pages/Cart'));
@@ -128,6 +129,7 @@ class App extends Component {
     if (loading) return <Loading />;
     return (
       <div className="app">
+        <Modal />
         <NavBar
           cartItemsCount={cartItemsCount}
           cartItems={cartItems}
