@@ -29,7 +29,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    request('https://shelf-e.herokuapp.com/', GET_ALL_PRODUCTS).then((data) => {
+    request('http://localhost:4000/', GET_ALL_PRODUCTS).then((data) => {
       data.categories.forEach((category) => {
         const categoryName = category.name.toLowerCase() + 'Products';
         this.setState({

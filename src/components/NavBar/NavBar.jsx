@@ -23,7 +23,7 @@ class NavBar extends Component {
   };
 
   componentDidMount() {
-    request('https://shelf-e.herokuapp.com/', GET_CURRENCIES_AND_CATEGORIES).then(
+    request('http://localhost:4000/', GET_CURRENCIES_AND_CATEGORIES).then(
       (data) =>
         // Set currencies & categories first
         this.setState(
