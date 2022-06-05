@@ -14,8 +14,8 @@ import {
   closeAllDropdowns,
   toggleCartDropdown,
   toggleCurrenciesDropdown,
-} from 'Redux/actions/dropdownActions';
-import { setModalState, toggleModalState } from 'Redux/actions/modalActions';
+} from 'Redux/ducks/dropdown';
+import { setModalState, toggleModalState } from 'Redux/ducks/modal';
 class NavBar extends Component {
   state = {
     currencies: [],

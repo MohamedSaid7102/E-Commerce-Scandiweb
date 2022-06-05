@@ -1,11 +1,29 @@
 /* eslint-disable import/no-anonymous-default-export */
+// Action types
+export const CLOSE_ALL_DROPDOWNS = 'CLOSE_ALL_DROPDOWNS';
+export const TOGGLE_CART_DROPDOWN = 'TOGGLE_CART_DROPDOWN';
+export const TOGGLE_CURRENCIES_DROPDOWN = 'TOGGLE_CURRENCIES_DROPDOWN';
 
-import {
-  CLOSE_ALL_DROPDOWNS,
-  TOGGLE_CART_DROPDOWN,
-  TOGGLE_CURRENCIES_DROPDOWN,
-} from 'Redux/actions/types';
+// Actions
+export const closeAllDropdowns = () => (dispatch) => {
+  dispatch({
+    type: CLOSE_ALL_DROPDOWNS,
+  });
+};
 
+export const toggleCartDropdown = () => (dispatch) => {
+  dispatch({
+    type: TOGGLE_CART_DROPDOWN,
+  });
+};
+
+export const toggleCurrenciesDropdown = () => (dispatch) => {
+  dispatch({
+    type: TOGGLE_CURRENCIES_DROPDOWN,
+  });
+};
+
+// Reducers
 const initialState = {
   isCartOpen: false,
   isCurrenciesOpen: false,

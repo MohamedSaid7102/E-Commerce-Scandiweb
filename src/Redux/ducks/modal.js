@@ -1,8 +1,24 @@
 /* eslint-disable import/no-anonymous-default-export */
+// Action types
+export const SET_MODAL_STATE = 'SET_MODAL_STATE';
+export const TOGGLE_MODAL_STATE = 'TOGGLE_MODAL_STATE';
 
-import { SET_MODAL_STATE } from 'Redux/actions/types';
-import { TOGGLE_MODAL_STATE } from 'Redux/actions/types';
+// Actions creators
+export const setModalState = (isModalOpen, isModalDark) => (dispatch) => {
+  dispatch({
+    type: SET_MODAL_STATE,
+    payload: { isModalOpen, isModalDark },
+  });
+};
 
+export const toggleModalState = (isModalDark) => (dispatch) => {
+  dispatch({
+    type: TOGGLE_MODAL_STATE,
+    payload: { isModalDark },
+  });
+};
+
+// Reducers
 const initialState = {
   isModalOpen: false,
   isModalDark: false,

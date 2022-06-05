@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
-import { closeAllDropdowns } from 'Redux/actions/dropdownActions';
-import { setModalState } from 'Redux/actions/modalActions';
+import { closeAllDropdowns } from 'Redux/ducks/dropdown';
+import { setModalState } from 'Redux/ducks/modal';
 
 export class Modal extends Component {
   render() {

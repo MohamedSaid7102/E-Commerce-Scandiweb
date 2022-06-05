@@ -3,8 +3,8 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import CartDropdownItem from 'components/common/dropdown/CartDropdownItem';
 import { getPrice } from 'utils/utilityFunctions';
-import { closeAllDropdowns } from 'Redux/actions/dropdownActions';
-import { setModalState } from 'Redux/actions/modalActions';
+import { closeAllDropdowns } from 'Redux/ducks/dropdown';
+import { setModalState } from 'Redux/ducks/modal';
 
 export class CartDropdown extends Component {
   render() {
