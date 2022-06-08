@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 // Action types
-export const SET_MODAL_STATE = 'SET_MODAL_STATE';
-export const TOGGLE_MODAL_STATE = 'TOGGLE_MODAL_STATE';
+const SET_MODAL_STATE = 'SET_MODAL_STATE';
+const TOGGLE_MODAL_STATE = 'TOGGLE_MODAL_STATE';
 
 // Actions creators
 export const setModalState = (isModalOpen, isModalDark) => (dispatch) => {

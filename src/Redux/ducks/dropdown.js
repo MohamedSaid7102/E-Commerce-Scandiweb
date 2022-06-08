@@ -1,8 +1,8 @@
 /* eslint-disable import/no-anonymous-default-export */
 // Action types
-export const CLOSE_ALL_DROPDOWNS = 'CLOSE_ALL_DROPDOWNS';
-export const TOGGLE_CART_DROPDOWN = 'TOGGLE_CART_DROPDOWN';
-export const TOGGLE_CURRENCIES_DROPDOWN = 'TOGGLE_CURRENCIES_DROPDOWN';
+const CLOSE_ALL_DROPDOWNS = 'CLOSE_ALL_DROPDOWNS';
+const TOGGLE_CART_DROPDOWN = 'TOGGLE_CART_DROPDOWN';
+const TOGGLE_CURRENCIES_DROPDOWN = 'TOGGLE_CURRENCIES_DROPDOWN';
 
 // Actions
 export const closeAllDropdowns = () => (dispatch) => {
