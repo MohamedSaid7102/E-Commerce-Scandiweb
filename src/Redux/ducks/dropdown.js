@@ -41,12 +41,14 @@ export default (state = initialState, action) => {
     return {
       ...state,
       isCartOpen: state.isCartOpen ? false : true,
+      isCurrenciesOpen: false,
     };
   }
   if (action.type === TOGGLE_CURRENCIES_DROPDOWN) {
     return {
       ...state,
       isCurrenciesOpen: state.isCurrenciesOpen ? false : true,
+      isCartOpen: false,
     };
   }
   return { ...state };

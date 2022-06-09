@@ -5,8 +5,6 @@ import Logo from 'components/common/Logo';
 import DropdownButton from 'components/common/dropdown/DropdownButton';
 import logo from 'assets/images/logo.png';
 import NavLinks from 'components/NavBar/NavLinks';
-import { GET_CURRENCIES_AND_CATEGORIES } from 'GraphQL/Queries';
-import request from 'graphql-request';
 import CurrenciesDropdown from 'components/common/dropdown/CurrenciesDropdown';
 import CartDropdown from 'components/common/dropdown/CartDropdown';
 import { connect } from 'react-redux';
@@ -16,69 +14,59 @@ import {
   toggleCurrenciesDropdown,
 } from 'Redux/ducks/dropdown';
 import { setModalState, toggleModalState } from 'Redux/ducks/modal';
-class NavBar extends Component {
-  state = {
-    currencies: [],
-    categories: [],
-    selectedCurrency: {},
-    selectedCategory: {},
-  };
+import { getCategories, setSelectedCategory } from 'Redux/ducks/categories';
+import { getCurrencies, setSelectedCurrency } from 'Redux/ducks/currencies';
 
-  componentDidMount() {
-    request('http://localhost:4000/', GET_CURRENCIES_AND_CATEGORIES).then(
-      (data) =>
-        // Set currencies & categories first
-        this.setState(
-          {
-            currencies: data.currencies,
-            categories: data.categories,
-            selectedCurrency: data.currencies[0],
-            selectedCategory: data.categories[0],
-          }, // then update app state with selection
-          () =>
-            this.props.updateMainStateWithSelection(
-              this.state.selectedCategory,
-              this.state.selectedCurrency
-            )
-        )
-    );
+class NavBar extends Component {
+  constructor(props) {
+    super(props);
+    this.props.getCategories();
+    this.props.getCurrencies();
   }
 
   handleLinkClick = (selectedCategory) => {
-    this.setState({ selectedCategory }, () => {
-      this.props.updateMainStateWithSelection(
-        this.state.selectedCategory,
-        this.state.selectedCurrency
-      );
-      this.props.closeAllDropdowns();
-      this.props.setModalState(false, false);
-    });
+    try {
+      this.props.setSelectedCategory(selectedCategory);
+    } catch (error) {
+      console.log(error);
+    }
+
+    this.props.closeAllDropdowns();
+    this.props.setModalState(false, false);
   };
 
   handleCurrencySelect = (selectedCurrency) => {
-    this.setState({ selectedCurrency }, () => {
-      // Update app state with new selections
-      this.props.updateMainStateWithSelection(
-        this.state.selectedCategory,
-        this.state.selectedCurrency
-      );
-      this.props.closeAllDropdowns();
-      this.props.setModalState(false, false);
-    });
+    try {
+      this.props.setSelectedCurrency(selectedCurrency);
+    } catch (error) {
+      console.log(error);
+    }
+
+    this.props.closeAllDropdowns();
+    this.props.setModalState(false, false);
   };
 
   render() {
     const {
+      // Parent props
       cartItems,
       cartItemsCount,
+      // Redux
+      // State
+      categories,
+      currencies,
+      selectedCurrency,
       isCartOpen,
       isCurrenciesOpen,
+      // Actions
       toggleCurrenciesDropdown,
       toggleCartDropdown,
       toggleModalState,
     } = this.props;
 
-    const { currencies, categories, selectedCurrency } = this.state;
+    // Don't render NavBar till categories and currencies are in redux store,
+    if (!categories || !currencies) return null;
+
     return (
       <nav className={isCartOpen ? 'navbar--solid-white navbar' : 'navbar'}>
         <ul className="navbar__nav">
@@ -143,9 +131,16 @@ class NavBar extends Component {
 const mapStateToProps = (state) => ({
   isCartOpen: state.dropdowns.isCartOpen,
   isCurrenciesOpen: state.dropdowns.isCurrenciesOpen,
+  categories: state.categories.list,
+  currencies: state.currencies.list,
+  selectedCurrency: state.currencies.selectedCurrency,
 });
 
 export default connect(mapStateToProps, {
+  getCategories,
+  setSelectedCategory,
+  getCurrencies,
+  setSelectedCurrency,
   closeAllDropdowns,
   toggleCartDropdown,
   toggleCurrenciesDropdown,

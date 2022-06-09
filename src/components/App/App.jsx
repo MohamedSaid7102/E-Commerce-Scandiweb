@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import request from 'graphql-request';
+import { connect } from 'react-redux';
 
 import NavBar from 'components/NavBar';
-import { GET_ALL_PRODUCTS } from 'GraphQL/Queries';
+import { getAllProducts } from 'Redux/ducks/products';
 // Assets
 import 'assets/style/app.css';
 // Pages
@@ -23,22 +23,10 @@ class App extends Component {
     selectedCurrency: {},
     cartItems: [],
     cartItemsCount: 0 /* This is not cartItems.length, because cartItems might contain more than one item */,
-    allProducts: [],
-    techProducts: [],
-    clothesProducts: [],
-    loading: true,
   };
 
   componentDidMount() {
-    request('http://localhost:4000/', GET_ALL_PRODUCTS).then((data) => {
-      data.categories.forEach((category) => {
-        const categoryName = category.name.toLowerCase() + 'Products';
-        this.setState({
-          [categoryName]: category.products,
-          loading: false,
-        });
-      });
-    });
+    this.props.getAllProducts();
   }
 
   setDefaults = (product) => {
@@ -111,30 +99,18 @@ class App extends Component {
     );
   };
 
-  // Update App state on (category || currency) change in NavBar.
-  getSelectedCategoryAndCurrency = (selectedCategory, selectedCurrency) => {
-    this.setState({ selectedCategory, selectedCurrency });
-  };
-
   render() {
-    const {
-      cartItems,
-      cartItemsCount,
-      selectedCurrency,
-      allProducts,
-      techProducts,
-      clothesProducts,
-      loading,
-    } = this.state;
-    if (loading) return <Loading />;
+    const { cartItems, cartItemsCount } = this.state;
+
+    const { allProducts, techProducts, clothesProducts, selectedCurrency } =
+      this.props;
+
+    if (!this.props.allProducts) return <Loading />; //while allProdcuts is not loaded => show Loading.
+
     return (
       <div className="app">
         <Modal />
-        <NavBar
-          cartItemsCount={cartItemsCount}
-          cartItems={cartItems}
-          updateMainStateWithSelection={this.getSelectedCategoryAndCurrency}
-        />
+        <NavBar cartItemsCount={cartItemsCount} cartItems={cartItems} />
         <Routes>
           <Route
             path="/"
@@ -222,5 +198,12 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  allProducts: state.products.allProducts,
+  clothesProducts: state.products.clothesProducts,
+  techProducts: state.products.techProducts,
+  selectedCurrency: state.currencies.selectedCurrency,
+});
+
+export default connect(mapStateToProps, { getAllProducts })(App);
 

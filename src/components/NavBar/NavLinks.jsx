@@ -13,10 +13,10 @@ export class NavLinks extends Component {
               className={({ isActive }) =>
                 isActive ? 'nav-links__item active' : 'nav-links__item'
               }
-              to={link.name + '-products'}
+              to={link + '-products'}
               onClick={() => onClick(link)}
             >
-              {link.name}
+              {link}
             </NavLink>
           </li>
         ))}
