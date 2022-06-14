@@ -13,9 +13,10 @@ import {
   toggleCartDropdown,
   toggleCurrenciesDropdown,
 } from 'Redux/ducks/dropdown';
-import { setModalState, toggleModalState } from 'Redux/ducks/modal';
+import { setModalState } from 'Redux/ducks/modal';
 import { getCategories, setSelectedCategory } from 'Redux/ducks/categories';
 import { getCurrencies, setSelectedCurrency } from 'Redux/ducks/currencies';
+import store from 'Redux/store';
 
 class NavBar extends Component {
   constructor(props) {
@@ -46,6 +47,20 @@ class NavBar extends Component {
     this.props.setModalState(false, false);
   };
 
+  handleCurrencyDropdownClick = () => {
+    if (store.getState().dropdowns.isCurrenciesOpen)
+      this.props.setModalState(false, false);
+    else this.props.setModalState(true, false);
+    this.props.toggleCurrenciesDropdown();
+  };
+
+  handleCartDropdownClick = () => {
+    if (store.getState().dropdowns.isCartOpen)
+      this.props.setModalState(false, false);
+    else this.props.setModalState(true, true);
+    this.props.toggleCartDropdown();
+  };
+
   render() {
     const {
       // Parent props
@@ -59,9 +74,6 @@ class NavBar extends Component {
       isCartOpen,
       isCurrenciesOpen,
       // Actions
-      toggleCurrenciesDropdown,
-      toggleCartDropdown,
-      toggleModalState,
     } = this.props;
 
     // Don't render NavBar till categories and currencies are in redux store,
@@ -89,8 +101,7 @@ class NavBar extends Component {
               opened={isCurrenciesOpen}
               label={selectedCurrency.symbol}
               onClick={() => {
-                toggleCurrenciesDropdown();
-                toggleModalState(false); /* False => transparent model */
+                this.handleCurrencyDropdownClick();
               }}
             />
           </li>
@@ -100,8 +111,7 @@ class NavBar extends Component {
               itemsCount={cartItemsCount}
               label={<CartSVG />}
               onClick={() => {
-                toggleCartDropdown();
-                toggleModalState(true); /* True => dark model */
+                this.handleCartDropdownClick();
               }}
             />
           </li>
@@ -134,6 +144,7 @@ const mapStateToProps = (state) => ({
   categories: state.categories.list,
   currencies: state.currencies.list,
   selectedCurrency: state.currencies.selectedCurrency,
+  isModalOpen: state.modal.isOpen,
 });
 
 export default connect(mapStateToProps, {
@@ -144,6 +155,5 @@ export default connect(mapStateToProps, {
   closeAllDropdowns,
   toggleCartDropdown,
   toggleCurrenciesDropdown,
-  toggleModalState,
   setModalState,
 })(NavBar);

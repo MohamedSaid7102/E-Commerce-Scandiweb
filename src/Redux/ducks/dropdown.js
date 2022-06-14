@@ -1,4 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
+
+import { setModalState } from 'Redux/ducks/modal';
+import store from 'Redux/store';
 // Action types
 const CLOSE_ALL_DROPDOWNS = 'CLOSE_ALL_DROPDOWNS';
 const TOGGLE_CART_DROPDOWN = 'TOGGLE_CART_DROPDOWN';
@@ -12,6 +15,7 @@ export const closeAllDropdowns = () => (dispatch) => {
 };
 
 export const toggleCartDropdown = () => (dispatch) => {
+  console.log(store.getState());
   dispatch({
     type: TOGGLE_CART_DROPDOWN,
   });
@@ -45,6 +49,8 @@ export default (state = initialState, action) => {
     };
   }
   if (action.type === TOGGLE_CURRENCIES_DROPDOWN) {
+    if (state.isCurrenciesOpen) setModalState(false, false);
+    else setModalState(true, true);
     return {
       ...state,
       isCurrenciesOpen: state.isCurrenciesOpen ? false : true,
