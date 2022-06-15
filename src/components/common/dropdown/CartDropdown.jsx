@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
 import CartDropdownItem from 'components/common/dropdown/CartDropdownItem';
 import { getPrice } from 'utils/utilityFunctions';
+import { closeAllDropdowns } from 'Redux/ducks/dropdown';
+import { setModalState } from 'Redux/ducks/modal';
 
 export class CartDropdown extends Component {
   render() {
-    const { cartItems, cartItemsCount, selectedCurrency, closeAllDropdowns } =
-      this.props;
+    const {
+      cartItems,
+      cartItemsCount,
+      selectedCurrency,
+      closeAllDropdowns,
+      setModalState,
+    } = this.props;
     return (
       <div className="dropdown cart-list">
         {/* Header */}
@@ -23,6 +31,7 @@ export class CartDropdown extends Component {
           {cartItems.map((item, index) => (
             <CartDropdownItem
               key={item.id || index}
+              id={item.id}
               brand={item.brand}
               name={item.name}
               price={getPrice(item.prices, selectedCurrency)}
@@ -43,14 +52,20 @@ export class CartDropdown extends Component {
           <NavLink
             to="cart"
             className="btn-reset btn--outline"
-            onClick={() => closeAllDropdowns()}
+            onClick={() => {
+              closeAllDropdowns();
+              setModalState(false, false);
+            }}
           >
             View Bag
           </NavLink>
           <NavLink
             to="checkout"
             className="btn-reset btn--filled"
-            onClick={() => closeAllDropdowns()}
+            onClick={() => {
+              closeAllDropdowns();
+              setModalState(false, false);
+            }}
           >
             Check out
           </NavLink>
@@ -60,4 +75,6 @@ export class CartDropdown extends Component {
   }
 }
 
-export default CartDropdown;
+export default connect(null, { closeAllDropdowns, setModalState })(
+  CartDropdown
+);
