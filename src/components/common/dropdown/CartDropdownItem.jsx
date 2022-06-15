@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { increaseProductCount, decreaseProductCount } from 'Redux/ducks/cart';
 
 export class CartDropdownItem extends Component {
   renderAttributes = (attributes, selectedAttributes) => {
@@ -47,6 +49,7 @@ export class CartDropdownItem extends Component {
 
   render() {
     const {
+      id,
       brand,
       name,
       price,
@@ -68,9 +71,19 @@ export class CartDropdownItem extends Component {
             {this.renderAttributes(attributes, selectedAttributes)}
           </div>
           <div className="item__controllers">
-            <button className="box">+</button>
+            <button
+              className="box"
+              onClick={() => this.props.increaseProductCount(id)}
+            >
+              +
+            </button>
             <span className="quantity">{qty}</span>
-            <button className="box">-</button>
+            <button
+              className="box"
+              onClick={() => this.props.decreaseProductCount(id)}
+            >
+              -
+            </button>
           </div>
         </div>
         <figure className="image">
@@ -81,4 +94,6 @@ export class CartDropdownItem extends Component {
   }
 }
 
-export default CartDropdownItem;
+export default connect(null, { increaseProductCount, decreaseProductCount })(
+  CartDropdownItem
+);

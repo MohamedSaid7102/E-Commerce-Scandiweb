@@ -7,7 +7,7 @@ import { getAllProducts } from 'Redux/ducks/products';
 // Assets
 import 'assets/style/app.css';
 // Redux
-import { incrementCartItemsCount, addToCart } from 'Redux/ducks/cart';
+import { addToCart } from 'Redux/ducks/cart';
 // Pages
 import ProductsList from 'components/common/Product/List';
 import Loading from 'components/common/Loading';
@@ -141,6 +141,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   getAllProducts,
   addToCart,
-  incrementCartItemsCount,
 })(App);
 

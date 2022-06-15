@@ -31,6 +31,7 @@ export class CartDropdown extends Component {
           {cartItems.map((item, index) => (
             <CartDropdownItem
               key={item.id || index}
+              id={item.id}
               brand={item.brand}
               name={item.name}
               price={getPrice(item.prices, selectedCurrency)}

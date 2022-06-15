@@ -3,7 +3,8 @@ import { checkObjectsEquality } from 'utils/utilityFunctions';
 
 // Actions types
 const ADD_TO_CART = 'ADD_TO_CART';
-const INCREMENT_CART_ITEMS_COUNT = 'INCREMENT_CART_ITEMS_COUNT';
+const INCREMENT_PRODUCT_COUNT = 'INCREMENT_PRODUCT_COUNT';
+const DECREMENT_PRODUCT_COUNT = 'DECREMENT_PRODUCT_COUNT';
 
 export function addToCart(product) {
   if (typeof product !== 'object')
@@ -21,10 +22,20 @@ export function addToCart(product) {
   };
 }
 
-export function incrementCartItemsCount() {
+export function increaseProductCount(id) {
+  // TODO: add exception handle here if id is not exists
   return (dispatch) => {
     dispatch({
-      type: INCREMENT_CART_ITEMS_COUNT,
+      type: INCREMENT_PRODUCT_COUNT,
+      id,
+    });
+  };
+}
+export function decreaseProductCount(id) {
+  return (dispatch) => {
+    dispatch({
+      type: DECREMENT_PRODUCT_COUNT,
+      id,
     });
   };
 }
@@ -75,10 +86,46 @@ export default (state = initialState, action) => {
     };
   }
 
-  if (action.type === INCREMENT_CART_ITEMS_COUNT) {
-    let cartItemsCount = state.cartItemsCount + 1;
+  if (action.type === INCREMENT_PRODUCT_COUNT) {
+    const id = action.id;
+    let newCartItems = [];
+    state.cartItems.forEach((item) => {
+      if (item.id === id) {
+        item.qty += 1;
+        newCartItems.push(item);
+        return;
+      }
+      newCartItems.push(item);
+    });
     return {
       ...state,
+      cartItems: newCartItems,
+      cartItemsCount: state.cartItemsCount + 1,
+    };
+  }
+
+  if (action.type === DECREMENT_PRODUCT_COUNT) {
+    const id = action.id;
+    let newCartItems = [];
+    let cartItemsCount = state.cartItemsCount;
+
+    state.cartItems.forEach((item) => {
+      // if so, in the next decrement will be 0 and should be removed from the cart
+      if (item.id === id && item.qty === 1) {
+        cartItemsCount -= 1;
+        return;
+      }
+      if (item.id === id && item.qty > 0) {
+        item.qty -= 1;
+        cartItemsCount -= 1;
+        newCartItems.push(item);
+        return;
+      }
+      newCartItems.push(item);
+    });
+    return {
+      ...state,
+      cartItems: newCartItems,
       cartItemsCount,
     };
   }
