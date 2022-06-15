@@ -224,9 +224,7 @@
   padding: 7px;
 }
 
-.cart__dropdown-items .dropdown__item button.box:hover,
-.cart__dropdown-items .dropdown__item button.box:focus,
-.cart__dropdown-items .dropdown__item button.box:focus-visible {
+.cart__dropdown-items .dropdown__item button.box:hover {
   background-color: #111;
   color: #fff;
 }

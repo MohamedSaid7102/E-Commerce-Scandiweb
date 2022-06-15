@@ -1,23 +1,36 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
 
-import PropTypes from 'prop-types';
+import { closeAllDropdowns } from 'Redux/ducks/dropdown';
+import { setModalState } from 'Redux/ducks/modal';
 
 export class Modal extends Component {
   render() {
-    const { visible, dark, onClick } = this.props;
+    const { isModalOpen, isModalDark, closeAllDropdowns, setModalState } =
+      this.props;
     return ReactDOM.createPortal(
-      visible ? (
-        <div id="modal" className={dark ? 'dark' : ''} onClick={onClick}></div>
+      isModalOpen ? (
+        <div
+          id="modal"
+          className={isModalDark ? 'dark' : ''}
+          onClick={() => {
+            closeAllDropdowns();
+            setModalState(false, false);
+          }}
+        ></div>
       ) : null,
       document.getElementById('modal-container')
     );
   }
 }
 
-Modal.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  dark: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
-};
-export default Modal;
+// Connecting to the global store.
+const mapStateToProps = (state) => ({
+  isModalOpen: state.modal.isModalOpen,
+  isModalDark: state.modal.isModalDark,
+});
+
+export default connect(mapStateToProps, { closeAllDropdowns, setModalState })(
+  Modal
+);

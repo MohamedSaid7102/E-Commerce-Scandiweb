@@ -6,7 +6,7 @@ export class Logo extends Component {
   render() {
     const { onClick } = this.props;
     return (
-      <Link to="/" onClick={() => onClick({ name: '/' })}>
+      <Link to="/" onClick={() => onClick('/')}>
         <img
           src={this.props.logo}
           alt={this.props.logoAlt}

@@ -5,203 +5,131 @@ import Logo from 'components/common/Logo';
 import DropdownButton from 'components/common/dropdown/DropdownButton';
 import logo from 'assets/images/logo.png';
 import NavLinks from 'components/NavBar/NavLinks';
-import { GET_CURRENCIES_AND_CATEGORIES } from 'GraphQL/Queries';
-import request from 'graphql-request';
-import Modal from 'components/common/Modal';
 import CurrenciesDropdown from 'components/common/dropdown/CurrenciesDropdown';
 import CartDropdown from 'components/common/dropdown/CartDropdown';
+import { connect } from 'react-redux';
+import {
+  closeAllDropdowns,
+  toggleCartDropdown,
+  toggleCurrenciesDropdown,
+} from 'Redux/ducks/dropdown';
+import { setModalState } from 'Redux/ducks/modal';
+import { getCategories, setSelectedCategory } from 'Redux/ducks/categories';
+import { getCurrencies, setSelectedCurrency } from 'Redux/ducks/currencies';
+import store from 'Redux/store';
 
 class NavBar extends Component {
-  state = {
-    cartDropdownListState: false,
-    currenciesDropdownListState: false,
-    currencies: [],
-    categories: [],
-    selectedCurrency: {},
-    selectedCategory: {},
-    modal: { visible: false, dark: false },
-  };
-
-  componentDidMount() {
-    request('http://localhost:4000/', GET_CURRENCIES_AND_CATEGORIES).then(
-      (data) =>
-        // Set currencies & categories first
-        this.setState(
-          {
-            currencies: data.currencies,
-            categories: data.categories,
-            selectedCurrency: data.currencies[0],
-            selectedCategory: data.categories[0],
-          }, // then update app state with selection
-          () =>
-            this.props.updateMainStateWithSelection(
-              this.state.selectedCategory,
-              this.state.selectedCurrency
-            )
-        )
-    );
+  constructor(props) {
+    super(props);
+    this.props.getCategories();
+    this.props.getCurrencies();
   }
 
   handleLinkClick = (selectedCategory) => {
-    this.setState({ selectedCategory }, () =>
-      this.props.updateMainStateWithSelection(
-        this.state.selectedCategory,
-        this.state.selectedCurrency
-      )
-    );
-    this.closeAllDropdowns(); /* Close all dropdowns & remove the modal */
+    try {
+      this.props.setSelectedCategory(selectedCategory);
+    } catch (error) {
+      console.log(error);
+    }
+
+    this.props.closeAllDropdowns();
+    this.props.setModalState(false, false);
   };
 
   handleCurrencySelect = (selectedCurrency) => {
-    this.setState({ selectedCurrency }, () => {
-      // Update app state with new selections
-      this.props.updateMainStateWithSelection(
-        this.state.selectedCategory,
-        this.state.selectedCurrency
-      );
-      this.closeAllDropdowns(); /* Close all dropdowns & remove the modal */
-    });
-  };
-
-  closeAllDropdowns = () => {
-    /* Close all dropdowns */
-    const state = { ...this.state };
-
-    for (const item in state) {
-      if (item.toLocaleLowerCase().includes('dropdownliststate'))
-        this.setState({ [item]: false });
-    }
-    /* remove the modal */
-    this.showmodal(false, false);
-  };
-
-  // Function to loop over all drop downs and close them except provided one.
-  closeAllDropdownsExcept = (dropdownStateItem = '') => {
-    // close all in case doesn't provide any stateItem
-    if (dropdownStateItem.length === 0) {
-      this.closeAllDropdowns();
-      return;
+    try {
+      this.props.setSelectedCurrency(selectedCurrency);
+    } catch (error) {
+      console.log(error);
     }
 
-    const state = { ...this.state };
-
-    for (const item in state) {
-      if (
-        item.toLocaleLowerCase().includes('dropdownliststate') &&
-        item.toLocaleLowerCase() !== dropdownStateItem.toLocaleLowerCase()
-      )
-        this.setState({ [item]: false });
-    }
+    this.props.closeAllDropdowns();
+    this.props.setModalState(false, false);
   };
 
-  // When invoked, pass state item which correspond to opening and closing the dropdown, and it's state darkModal to specify it.
-  handleDropdownClick = (dropdownStateItem, darkModal = false) => {
-    // If user pass valid dropdownStateItem
-    if (this.state.hasOwnProperty(dropdownStateItem)) {
-      // Toggle the state of dropdownStateItem and set the modal like that state, if dropdownStateItem true so the dropdown is shown hence the modal should be shown to capture clicking outside the modal and vice versa.
-      this.setState(
-        (oldState) => ({
-          [dropdownStateItem]: !oldState[dropdownStateItem],
-        }),
-        () => {
-          this.showmodal(this.state[dropdownStateItem], darkModal);
-          this.closeAllDropdownsExcept(
-            dropdownStateItem
-          ); /* Close all dropdowns except dropdownStateItem */
-        }
-      );
-    } else {
-      // If he doesn't pass valid dropdownStateItem
-      console.log(
-        `${dropdownStateItem} is not an item on the state..!, Check your dropdown handler.`
-      );
-    }
+  handleCurrencyDropdownClick = () => {
+    if (store.getState().dropdowns.isCurrenciesOpen)
+      this.props.setModalState(false, false);
+    else this.props.setModalState(true, false);
+    this.props.toggleCurrenciesDropdown();
   };
 
-  // Default is true to show, and false if we pass false to hide
-  showmodal = (visible = true, dark = false) => {
-    if (typeof visible === 'boolean')
-      this.setState({ modal: { visible, dark } });
+  handleCartDropdownClick = () => {
+    if (store.getState().dropdowns.isCartOpen)
+      this.props.setModalState(false, false);
+    else this.props.setModalState(true, true);
+    this.props.toggleCartDropdown();
   };
 
   render() {
-    const { cartItems, cartItemsCount } = this.props;
-
     const {
-      currenciesDropdownListState,
-      cartDropdownListState,
-      currencies,
+      // Parent props
+      cartItems,
+      cartItemsCount,
+      // Redux
+      // State
       categories,
+      currencies,
       selectedCurrency,
-      modal,
-    } = this.state;
+      isCartOpen,
+      isCurrenciesOpen,
+      // Actions
+    } = this.props;
+
+    // Don't render NavBar till categories and currencies are in redux store,
+    if (!categories || !currencies) return null;
+
     return (
-      <nav
-        className={
-          cartDropdownListState ? 'navbar--solid-white navbar' : 'navbar'
-        }
-      >
-        {/* 1. Nav bar icons */}
-        {/* 2. Modal: rendered as a portal as a sibiling to root, 
-                      visible on dropdown active */}
-        <Modal
-          visible={modal.visible}
-          dark={modal.dark}
-          onClick={this.closeAllDropdowns}
-        />
+      <nav className={isCartOpen ? 'navbar--solid-white navbar' : 'navbar'}>
         <ul className="navbar__nav">
-          {/* 1.1. Categories */}
+          {/* NavLins */}
           <li className="nav-item">
             <NavLinks links={categories} onClick={this.handleLinkClick} />
           </li>
-          {/* 1.2. Logo */}
-          <li
-            className="nav-item logo-wrapper"
-            onClick={this.closeAllDropdowns}
-          >
+          {/* Logo */}
+          <li className="nav-item logo-wrapper">
             <Logo
               onClick={this.handleLinkClick}
               logo={logo}
               logoAlt="Logo, Green bag with a white arrow inside"
             />
           </li>
-          {/* 1.3. Currency dropdown button */}
+          {/* Currency dropdown button */}
           <li className="nav-item currency-wrapper">
             <DropdownButton
               showTopDownArrows={true}
-              opened={currenciesDropdownListState}
+              opened={isCurrenciesOpen}
               label={selectedCurrency.symbol}
-              onClick={() =>
-                this.handleDropdownClick('currenciesDropdownListState', false)
-              }
+              onClick={() => {
+                this.handleCurrencyDropdownClick();
+              }}
             />
           </li>
-          {/* 1.4. Cart dropdown button */}
+          {/* Cart dropdown button */}
           <li className="nav-item cart-wrapper">
             <DropdownButton
               itemsCount={cartItemsCount}
               label={<CartSVG />}
-              onClick={() =>
-                this.handleDropdownClick('cartDropdownListState', true)
-              }
+              onClick={() => {
+                this.handleCartDropdownClick();
+              }}
             />
           </li>
         </ul>
         {/* 3. Dropdowns */}
         {/* 3.1. Currency Dropdown */}
-        {currenciesDropdownListState && (
+        {isCurrenciesOpen && (
           <CurrenciesDropdown
             currencies={currencies}
             handleCurrencySelect={this.handleCurrencySelect}
           />
         )}
         {/* 3.2. Cart Dropdown */}
-        {cartDropdownListState && (
+        {isCartOpen && (
           <CartDropdown
             cartItems={cartItems}
             cartItemsCount={cartItemsCount}
             selectedCurrency={selectedCurrency}
-            closeAllDropdowns={this.closeAllDropdowns}
           />
         )}
       </nav>
@@ -209,4 +137,23 @@ class NavBar extends Component {
   }
 }
 
-export default NavBar;
+// Connecting to the global store.
+const mapStateToProps = (state) => ({
+  isCartOpen: state.dropdowns.isCartOpen,
+  isCurrenciesOpen: state.dropdowns.isCurrenciesOpen,
+  categories: state.categories.list,
+  currencies: state.currencies.list,
+  selectedCurrency: state.currencies.selectedCurrency,
+  isModalOpen: state.modal.isOpen,
+});
+
+export default connect(mapStateToProps, {
+  getCategories,
+  setSelectedCategory,
+  getCurrencies,
+  setSelectedCurrency,
+  closeAllDropdowns,
+  toggleCartDropdown,
+  toggleCurrenciesDropdown,
+  setModalState,
+})(NavBar);

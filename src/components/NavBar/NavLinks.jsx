@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 export class NavLinks extends Component {
   render() {
@@ -13,10 +12,10 @@ export class NavLinks extends Component {
               className={({ isActive }) =>
                 isActive ? 'nav-links__item active' : 'nav-links__item'
               }
-              to={link.name + '-products'}
+              to={link + '-products'}
               onClick={() => onClick(link)}
             >
-              {link.name}
+              {link}
             </NavLink>
           </li>
         ))}
@@ -24,9 +23,5 @@ export class NavLinks extends Component {
     );
   }
 }
-
-NavLinks.propTypes = {
-  links: PropTypes.arrayOf(PropTypes.object),
-};
 
 export default NavLinks;
