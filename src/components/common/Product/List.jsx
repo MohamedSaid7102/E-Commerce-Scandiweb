@@ -6,15 +6,13 @@ import ProductCard from 'components/common/Product/Card';
 // Wrapper, to wrap all productsCard.
 export class List extends Component {
   render() {
-    const { products, currency, onClick } = this.props;
+    const { products } = this.props;
     return (
       <div className="products-list">
         {products.map((product) => (
           <ProductCard
             key={product.id}
             product={product}
-            currency={currency}
-            onClick={onClick}
           />
         ))}
       </div>
@@ -24,7 +22,6 @@ export class List extends Component {
 
 List.propTypes = {
   products: PropTypes.arrayOf(PropTypes.object),
-  currency: PropTypes.object,
 };
 
 export default List;

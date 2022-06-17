@@ -6,8 +6,6 @@ import NavBar from 'components/NavBar';
 import { getAllProducts } from 'Redux/ducks/products';
 // Assets
 import 'assets/style/app.css';
-// Redux
-import { addToCart } from 'Redux/ducks/cart';
 // Pages
 import ProductsList from 'components/common/Product/List';
 import Loading from 'components/common/Loading';
@@ -29,10 +27,8 @@ class App extends Component {
       allProducts,
       techProducts,
       clothesProducts,
-      selectedCurrency,
       cartItems,
       cartItemsCount,
-      addToCart,
     } = this.props;
 
     if (!this.props.allProducts) return <Loading />; //while allProdcuts is not loaded => show Loading.
@@ -47,11 +43,7 @@ class App extends Component {
             element={
               <React.Suspense fallback={<Loading />}>
                 <LazyPLP>
-                  <ProductsList
-                    products={allProducts}
-                    currency={selectedCurrency}
-                    onClick={addToCart}
-                  />
+                  <ProductsList products={allProducts} />
                 </LazyPLP>
               </React.Suspense>
             }
@@ -61,11 +53,7 @@ class App extends Component {
             element={
               <React.Suspense fallback={<Loading />}>
                 <LazyPLP title="All">
-                  <ProductsList
-                    products={allProducts}
-                    currency={selectedCurrency}
-                    onClick={addToCart}
-                  />
+                  <ProductsList products={allProducts} />
                 </LazyPLP>
               </React.Suspense>
             }
@@ -75,11 +63,7 @@ class App extends Component {
             element={
               <React.Suspense fallback={<Loading />}>
                 <LazyPLP title="Clothes">
-                  <ProductsList
-                    products={clothesProducts}
-                    currency={selectedCurrency}
-                    onClick={addToCart}
-                  />
+                  <ProductsList products={clothesProducts} />
                 </LazyPLP>
               </React.Suspense>
             }
@@ -89,11 +73,7 @@ class App extends Component {
             element={
               <React.Suspense fallback={<Loading />}>
                 <LazyPLP title="Tech">
-                  <ProductsList
-                    products={techProducts}
-                    currency={selectedCurrency}
-                    onClick={addToCart}
-                  />
+                  <ProductsList products={techProducts} />
                 </LazyPLP>
               </React.Suspense>
             }
@@ -140,6 +120,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   getAllProducts,
-  addToCart,
 })(App);
 

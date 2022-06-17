@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import { ReactComponent as CartSVG } from 'assets/svgs/cart.svg';
 import { getPrice } from 'utils/utilityFunctions';
+import { connect } from 'react-redux';
+import { addToCart } from 'Redux/ducks/cart';
 export class ProductCard extends Component {
   state = {
     showAddToCartBtn: false,
@@ -14,12 +16,12 @@ export class ProductCard extends Component {
     this.setState({ showAddToCartBtn: false });
   };
   render() {
-    const { product, currency, onClick } = this.props;
+    const { product, selectedCurrency, onClick } = this.props;
     const { showAddToCartBtn } = this.state;
     // Compose full name
     const fullName = product.brand + ', ' + product.name;
-    // pick product currency according to selected currency
-    const selectedPrice = getPrice(product.prices, currency);
+    // pick product selectedCurrency according to selected selectedCurrency
+    const selectedPrice = getPrice(product.prices, selectedCurrency);
     return (
       <div
         key={product.id}
@@ -55,4 +57,8 @@ export class ProductCard extends Component {
   }
 }
 
-export default ProductCard;
+const mapStateToProps = (state) => ({
+  selectedCurrency: state.currencies.selectedCurrency,
+});
+
+export default connect(mapStateToProps, { addToCart })(ProductCard);
