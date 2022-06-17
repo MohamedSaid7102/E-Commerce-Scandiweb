@@ -1,10 +1,12 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { checkObjectsEquality } from 'utils/utilityFunctions';
+import store from 'Redux/store';
+import { checkObjectsEquality, getPrice } from 'utils/utilityFunctions';
 
 // Actions types
 const ADD_TO_CART = 'ADD_TO_CART';
 const INCREMENT_PRODUCT_COUNT = 'INCREMENT_PRODUCT_COUNT';
 const DECREMENT_PRODUCT_COUNT = 'DECREMENT_PRODUCT_COUNT';
+const UPDATE_TOTAL_PRICE = 'UPDATE_TOTAL_PRICE';
 
 export function addToCart(product) {
   if (typeof product !== 'object')
@@ -19,6 +21,12 @@ export function addToCart(product) {
       type: ADD_TO_CART,
       payload: product,
     });
+    const totalPrice = calcTotalPrice();
+
+    dispatch({
+      type: UPDATE_TOTAL_PRICE,
+      totalPrice,
+    });
   };
 }
 
@@ -29,6 +37,12 @@ export function increaseProductCount(id) {
       type: INCREMENT_PRODUCT_COUNT,
       id,
     });
+    const totalPrice = calcTotalPrice();
+
+    dispatch({
+      type: UPDATE_TOTAL_PRICE,
+      totalPrice,
+    });
   };
 }
 export function decreaseProductCount(id) {
@@ -37,13 +51,44 @@ export function decreaseProductCount(id) {
       type: DECREMENT_PRODUCT_COUNT,
       id,
     });
+    const totalPrice = calcTotalPrice();
+
+    dispatch({
+      type: UPDATE_TOTAL_PRICE,
+      totalPrice,
+    });
   };
+}
+
+export function updateTotalPrice() {
+  const totalPrice = calcTotalPrice();
+  console.log(`here here ..!!`);
+  return (dispatch) => {
+    dispatch({
+      type: UPDATE_TOTAL_PRICE,
+      totalPrice,
+    });
+  };
+}
+
+function calcTotalPrice() {
+  const cartItems = store.getState().cart.cartItems;
+  const SelectedCurrency = store.getState().currencies.selectedCurrency;
+  let totalPrice = 0;
+  cartItems.forEach((item) => {
+    let itemPrice = getPrice(item.prices, SelectedCurrency);
+    let totalItemPrice = itemPrice.amount * item.qty;
+    totalPrice += totalItemPrice;
+  });
+
+  return totalPrice.toFixed(2);
 }
 
 // Reducer
 let initialState = {
   cartItems: [],
   cartItemsCount: 0 /* This is not cartItems.length, because cartItems might contain more than one item */,
+  totalPrice: 0,
 };
 
 export default (state = initialState, action) => {
@@ -127,6 +172,14 @@ export default (state = initialState, action) => {
       ...state,
       cartItems: newCartItems,
       cartItemsCount,
+    };
+  }
+
+  if (action.type === UPDATE_TOTAL_PRICE) {
+    const totalPrice = action.totalPrice;
+    return {
+      ...state,
+      totalPrice,
     };
   }
   return { ...state };

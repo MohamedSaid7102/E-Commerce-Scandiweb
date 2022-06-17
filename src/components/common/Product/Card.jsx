@@ -16,7 +16,7 @@ export class ProductCard extends Component {
     this.setState({ showAddToCartBtn: false });
   };
   render() {
-    const { product, selectedCurrency, onClick } = this.props;
+    const { product, selectedCurrency, addToCart } = this.props;
     const { showAddToCartBtn } = this.state;
     // Compose full name
     const fullName = product.brand + ', ' + product.name;
@@ -39,7 +39,7 @@ export class ProductCard extends Component {
           {showAddToCartBtn && (
             <button
               className="btn-reset cart-btn"
-              onClick={() => onClick(product)}
+              onClick={() => addToCart(product)}
             >
               <CartSVG />
             </button>

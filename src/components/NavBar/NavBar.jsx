@@ -73,6 +73,7 @@ class NavBar extends Component {
       selectedCurrency,
       isCartOpen,
       isCurrenciesOpen,
+      totalPrice,
       // Actions
     } = this.props;
 
@@ -130,6 +131,7 @@ class NavBar extends Component {
             cartItems={cartItems}
             cartItemsCount={cartItemsCount}
             selectedCurrency={selectedCurrency}
+            totalPrice={totalPrice}
           />
         )}
       </nav>
@@ -145,6 +147,7 @@ const mapStateToProps = (state) => ({
   currencies: state.currencies.list,
   selectedCurrency: state.currencies.selectedCurrency,
   isModalOpen: state.modal.isOpen,
+  totalPrice: state.cart.totalPrice,
 });
 
 export default connect(mapStateToProps, {

@@ -14,6 +14,7 @@ export class CartDropdown extends Component {
       selectedCurrency,
       closeAllDropdowns,
       setModalState,
+      totalPrice,
     } = this.props;
     return (
       <div className="dropdown cart-list">
@@ -45,7 +46,9 @@ export class CartDropdown extends Component {
         {/* Total */}
         <p className="total">
           <span className="total__label">Total</span>
-          <span>{selectedCurrency.symbol}200</span>
+          <span>
+            {selectedCurrency.symbol} {totalPrice}
+          </span>
         </p>
         {/* Buttons */}
         <div className="cart__btns">
