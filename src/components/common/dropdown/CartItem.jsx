@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { increaseProductCount, decreaseProductCount } from 'Redux/ducks/cart';
 
-export class CartDropdownItem extends Component {
+export class CartItem extends Component {
   renderAttributes = (attributes, selectedAttributes) => {
     return attributes.map((attr, index) => {
       const selectedAttribute = selectedAttributes.filter(
         (atti) => atti.id === attr.id
       )[0];
       return (
-        <div key={attr.id} className="attribute">
+        <div key={attr.id || index} className="attribute">
           <span className="attribute__name">{attr.name}:</span>
           <div className="attribute__values">
             {attr.items.map((item) => {
               return attr.type === 'swatch' ? (
-                <div
+                <button
                   key={item.id}
                   style={{ backgroundColor: item.value }}
                   className={
@@ -22,10 +22,15 @@ export class CartDropdownItem extends Component {
                       ? 'swatch box active'
                       : 'swatch box'
                   }
-                ></div>
+                ></button>
               ) : (
-                <div
+                <button
                   key={item.id}
+                  disabled={
+                    this.props.disableAttributeChange
+                      ? this.props.disableAttributeChange
+                      : false
+                  }
                   className={
                     selectedAttribute.items.id === item.id
                       ? 'box active'
@@ -38,7 +43,7 @@ export class CartDropdownItem extends Component {
                   }
                 >
                   {item.value}
-                </div>
+                </button>
               );
             })}
           </div>
@@ -57,9 +62,14 @@ export class CartDropdownItem extends Component {
       attributes,
       selectedAttributes,
       qty,
+      disableAttributeChange,
     } = this.props;
     return (
-      <li className="dropdown__item">
+      <li
+        className={
+          disableAttributeChange ? 'cart__item disable-selection' : 'cart__item'
+        }
+      >
         <div className="item__info">
           <div className="item__details">
             <span className="item__brand">{brand}</span>
@@ -72,14 +82,14 @@ export class CartDropdownItem extends Component {
           </div>
           <div className="item__controllers">
             <button
-              className="box"
+              className="box qty-controller"
               onClick={() => this.props.increaseProductCount(id)}
             >
               +
             </button>
             <span className="quantity">{qty}</span>
             <button
-              className="box"
+              className="box qty-controller"
               onClick={() => this.props.decreaseProductCount(id)}
             >
               -
@@ -95,5 +105,5 @@ export class CartDropdownItem extends Component {
 }
 
 export default connect(null, { increaseProductCount, decreaseProductCount })(
-  CartDropdownItem
+  CartItem
 );

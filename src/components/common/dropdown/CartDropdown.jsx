@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import CartDropdownItem from 'components/common/dropdown/CartDropdownItem';
+import CartItem from 'components/common/dropdown/CartItem';
 import { getPrice } from 'utils/utilityFunctions';
 import { closeAllDropdowns } from 'Redux/ducks/dropdown';
 import { setModalState } from 'Redux/ducks/modal';
@@ -30,7 +30,7 @@ export class CartDropdown extends Component {
         {/* Cart items */}
         <ul className="cart__dropdown-items">
           {cartItems.map((item, index) => (
-            <CartDropdownItem
+            <CartItem
               key={item.id || index}
               id={item.id}
               brand={item.brand}
@@ -40,6 +40,7 @@ export class CartDropdown extends Component {
               attributes={item.attributes}
               selectedAttributes={item.selectedAttributes}
               qty={item.qty}
+              disableAttributeChange={true}
             />
           ))}
         </ul>

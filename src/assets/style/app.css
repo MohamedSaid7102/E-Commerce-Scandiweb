@@ -1,10 +1,12 @@
 .app {
   --c-primary: #5ece7b;
   --c-txt: #1d1f22;
+  --c-light-border: #eee;
 
   --currency-symbol-size: 2rem;
   --currency-dropdown-item-hover-clr: #eeeeee;
   --navbar-height: 80px;
+  --page-side-padding: 9rem;
 
   padding-top: calc(var(--navbar-height, 80px) * 2);
 }
@@ -12,7 +14,7 @@
 .navbar {
   --gutter: 3rem;
 
-  padding: 2rem 9rem 0;
+  padding: 2rem var(--page-side-padding, 9rem) 0;
   max-width: 100%;
   height: var(--navbar-height);
   position: fixed;
@@ -189,7 +191,7 @@
     inset 0px -11px 8px -10px rgba(204, 204, 204, 0.52); */
 }
 
-.cart__dropdown-items .dropdown__item {
+.cart__dropdown-items .cart__item {
   --box-width: 40px;
   --box-height: 40px;
   display: flex;
@@ -199,14 +201,14 @@
   border-bottom: 1px solid rgba(163, 163, 163, 0.773);
   padding-bottom: 2rem;
 }
-.cart__dropdown-items .dropdown__item figure {
+.cart__dropdown-items .cart__item figure {
   overflow: hidden;
 }
-.cart__dropdown-items .dropdown__item figure img {
+.cart__dropdown-items .cart__item figure img {
   object-fit: contain;
 }
 
-.cart__dropdown-items .dropdown__item .box {
+.cart__dropdown-items .cart__item .box {
   width: var(--box-width, 40px);
   height: var(--box-height, 40px);
 
@@ -215,58 +217,75 @@
   align-items: center;
   background-color: transparent;
   border: 1px solid #111;
+  font-size: 2rem;
+  font-weight: 300;
   user-select: none;
 }
 
-.cart__dropdown-items .dropdown__item .box.attribute {
+.cart__dropdown-items .cart__item .box.attribute {
   width: max-content;
   height: max-content;
   padding: 7px;
 }
 
-.cart__dropdown-items .dropdown__item button.box:hover {
+.cart__dropdown-items
+  .cart__item:not([class*='disable-selection'])
+  button.box:hover {
   background-color: #111;
   color: #fff;
 }
 
-.cart__dropdown-items .dropdown__item .box.active {
+.cart__dropdown-items
+  .cart__item.disable-selection
+  button.box:not([class*='qty-controller']):hover {
+  cursor: default;
+}
+
+.cart__dropdown-items
+  .cart__item.disable-selection
+  button.box.qty-controller:hover {
   background-color: #111;
   color: #fff;
 }
 
-.cart__dropdown-items .dropdown__item .box.swatch.active {
+.cart__dropdown-items .cart__item .box.active {
+  background-color: #111;
+  color: #fff;
+}
+
+.cart__dropdown-items .cart__item .box.swatch.active {
   box-shadow: 0px 0px 0px 2px var(--c-primary);
   border: 3px solid #fff;
   box-sizing: border-box;
 }
 
-.dropdown__item .image {
+.cart__item .image {
   display: flex;
   flex: 1;
   justify-content: center;
   align-items: center;
 }
 
-.dropdown__item .image img {
+.cart__item .image img {
   width: 100%;
   height: 100%;
 }
 
-.cart__dropdown-items .dropdown__item .item__info {
+.cart__dropdown-items .cart__item .item__info {
   display: flex;
   justify-content: space-between;
   flex: 2;
   gap: 3.5rem;
 }
 
-.dropdown__item .item__details {
+.cart__item .item__details {
   display: flex;
   flex-grow: 1;
   gap: 1rem;
   flex-direction: column;
 }
 
-.dropdown__item .item__details .item__price {
+.cart__item .item__details .item__price {
   font-weight: 500;
 }
 
@@ -482,6 +501,24 @@
 
 /* PLP end */
 
+/* Cart start */
+.cart-page {
+  padding: 0 var(--page-side-padding, 9rem);
+}
+.cart-page .cart--empty {
+  font-weight: 200;
+  text-align: center;
+  padding-top: 3rem;
+}
+.cart-page .cart__heading {
+  border-bottom: 2px solid var(--c-light-border, #eee);
+  padding-bottom: 3rem;
+}
+.cart__dropdown-items .cart__item {
+  margin-bottom: 2rem;
+}
+/* Cart end */
+
 /* Page Not Found Start */
 
 .not-found__btn {
@@ -569,11 +606,11 @@
 }
 
 @media (max-width: 525px) {
-  .cart__dropdown-items .dropdown__item,
-  .cart__dropdown-items .dropdown__item .item__info {
+  .cart__dropdown-items .cart__item,
+  .cart__dropdown-items .cart__item .item__info {
     flex-direction: column;
   }
-  .cart__dropdown-items .dropdown__item .item__controllers {
+  .cart__dropdown-items .cart__item .item__controllers {
     flex-direction: row;
   }
 
@@ -616,7 +653,7 @@
   }
 }
 @media (max-width: 350px) {
-  .cart__dropdown-items .dropdown__item .attribute__values {
+  .cart__dropdown-items .cart__item .attribute__values {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
