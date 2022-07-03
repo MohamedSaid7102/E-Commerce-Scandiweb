@@ -5,8 +5,33 @@ import {
   decreaseProductCount,
   updateSelectedAttribute,
 } from 'Redux/ducks/cart';
+import { ReactComponent as LeftArrow } from 'assets/svgs/left-arrow.svg';
+import { ReactComponent as RightArrow } from 'assets/svgs/right-arrow.svg';
 
 export class CartItem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentGalleryItem: 0,
+    };
+  }
+
+  getPrevPic = () => {
+    const galleryLength = this.props.gallery.length;
+    this.setState((oldState) => ({
+      currentGalleryItem:
+        oldState.currentGalleryItem === 0
+          ? galleryLength - 1
+          : oldState.currentGalleryItem - 1,
+    }));
+  };
+  getNextPic = () => {
+    const galleryLength = this.props.gallery.length;
+    this.setState((oldState) => ({
+      currentGalleryItem: (oldState.currentGalleryItem + 1) % galleryLength,
+    }));
+  };
+
   renderAttributes = (id, attributes, selectedAttributes) => {
     return attributes.map((attr, index) => {
       const selectedAttribute = selectedAttributes.filter(
@@ -83,6 +108,11 @@ export class CartItem extends Component {
       qty,
       disableAttributeChange,
     } = this.props;
+
+    const currentGalleryItem = 0;
+
+    let currentPic = gallery[this.state.currentGalleryItem || 0];
+
     return (
       <li
         className={
@@ -116,7 +146,17 @@ export class CartItem extends Component {
           </div>
         </div>
         <figure className="image">
-          <img src={gallery[0]} alt={name} />
+          <img src={currentPic} alt={name} />
+          {!disableAttributeChange && (
+            <span className="controllers">
+              <button className="btn-reset" onClick={() => this.getPrevPic()}>
+                <LeftArrow />
+              </button>
+              <button className="btn-reset" onClick={() => this.getNextPic()}>
+                <RightArrow />
+              </button>
+            </span>
+          )}
         </figure>
       </li>
     );

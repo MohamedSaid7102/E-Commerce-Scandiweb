@@ -1,5 +1,4 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { isCompositeComponentWithType } from 'react-dom/test-utils';
 import store from 'Redux/store';
 import { checkObjectsEquality, getPrice } from 'utils/utilityFunctions';
 
@@ -193,7 +192,7 @@ export default (state = initialState, action) => {
       cartItems: newCartItems,
       cartItemsCount,
     };
-  }console.log(``);
+  }
 
   if (action.type === UPDATE_TOTAL_PRICE) {
     const totalPrice = action.totalPrice;
