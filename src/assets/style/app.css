@@ -175,7 +175,8 @@
   font-size: 2rem;
   border-top: 0.2px solid #d3d3d34a;
   width: max-content;
-
+  max-height: 85vh;
+  overflow: auto;
   z-index: calc(var(--modal-z-index, 1) + 1); /* To be top */
 }
 

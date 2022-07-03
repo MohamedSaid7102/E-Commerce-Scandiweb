@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { increaseProductCount, decreaseProductCount } from 'Redux/ducks/cart';
+import {
+  increaseProductCount,
+  decreaseProductCount,
+  updateSelectedAttribute,
+} from 'Redux/ducks/cart';
 
 export class CartItem extends Component {
-  renderAttributes = (attributes, selectedAttributes) => {
+  renderAttributes = (id, attributes, selectedAttributes) => {
     return attributes.map((attr, index) => {
       const selectedAttribute = selectedAttributes.filter(
         (atti) => atti.id === attr.id
@@ -16,12 +20,22 @@ export class CartItem extends Component {
               return attr.type === 'swatch' ? (
                 <button
                   key={item.id}
+                  disabled={
+                    this.props.disableAttributeChange
+                      ? this.props.disableAttributeChange
+                      : false
+                  }
                   style={{ backgroundColor: item.value }}
                   className={
                     selectedAttribute.items.id === item.id
                       ? 'swatch box active'
                       : 'swatch box'
                   }
+                  onClick={() => {
+                    this.props.updateSelectedAttribute(id, attr, item);
+                    // I forced the component to update because there were a problem when changing attribute in cart page, then that change won't showup.
+                    this.forceUpdate();
+                  }}
                 ></button>
               ) : (
                 <button
@@ -41,6 +55,11 @@ export class CartItem extends Component {
                       ? { width: 'max-content', padding: '3px' }
                       : null
                   }
+                  onClick={() => {
+                    this.props.updateSelectedAttribute(id, attr, item);
+                    // I forced the component to update because there were a problem when changing attribute in cart page, then that change won't showup.
+                    this.forceUpdate();
+                  }}
                 >
                   {item.value}
                 </button>
@@ -78,7 +97,7 @@ export class CartItem extends Component {
               <span className="price-symbol">{price.currency.symbol}</span>
               <span className="price-amount">{price.amount}</span>
             </span>
-            {this.renderAttributes(attributes, selectedAttributes)}
+            {this.renderAttributes(id, attributes, selectedAttributes)}
           </div>
           <div className="item__controllers">
             <button
@@ -104,6 +123,8 @@ export class CartItem extends Component {
   }
 }
 
-export default connect(null, { increaseProductCount, decreaseProductCount })(
-  CartItem
-);
+export default connect(null, {
+  increaseProductCount,
+  decreaseProductCount,
+  updateSelectedAttribute,
+})(CartItem);

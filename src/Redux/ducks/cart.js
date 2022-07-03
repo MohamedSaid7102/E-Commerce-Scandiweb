@@ -1,4 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
+import { isCompositeComponentWithType } from 'react-dom/test-utils';
 import store from 'Redux/store';
 import { checkObjectsEquality, getPrice } from 'utils/utilityFunctions';
 
@@ -7,6 +8,7 @@ const ADD_TO_CART = 'ADD_TO_CART';
 const INCREMENT_PRODUCT_COUNT = 'INCREMENT_PRODUCT_COUNT';
 const DECREMENT_PRODUCT_COUNT = 'DECREMENT_PRODUCT_COUNT';
 const UPDATE_TOTAL_PRICE = 'UPDATE_TOTAL_PRICE';
+const UPDATE_SELECTED_ATTRIBUTES = 'UPDATE_SELECTED_ATTRIBUTES';
 
 export function addToCart(product) {
   if (typeof product !== 'object')
@@ -30,6 +32,23 @@ export function addToCart(product) {
   };
 }
 
+export function updateSelectedAttribute(id, attr, item) {
+  let cartItems = [...store.getState().cart.cartItems];
+  cartItems
+    .filter((item) => item.id === id)[0]
+    .selectedAttributes.forEach((attribute) => {
+      if (attribute.id === attr.id) {
+        attribute.items = item;
+      }
+    });
+  return (dispatch) => {
+    dispatch({
+      type: UPDATE_SELECTED_ATTRIBUTES,
+      cartItems,
+    });
+  };
+}
+
 export function increaseProductCount(id) {
   // TODO: add exception handle here if id is not exists
   return (dispatch) => {
@@ -45,6 +64,7 @@ export function increaseProductCount(id) {
     });
   };
 }
+
 export function decreaseProductCount(id) {
   return (dispatch) => {
     dispatch({
@@ -173,13 +193,21 @@ export default (state = initialState, action) => {
       cartItems: newCartItems,
       cartItemsCount,
     };
-  }
+  }console.log(``);
 
   if (action.type === UPDATE_TOTAL_PRICE) {
     const totalPrice = action.totalPrice;
     return {
       ...state,
       totalPrice,
+    };
+  }
+
+  if (action.type === UPDATE_SELECTED_ATTRIBUTES) {
+    const cartItems = action.cartItems;
+    return {
+      ...state,
+      cartItems,
     };
   }
   return { ...state };
