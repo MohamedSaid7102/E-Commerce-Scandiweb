@@ -10,10 +10,12 @@ import 'assets/style/app.css';
 import ProductsList from 'components/common/Product/List';
 import Loading from 'components/common/Loading';
 import Modal from 'components/common/Modal';
+import ProductDescription from 'components/common/ProductDescription';
 const LazyPageNotFound = React.lazy(() => import('pages/NotFound'));
 const LazyCheckout = React.lazy(() => import('pages/Checkout'));
 const LazyCart = React.lazy(() => import('pages/Cart'));
 const LazyPLP = React.lazy(() => import('pages/PLP'));
+const LazyPDP = React.lazy(() => import('pages/PDP'));
 
 // qty => quantity
 class App extends Component {
@@ -78,6 +80,16 @@ class App extends Component {
               </React.Suspense>
             }
           />
+          <Route
+            path="/product"
+            element={
+              <React.Suspense fallback={<Loading />}>
+                <LazyPDP></LazyPDP>
+              </React.Suspense>
+            }
+          >
+            <Route path=":productId" element={<ProductDescription />} />
+          </Route>
           <Route
             path="checkout"
             element={

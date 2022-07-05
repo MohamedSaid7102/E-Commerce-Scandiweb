@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  increaseProductCount,
-  decreaseProductCount,
-  updateSelectedAttribute,
-} from 'Redux/ducks/cart';
+import { increaseProductCount, decreaseProductCount } from 'Redux/ducks/cart';
+import { updateSelectedAttribute } from 'Redux/ducks/products';
+
 import { ReactComponent as LeftArrow } from 'assets/svgs/left-arrow.svg';
 import { ReactComponent as RightArrow } from 'assets/svgs/right-arrow.svg';
-
+import { Link } from 'react-router-dom';
+import NoPic from 'assets/images/no-pic.png';
+import { closeAllDropdowns } from 'Redux/ducks/dropdown';
+import { setModalState } from 'Redux/ducks/modal';
 export class CartItem extends Component {
   constructor(props) {
     super(props);
@@ -109,9 +110,9 @@ export class CartItem extends Component {
       disableAttributeChange,
     } = this.props;
 
-    const currentGalleryItem = 0;
-
-    let currentPic = gallery[this.state.currentGalleryItem || 0];
+    let currentPic = gallery
+      ? gallery[this.state.currentGalleryItem || 0]
+      : null;
 
     return (
       <li
@@ -121,12 +122,25 @@ export class CartItem extends Component {
       >
         <div className="item__info">
           <div className="item__details">
-            <span className="item__brand">{brand}</span>
-            <span className="item__name">{name}</span>
-            <span className="item__price">
-              <span className="price-symbol">{price.currency.symbol}</span>
-              <span className="price-amount">{price.amount}</span>
-            </span>
+            <Link
+              to={'/product/' + id}
+              onClick={() => {
+                this.props.closeAllDropdowns();
+                this.props.setModalState(false, false);
+              }}
+              style={{
+                textDecoration: 'none',
+                zIndex: 0,
+                position: 'relative',
+              }}
+            >
+              <span className="item__brand">{brand}</span>
+              <span className="item__name">{name}</span>
+              <span className="item__price">
+                <span className="price-symbol">{price.currency.symbol}</span>
+                <span className="price-amount">{price.amount}</span>
+              </span>
+            </Link>
             {this.renderAttributes(id, attributes, selectedAttributes)}
           </div>
           <div className="item__controllers">
@@ -146,7 +160,23 @@ export class CartItem extends Component {
           </div>
         </div>
         <figure className="image">
-          <img src={currentPic} alt={name} />
+          <Link
+            to={'/product/' + id}
+            onClick={() => {
+              this.props.closeAllDropdowns();
+              this.props.setModalState(false, false);
+            }}
+            style={{
+              textDecoration: 'none',
+              zIndex: 0,
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            {currentPic ? <img src={currentPic} alt={name} /> : <NoPic />}
+          </Link>
+
           {!disableAttributeChange && (
             <span className="controllers">
               <button className="btn-reset" onClick={() => this.getPrevPic()}>
@@ -167,4 +197,6 @@ export default connect(null, {
   increaseProductCount,
   decreaseProductCount,
   updateSelectedAttribute,
+  closeAllDropdowns,
+  setModalState,
 })(CartItem);

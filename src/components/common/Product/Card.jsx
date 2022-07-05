@@ -4,6 +4,7 @@ import { ReactComponent as CartSVG } from 'assets/svgs/cart.svg';
 import { getPrice } from 'utils/utilityFunctions';
 import { connect } from 'react-redux';
 import { addToCart } from 'Redux/ducks/cart';
+import { Link } from 'react-router-dom';
 export class ProductCard extends Component {
   state = {
     showAddToCartBtn: false,
@@ -31,26 +32,42 @@ export class ProductCard extends Component {
           product.inStock ? 'product-card' : 'product-card out-of-stock'
         }
       >
-        <div className="product__img">
+        <Link
+          to={'/product/' + product.id}
+          className="product__img"
+          style={{ textDecoration: 'none' }}
+        >
           <p className="out-of-stock-label">Out of stock</p>
           <img src={product.gallery?.[0]} alt={fullName} />
-        </div>
+        </Link>
         <div className="product__info">
           {showAddToCartBtn && (
             <button
               className="btn-reset cart-btn"
-              onClick={() => addToCart(product)}
+              onClick={() => {
+                try {
+                  addToCart(product);
+                } catch (error) {
+                  console.log(error);
+                }
+              }}
+              style={{ textDecoration: 'none', zIndex: 2 }}
             >
               <CartSVG />
             </button>
           )}
-          <div className="product__title">{fullName}</div>
-          <div className="product__price">
-            <span className="price">
-              {selectedPrice?.currency?.symbol || '$'}{' '}
-              {selectedPrice?.amount || '0.0'}
-            </span>
-          </div>
+          <Link
+            to={'/product/' + product.id}
+            style={{ textDecoration: 'none' }}
+          >
+            <div className="product__title">{fullName}</div>
+            <div className="product__price">
+              <span className="price">
+                {selectedPrice?.currency?.symbol || '$'}{' '}
+                {selectedPrice?.amount || '0.0'}
+              </span>
+            </div>
+          </Link>
         </div>
       </div>
     );
