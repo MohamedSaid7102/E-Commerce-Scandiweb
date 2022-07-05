@@ -17,3 +17,24 @@ export function getPrice(prices, currency) {
     checkObjectsEquality(price.currency, currency)
   )[0];
 }
+
+export function setDefaults(product) {
+  // All this logic bacause backend doens't contain 'qty' & 'selectedAttributes' property
+  // set qty if not set
+  if (!product.qty) product.qty = 1;
+  // If it's already exists return prodcut as it is.
+  if (product.selectedAttributes) return product;
+
+  let selectedAttributes = [];
+
+  // If it doesn't has any attributes, make selectedAttributes = [].
+  if (product.attributes.length === 0)
+    return { ...product, selectedAttributes };
+
+  // If it doese has attributes, make selectedAttributes the first selected from each attribute.
+  product.attributes.forEach((attribute) =>
+    selectedAttributes.push({ ...attribute, items: attribute.items[0] })
+  );
+
+  return { ...product, selectedAttributes };
+}

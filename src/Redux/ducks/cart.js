@@ -1,6 +1,10 @@
 /* eslint-disable import/no-anonymous-default-export */
 import store from 'Redux/store';
-import { checkObjectsEquality, getPrice } from 'utils/utilityFunctions';
+import {
+  checkObjectsEquality,
+  getPrice,
+  setDefaults,
+} from 'utils/utilityFunctions';
 
 // Actions types
 const ADD_TO_CART = 'ADD_TO_CART';
@@ -15,35 +19,23 @@ export function addToCart(product) {
       'You should only add prodcuts to your cart items as a type of objects !!'
     );
 
-  product = setDefaults(product);
+  // Deep clone without reference
+  let productClone = JSON.parse(JSON.stringify(product));
+
+  productClone = productClone.selectedAttributes
+    ? productClone
+    : setDefaults(productClone);
 
   return (dispatch) => {
     dispatch({
       type: ADD_TO_CART,
-      payload: product,
+      product: productClone,
     });
     const totalPrice = calcTotalPrice();
 
     dispatch({
       type: UPDATE_TOTAL_PRICE,
       totalPrice,
-    });
-  };
-}
-
-export function updateSelectedAttribute(id, attr, item) {
-  let cartItems = [...store.getState().cart.cartItems];
-  cartItems
-    .filter((item) => item.id === id)[0]
-    .selectedAttributes.forEach((attribute) => {
-      if (attribute.id === attr.id) {
-        attribute.items = item;
-      }
-    });
-  return (dispatch) => {
-    dispatch({
-      type: UPDATE_SELECTED_ATTRIBUTES,
-      cartItems,
     });
   };
 }
@@ -90,6 +82,21 @@ export function updateTotalPrice() {
   };
 }
 
+export function updateCartProduct(id, productToEdit) {
+  let cartItems = [...store.getState().cart.cartItems];
+  cartItems = cartItems.map((item) => {
+    if (item.id === id) item = productToEdit;
+    return item;
+  });
+  console.log(cartItems);
+  return (dispatch) => {
+    dispatch({
+      type: UPDATE_SELECTED_ATTRIBUTES,
+      cartItems,
+    });
+  };
+}
+
 function calcTotalPrice() {
   const cartItems = store.getState().cart.cartItems;
   const SelectedCurrency = store.getState().currencies.selectedCurrency;
@@ -112,37 +119,57 @@ let initialState = {
 
 export default (state = initialState, action) => {
   if (action.type === ADD_TO_CART) {
-    // Set the default selected attributes if prodcut doesn't has one.
     let cartItems = [...state.cartItems];
-    let product = action.payload;
+    let product = action.product;
 
     let cartItemsCount = state.cartItemsCount + 1;
 
     const productIndex = cartItems.findIndex((item) => product.id === item.id);
 
-    // If this is a new item, it doesn't exists in cartItems
-    if (productIndex === -1) {
-      cartItems.push(product);
-      return {
-        ...state,
-        cartItems,
-        cartItemsCount,
-      };
-    }
+    if (productIndex !== -1) {/**So it's in cart but we don't know with the same attributes or not */
+      let objectExistsWithSameSelectedAttributes = true;
 
-    // If prodcut exists with the same attributes, we just want to increase the quantity 'qty'
-    let objectExistsWithSameSelectedAttributes = true;
-    for (let i = 0; i < product.selectedAttributes.length; i++)
-      if (
-        !checkObjectsEquality(
-          product.selectedAttributes[i],
-          cartItems[productIndex].selectedAttributes[i]
+      for (let i = 0; i < product.selectedAttributes.length; i++)
+        if (
+          !checkObjectsEquality(
+            product.selectedAttributes[i],
+            cartItems[productIndex].selectedAttributes[i]
+          )
         )
-      )
-        objectExistsWithSameSelectedAttributes = false;
+          objectExistsWithSameSelectedAttributes = false;
 
-    if (objectExistsWithSameSelectedAttributes) cartItems[productIndex].qty++;
+      // console.log(
+      //   cartItems[productIndex].selectedAttributes,
+      //   product.selectedAttributes,
+      //   objectExistsWithSameSelectedAttributes
+      // );
 
+      // 1) In case object exists with the same selected attributes, just increase it's qty
+      if (objectExistsWithSameSelectedAttributes) {
+        console.log(`object exists with the same selected attributes`);
+
+        cartItems[productIndex].qty++;
+
+        return {
+          ...state,
+          cartItems,
+          cartItemsCount,
+        };
+      }
+
+      // console.log(`object exists with other selected attributes`);
+      // // 2) In case object exists with other selected attributes, add it as a new one with it's new attributes
+      // cartItems.push(product);
+      // return {
+      //   ...state,
+      //   cartItems,
+      //   cartItemsCount,
+      // };
+    }
+    console.log(`this is a new item`);
+    // If this is a new item, it doesn't exists in cartItems
+    // If you are here, so product exists with the same id and different selected attribute
+    cartItems.push(product);
     return {
       ...state,
       cartItems,
@@ -211,25 +238,3 @@ export default (state = initialState, action) => {
   }
   return { ...state };
 };
-
-// Utility Functions
-function setDefaults(product) {
-  // All this logic bacause backend doens't contain 'qty' & 'selectedAttributes' property
-  // set qty if not set
-  if (!product.qty) product.qty = 1;
-  // If it's already exists return prodcut as it is.
-  if (product.selectedAttributes) return product;
-
-  let selectedAttributes = [];
-
-  // If it doesn't has any attributes, make selectedAttributes = [].
-  if (product.attributes.length === 0)
-    return { ...product, selectedAttributes };
-
-  // If it doese has attributes, make selectedAttributes the first selected from each attribute.
-  product.attributes.forEach((attribute) =>
-    selectedAttributes.push({ ...attribute, items: attribute.items[0] })
-  );
-
-  return { ...product, selectedAttributes };
-}
