@@ -146,14 +146,18 @@ export class CartItem extends Component {
           <div className="item__controllers">
             <button
               className="box qty-controller"
-              onClick={() => this.props.increaseProductCount(id)}
+              onClick={() =>
+                this.props.increaseProductCount(id, selectedAttributes)
+              }
             >
               +
             </button>
             <span className="quantity">{qty}</span>
             <button
               className="box qty-controller"
-              onClick={() => this.props.decreaseProductCount(id)}
+              onClick={() =>
+                this.props.decreaseProductCount(id, selectedAttributes)
+              }
             >
               -
             </button>
