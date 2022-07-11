@@ -183,17 +183,16 @@ export default (state = initialState, action) => {
     const selectedAttributes = action.selectedAttributes;
     let cartItemsCount = state.cartItemsCount;
     let newCartItems = [];
+
     state.cartItems.forEach((item) => {
       if (item.id === id) {
+        // Now check if 'selectedAttributesMatch' are the same.
         let selectedAttributesMatch = true;
         for (let i = 0; i < item.selectedAttributes.length; i++) {
           if (
             item.selectedAttributes[i].items.id !==
             selectedAttributes[i].items.id
           ) {
-            /**So this is not what we want, just add it without qty++ to newCartItems */
-            newCartItems.push(item);
-            cartItemsCount += 1;
             selectedAttributesMatch = false;
             break;
           }
@@ -206,8 +205,10 @@ export default (state = initialState, action) => {
           return;
         }
       }
+      // If it's not the same id, just push the product normally
       newCartItems.push(item);
     });
+
     return {
       ...state,
       cartItems: newCartItems,
