@@ -81,16 +81,85 @@ export function updateTotalPrice() {
   };
 }
 
-export function updateCartProduct(id, productToEdit) {
-  let cartItems = [...store.getState().cart.cartItems];
-  cartItems = cartItems.map((item) => {
-    if (item.id === id) item = productToEdit;
-    return item;
+// TODO: there is a little bugg here 😒, when multiple products has the same product selectedattributes
+export function updateCartProduct(id, attr, item, selectedAttributes) {
+  let cartItems = getArrayDeepClone(store.getState().cart.cartItems);
+  let newCartItems = [];
+  let product = cartItems.filter((item) => item.id === id);
+  product =
+    product.length === 0
+      ? null
+      : checkSelectedAttributes(getObjectDeepClone(product[0]));
+
+  if (product === null || !product)
+    throw new Error('Product not found in cartItems..!');
+
+  // Loop over cart items and get out all occurences
+  const allOccurrencesOfObject = getAllIndexesInArrayOfObjects(
+    cartItems,
+    product.id,
+    'id'
+  );
+
+  if (allOccurrencesOfObject.length === 0)
+    throw new Error(
+      "You are trying to update product that doesn't exist in the card"
+    );
+
+  // First update selected attributes in allOccurrences
+  let selectedAttributesMatch = true;
+  let itemIndex = -1;
+  for (let index = 0; index < allOccurrencesOfObject.length; index++) {
+    selectedAttributesMatch = true;
+    for (
+      let i = 0;
+      i < cartItems[allOccurrencesOfObject[index]].selectedAttributes.length;
+      i++
+    )
+      if (
+        selectedAttributes[i].items.id !==
+        cartItems[allOccurrencesOfObject[index]].selectedAttributes[i].items.id
+      ) {
+        selectedAttributesMatch = false;
+        break;
+      }
+
+    if (selectedAttributesMatch) {
+      product = cartItems[allOccurrencesOfObject[index]];
+      itemIndex = index;
+      console.log(index, product);
+      break;
+      // cartItems[allOccurrencesOfObject[index]].selectedAttributes =
+      // selectedAttributes;
+    }
+  }
+  // Then make new cartItems and add all except ones with index == in allOccurrences
+  // compare every occurence with selectedAttributes to see if this is the one
+
+  // if it was the one work on it, if not
+
+  // Edit selected attributes
+  product.selectedAttributes.forEach((attribute) => {
+    if (attribute.id === attr.id) attribute.items = item;
   });
+
+  // Add edited product to list
+  for (let i = 0; i < cartItems.length; i++) {
+    if (i === itemIndex) {
+      newCartItems.push(product);
+      continue;
+    }
+    newCartItems.push(cartItems[i]);
+  }
+  // cartItems = cartItems.map((item) => {
+  //   if (item.id === id) item = product;
+  //   return product;
+  // });
+
   return (dispatch) => {
     dispatch({
       type: UPDATE_SELECTED_ATTRIBUTES,
-      cartItems,
+      cartItems: newCartItems,
     });
   };
 }

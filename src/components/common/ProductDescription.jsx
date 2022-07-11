@@ -7,7 +7,6 @@ import {
   decreaseProductCount,
   addToCart,
 } from 'Redux/ducks/cart';
-import NoPic from 'assets/images/no-pic.png';
 import { getObjectDeepClone } from '../../utils/utilityFunctions';
 
 export class ProductDescription extends Component {
@@ -171,13 +170,12 @@ export class ProductDescription extends Component {
             ))}
           </div>
           {/* 1.2 */}
-          {currentPic ? (
-            <figure className="gallery__main-image">
-              <img src={currentPic} alt={name} />
-            </figure>
-          ) : (
-            <NoPic />
-          )}
+          <figure className="gallery__main-image">
+            <img
+              src={currentPic}
+              alt={name + ' picture, sadlly not found 😢'}
+            />
+          </figure>
         </div>
         {/* 2 */}
         <div className="product__info">
