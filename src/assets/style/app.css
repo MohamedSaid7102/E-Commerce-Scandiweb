@@ -665,6 +665,14 @@
   margin-top: 2rem;
   text-decoration: none;
 }
+
+.cart-page .image {
+  max-height: 350px;
+  max-width: 352px;
+}
+.cart-page .image img {
+  object-fit: cover;
+}
 /* Cart end */
 
 /* Page Not Found Start */
