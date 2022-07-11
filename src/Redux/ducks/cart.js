@@ -73,7 +73,6 @@ export function decreaseProductCount(id, selectedAttributes) {
 
 export function updateTotalPrice() {
   const totalPrice = calcTotalPrice();
-  console.log(`here here ..!!`);
   return (dispatch) => {
     dispatch({
       type: UPDATE_TOTAL_PRICE,
@@ -88,7 +87,6 @@ export function updateCartProduct(id, productToEdit) {
     if (item.id === id) item = productToEdit;
     return item;
   });
-  console.log(cartItems);
   return (dispatch) => {
     dispatch({
       type: UPDATE_SELECTED_ATTRIBUTES,
@@ -116,10 +114,8 @@ export default (state = initialState, action) => {
       'id'
     );
 
-    console.log(`allOccurrencesOfObject: ${allOccurrencesOfObject}`);
     // If this is a new item, it doesn't exists in cartItems, so allOccurrencesOfObject will be length of 0
     if (allOccurrencesOfObject.length === 0) {
-      console.log(`this is a new item`);
       cartItems.push(product);
       return {
         ...state,
@@ -136,11 +132,6 @@ export default (state = initialState, action) => {
       // Loop over all selected attributes in each item
       selectedAttributesMatch = true;
       for (let i = 0; i < product.selectedAttributes.length; i++) {
-        console.log(
-          product.selectedAttributes[i].items.id,
-          cartItems[allOccurrencesOfObject[index]].selectedAttributes[i].items
-            .id
-        );
         if (
           product.selectedAttributes[i].items.id !==
           cartItems[allOccurrencesOfObject[index]].selectedAttributes[i].items
@@ -157,7 +148,6 @@ export default (state = initialState, action) => {
     }
 
     if (selectedAttributesMatch) {
-      console.log(`object exists with same selected attributes`);
       productFoundAndUpdated = true;
       cartItems[occurrenceIndex].qty++;
       return {
@@ -168,7 +158,6 @@ export default (state = initialState, action) => {
     }
     // Otherwise, this is an existing product with different attribute, add it normally
     if (!productFoundAndUpdated) {
-      console.log(`object exists with other selected attributes`);
       cartItems.push(product);
       return {
         ...state,
