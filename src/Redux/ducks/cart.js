@@ -230,8 +230,6 @@ export default (state = initialState, action) => {
             item.selectedAttributes[i].items.id !==
             selectedAttributes[i].items.id
           ) {
-            /**So this is not what we want, just add it without qty++ to newCartItems */
-            newCartItems.push(item);
             selectedAttributesMatch = false;
             break;
           }
@@ -243,12 +241,10 @@ export default (state = initialState, action) => {
             cartItemsCount -= 1;
             return;
           }
-          if (item.qty > 0) {
-            item.qty -= 1;
-            cartItemsCount -= 1;
-            newCartItems.push(item);
-            return;
-          }
+          item.qty -= 1;
+          cartItemsCount -= 1;
+          newCartItems.push(item);
+          return;
         }
       }
       newCartItems.push(item);
