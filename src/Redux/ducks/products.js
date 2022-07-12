@@ -1,12 +1,9 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { request } from 'graphql-request';
-import {
-  GET_ALL_PRODUCTS as GET_ALL_PRODUCTS_QUERY,
-} from 'GraphQL/Queries';
-
+import { GET_ALL_PRODUCTS as GET_ALL_PRODUCTS_QUERY } from 'GraphQL/Queries';
 // Action Types
 const GET_ALL_PRODUCTS = 'GET_ALL_PRODUCTS';
-
+const UPDATE_CARD_SELECTED_ATTRIBUTES = 'UPDATE_CARD_SELECTED_ATTRIBUTES';
 // Action Creators
 export function getAllProducts() {
   return (dispatch) => {
@@ -27,6 +24,7 @@ export function getAllProducts() {
       });
   };
 }
+
 // Reducer
 const initialState = {};
 
@@ -37,5 +35,13 @@ export default (state = initialState, action) => {
       ...action.payload,
     };
   }
+  if (action.type === UPDATE_CARD_SELECTED_ATTRIBUTES) {
+    const allProducts = action.allProducts;
+    return {
+      ...state,
+      allProducts,
+    };
+  }
+
   return { ...state };
 };

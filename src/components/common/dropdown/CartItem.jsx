@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  increaseProductCount,
-  decreaseProductCount,
-  updateSelectedAttribute,
-} from 'Redux/ducks/cart';
+import { increaseProductCount, decreaseProductCount } from 'Redux/ducks/cart';
+import { updateCartProduct } from 'Redux/ducks/cart';
+
 import { ReactComponent as LeftArrow } from 'assets/svgs/left-arrow.svg';
 import { ReactComponent as RightArrow } from 'assets/svgs/right-arrow.svg';
+import { Link } from 'react-router-dom';
+import { closeAllDropdowns } from 'Redux/ducks/dropdown';
+import { setModalState } from 'Redux/ducks/modal';
+import {
+  checkSelectedAttributes,
+  getObjectDeepClone,
+} from 'utils/utilityFunctions';
 
 export class CartItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentGalleryItem: 0,
+      product: this.findProduct(),
     };
   }
 
@@ -25,6 +31,7 @@ export class CartItem extends Component {
           : oldState.currentGalleryItem - 1,
     }));
   };
+
   getNextPic = () => {
     const galleryLength = this.props.gallery.length;
     this.setState((oldState) => ({
@@ -32,11 +39,24 @@ export class CartItem extends Component {
     }));
   };
 
+  findProduct = () => {
+    // Get the product from store.allProducts
+    let targetProduct = null;
+    this.props.allProducts?.forEach((product) => {
+      if (product.id === this.props.params.productId)
+        targetProduct = checkSelectedAttributes(getObjectDeepClone(product));
+    });
+
+    return targetProduct;
+  };
+
   renderAttributes = (id, attributes, selectedAttributes) => {
     return attributes.map((attr, index) => {
+      // For each attribute, get default selected items from 'selectedAttributes'
       const selectedAttribute = selectedAttributes.filter(
         (atti) => atti.id === attr.id
       )[0];
+
       return (
         <div key={attr.id || index} className="attribute">
           <span className="attribute__name">{attr.name}:</span>
@@ -57,9 +77,18 @@ export class CartItem extends Component {
                       : 'swatch box'
                   }
                   onClick={() => {
-                    this.props.updateSelectedAttribute(id, attr, item);
-                    // I forced the component to update because there were a problem when changing attribute in cart page, then that change won't showup.
-                    this.forceUpdate();
+                    try {
+                      this.props.updateCartProduct(
+                        id,
+                        attr,
+                        item,
+                        selectedAttributes
+                      );
+                    } catch (error) {
+                      console.log(error);
+                    }
+                    // // I forced the component to update because there were a problem when changing attribute in cart page, then that change won't showup.
+                    // this.forceUpdate();
                   }}
                 ></button>
               ) : (
@@ -81,9 +110,18 @@ export class CartItem extends Component {
                       : null
                   }
                   onClick={() => {
-                    this.props.updateSelectedAttribute(id, attr, item);
-                    // I forced the component to update because there were a problem when changing attribute in cart page, then that change won't showup.
-                    this.forceUpdate();
+                    try {
+                      this.props.updateCartProduct(
+                        id,
+                        attr,
+                        item,
+                        selectedAttributes
+                      );
+                    } catch (error) {
+                      console.log(error);
+                    }
+                    // // I forced the component to update because there were a problem when changing attribute in cart page, then that change won't showup.
+                    // this.forceUpdate();
                   }}
                 >
                   {item.value}
@@ -109,9 +147,9 @@ export class CartItem extends Component {
       disableAttributeChange,
     } = this.props;
 
-    const currentGalleryItem = 0;
-
-    let currentPic = gallery[this.state.currentGalleryItem || 0];
+    let currentPic = gallery
+      ? gallery[this.state.currentGalleryItem || 0]
+      : null;
 
     return (
       <li
@@ -121,33 +159,68 @@ export class CartItem extends Component {
       >
         <div className="item__info">
           <div className="item__details">
-            <span className="item__brand">{brand}</span>
-            <span className="item__name">{name}</span>
-            <span className="item__price">
-              <span className="price-symbol">{price.currency.symbol}</span>
-              <span className="price-amount">{price.amount}</span>
-            </span>
+            <Link
+              to={'/product/' + id}
+              onClick={() => {
+                this.props.closeAllDropdowns();
+                this.props.setModalState(false, false);
+              }}
+              style={{
+                textDecoration: 'none',
+                zIndex: 0,
+                position: 'relative',
+              }}
+            >
+              <span className="item__brand">{brand}</span>
+              <span className="item__name">{name}</span>
+              <span className="item__price">
+                <span className="price-symbol">{price.currency.symbol}</span>
+                <span className="price-amount">{price.amount}</span>
+              </span>
+            </Link>
             {this.renderAttributes(id, attributes, selectedAttributes)}
           </div>
           <div className="item__controllers">
             <button
               className="box qty-controller"
-              onClick={() => this.props.increaseProductCount(id)}
+              onClick={() =>
+                this.props.increaseProductCount(id, selectedAttributes)
+              }
             >
               +
             </button>
             <span className="quantity">{qty}</span>
             <button
               className="box qty-controller"
-              onClick={() => this.props.decreaseProductCount(id)}
+              onClick={() =>
+                this.props.decreaseProductCount(id, selectedAttributes)
+              }
             >
               -
             </button>
           </div>
         </div>
         <figure className="image">
-          <img src={currentPic} alt={name} />
-          {!disableAttributeChange && (
+          <Link
+            to={'/product/' + id}
+            onClick={() => {
+              this.props.closeAllDropdowns();
+              this.props.setModalState(false, false);
+            }}
+            style={{
+              textDecoration: 'none',
+              zIndex: 0,
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            <img
+              src={currentPic}
+              alt={name + ' picture, sadlly not found 😢'}
+            />
+          </Link>
+
             <span className="controllers">
               <button className="btn-reset" onClick={() => this.getPrevPic()}>
                 <LeftArrow />
@@ -156,7 +229,6 @@ export class CartItem extends Component {
                 <RightArrow />
               </button>
             </span>
-          )}
         </figure>
       </li>
     );
@@ -166,5 +238,7 @@ export class CartItem extends Component {
 export default connect(null, {
   increaseProductCount,
   decreaseProductCount,
-  updateSelectedAttribute,
+  updateCartProduct,
+  closeAllDropdowns,
+  setModalState,
 })(CartItem);

@@ -26,6 +26,7 @@ export class Cart extends Component {
     const taxPercentage = 23; // in the future we can find a way to control this from outside of this component
     const taxAmount = this.calcTax(taxPercentage, totalPrice);
 
+    // The '+' before the number to convert it to 'int' from 'string'
     const finalPrice = +totalPrice + +taxAmount;
 
     if (cartItemsCount === 0)
@@ -42,7 +43,7 @@ export class Cart extends Component {
         <ul className="cart__dropdown-items">
           {cartItems.map((item, index) => (
             <CartItem
-              key={item.id || index}
+              key={index}
               id={item.id}
               brand={item.brand}
               name={item.name}
@@ -51,6 +52,7 @@ export class Cart extends Component {
               attributes={item.attributes}
               selectedAttributes={item.selectedAttributes}
               qty={item.qty}
+              disableAttributeChange={true}
             />
           ))}
         </ul>
