@@ -1,16 +1,13 @@
 import withParams from 'HOC/withParams';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getPrice } from 'utils/utilityFunctions';
+import { checkSelectedAttributes, getPrice } from 'utils/utilityFunctions';
 import {
   increaseProductCount,
   decreaseProductCount,
   addToCart,
 } from 'Redux/ducks/cart';
-
-import { setDefaults } from 'utils/utilityFunctions';
-
-import NoPic from 'assets/images/no-pic.png';
+import { getObjectDeepClone } from '../../utils/utilityFunctions';
 
 export class ProductDescription extends Component {
   constructor(props) {
@@ -39,44 +36,29 @@ export class ProductDescription extends Component {
   };
 
   findProduct = () => {
+    // Get the product from store.allProducts
     let targetProduct = null;
-
-    this.props.cartItems?.forEach((product) => {
-      if (product.id === this.props.params.productId) targetProduct = product;
+    this.props.allProducts?.forEach((product) => {
+      if (product.id === this.props.params.productId)
+        targetProduct = checkSelectedAttributes(getObjectDeepClone(product));
     });
-
-    // If it doesn't exists in cartItems
-    if (!targetProduct)
-      this.props.allProducts?.forEach((product) => {
-        if (product.id === this.props.params.productId)
-          if (product.selectedAttribute) targetProduct = product;
-          else targetProduct = setDefaults(product);
-      });
 
     return targetProduct;
   };
 
   updateSelectedAttribute = (attr, item) => {
-    let product = { ...this.state.product };
-
-    // Check if the product in cart too
-    let productToEdit = null;
-
-    // There is no selectedAttributes, so put one
-    if (!product.selectedAttributes) {
-      productToEdit = setDefaults(product);
-    } else {
-      productToEdit = product;
-    }
+    let product = checkSelectedAttributes(
+      getObjectDeepClone(this.state.product)
+    );
 
     // Edit selected attributes
-    productToEdit.selectedAttributes.forEach((attribute) => {
+    product.selectedAttributes.forEach((attribute) => {
       if (attribute.id === attr.id) {
         attribute.items = item;
       }
     });
 
-    this.setState({ product: productToEdit });
+    this.setState({ product });
   };
 
   renderAttributes = (id, attributes, selectedAttributes, inStock) => {
@@ -188,13 +170,12 @@ export class ProductDescription extends Component {
             ))}
           </div>
           {/* 1.2 */}
-          {currentPic ? (
-            <figure className="gallery__main-image">
-              <img src={currentPic} alt={name} />
-            </figure>
-          ) : (
-            <NoPic />
-          )}
+          <figure className="gallery__main-image">
+            <img
+              src={currentPic}
+              alt={name + ' picture, sadlly not found 😢'}
+            />
+          </figure>
         </div>
         {/* 2 */}
         <div className="product__info">
