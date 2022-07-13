@@ -5,6 +5,8 @@ import { getPrice } from 'utils/utilityFunctions';
 import { connect } from 'react-redux';
 import { addToCart } from 'Redux/ducks/cart';
 import { Link } from 'react-router-dom';
+import { showNotifcation } from 'Redux/ducks/alert';
+
 export class ProductCard extends Component {
   state = {
     showAddToCartBtn: false,
@@ -47,8 +49,10 @@ export class ProductCard extends Component {
               onClick={() => {
                 try {
                   addToCart(product);
+                  this.props.showNotifcation(false, 'Item added successfully');
                 } catch (error) {
                   console.log(error);
+                  this.props.showNotifcation(true, 'Error Happened..!');
                 }
               }}
               style={{ textDecoration: 'none', zIndex: 2 }}
@@ -78,4 +82,6 @@ const mapStateToProps = (state) => ({
   selectedCurrency: state.currencies.selectedCurrency,
 });
 
-export default connect(mapStateToProps, { addToCart })(ProductCard);
+export default connect(mapStateToProps, { addToCart, showNotifcation })(
+  ProductCard
+);

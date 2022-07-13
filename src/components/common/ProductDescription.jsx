@@ -8,7 +8,7 @@ import {
   addToCart,
 } from 'Redux/ducks/cart';
 import { getObjectDeepClone } from '../../utils/utilityFunctions';
-
+import { showNotifcation } from 'Redux/ducks/alert';
 export class ProductDescription extends Component {
   constructor(props) {
     super(props);
@@ -196,8 +196,10 @@ export class ProductDescription extends Component {
               onClick={() => {
                 try {
                   addToCart(product);
+                  this.props.showNotifcation(false, 'Item added successfully');
                 } catch (error) {
                   console.log(error);
+                  this.props.showNotifcation(true, 'Error Happened..!');
                 }
               }}
               style={{ textDecoration: 'none', zIndex: 2 }}
@@ -231,4 +233,5 @@ export default connect(mapStateToProps, {
   increaseProductCount,
   decreaseProductCount,
   addToCart,
+  showNotifcation,
 })(withParams(ProductDescription));

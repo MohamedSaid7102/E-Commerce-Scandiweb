@@ -711,6 +711,30 @@
 }
 /* Loading End */
 
+/* Alert Start */
+.alert-box {
+  color: #fff;
+  width: max-content;
+  height: max-content;
+  padding: 1rem;
+  border-radius: 30px;
+  position: fixed;
+  top: calc(var(--navbar-height) + 10px);
+  left: 10px;
+  filter: drop-shadow(-1px 3px 6px rgba(0, 0, 0, 0.5));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-weight: lighter;
+  z-index: 100;
+}
+
+.alert-box .error-img {
+  width: 100%;
+  max-width: 20px;
+}
+/* Alert End */
 /* Responsiveness */
 /* Nav */
 @media (max-width: 1000px) {
