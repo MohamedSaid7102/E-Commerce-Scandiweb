@@ -185,7 +185,7 @@ export default (state = initialState, action) => {
 
     // If this is a new item, it doesn't exists in cartItems, so allOccurrencesOfObject will be length of 0
     if (allOccurrencesOfObject.length === 0) {
-      cartItems.push(product);
+      cartItems.unshift(product);
       return {
         ...state,
         cartItems,
@@ -227,7 +227,7 @@ export default (state = initialState, action) => {
     }
     // Otherwise, this is an existing product with different attribute, add it normally
     if (!productFoundAndUpdated) {
-      cartItems.push(product);
+      cartItems.unshift(product);
       return {
         ...state,
         cartItems,
