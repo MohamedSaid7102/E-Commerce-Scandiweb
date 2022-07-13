@@ -95,7 +95,7 @@ class App extends Component {
             }
           />
           <Route
-            path="/product"
+            path="product"
             element={
               <React.Suspense fallback={<Loading />}>
                 <LazyPDP></LazyPDP>
