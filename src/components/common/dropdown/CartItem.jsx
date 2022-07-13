@@ -87,8 +87,6 @@ export class CartItem extends Component {
                     } catch (error) {
                       console.log(error);
                     }
-                    // // I forced the component to update because there were a problem when changing attribute in cart page, then that change won't showup.
-                    // this.forceUpdate();
                   }}
                 ></button>
               ) : (
@@ -120,8 +118,6 @@ export class CartItem extends Component {
                     } catch (error) {
                       console.log(error);
                     }
-                    // // I forced the component to update because there were a problem when changing attribute in cart page, then that change won't showup.
-                    // this.forceUpdate();
                   }}
                 >
                   {item.value}

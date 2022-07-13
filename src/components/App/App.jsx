@@ -19,9 +19,13 @@ const LazyPDP = React.lazy(() => import('pages/PDP'));
 
 // qty => quantity
 class App extends Component {
-  constructor(props) {
-    super(props);
+  // Continuaslly fetch data from backend till data is fetched.
+  componentDidMount() {
     this.props.getAllProducts();
+    const interval = setInterval(() => {
+      if (!this.props.allProducts) this.props.getAllProducts();
+      else clearInterval(interval);
+    }, 2000);
   }
 
   render() {
@@ -33,7 +37,7 @@ class App extends Component {
       cartItemsCount,
     } = this.props;
 
-    if (!this.props.allProducts) return <Loading />; //while allProdcuts is not loaded => show Loading.
+    if (!allProducts) return <Loading />; //while allProdcuts is not loaded => show Loading.
 
     return (
       <div className="app">
