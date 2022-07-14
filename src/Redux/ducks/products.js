@@ -1,6 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { request } from 'graphql-request';
 import { GET_ALL_PRODUCTS as GET_ALL_PRODUCTS_QUERY } from 'GraphQL/Queries';
+import { getObjectDeepClone } from 'utils/utilityFunctions';
 // Action Types
 const GET_ALL_PRODUCTS = 'GET_ALL_PRODUCTS';
 const UPDATE_CARD_SELECTED_ATTRIBUTES = 'UPDATE_CARD_SELECTED_ATTRIBUTES';
@@ -12,7 +13,23 @@ export function getAllProducts() {
         let categories = {};
         data.categories.forEach((category) => {
           const categoryName = category.name.toLowerCase() + 'Products';
-          categories[categoryName] = category.products;
+          categories[categoryName] = category.products.map((item) => {
+            if (item.id === 'jacket-canada-goosee') {
+              let newItem = {};
+              newItem = getObjectDeepClone(item);
+              newItem.gallery = item.gallery.filter(
+                (pic) =>
+                  pic !==
+                    'https://images.canadagoose.com/image/upload/w_480,c_scale,f_auto,q_auto:best/v1576016105/product-image/2409L_61.jpg' &&
+                  pic !==
+                    'https://images.canadagoose.com/image/upload/w_480,c_scale,f_auto,q_auto:best/v1576016107/product-image/2409L_61_a.jpg' &&
+                  pic !==
+                    'https://images.canadagoose.com/image/upload/w_480,c_scale,f_auto,q_auto:best/v1576016108/product-image/2409L_61_b.jpg'
+              );
+              return newItem;
+            }
+            return item;
+          });
         });
         return categories;
       })
