@@ -1,14 +1,14 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { request } from 'graphql-request';
 import { GET_CURRENCIES as GET_CURRENCIES_QUERY } from 'GraphQL/Queries';
-
+import { PORT } from 'Redux/config';
 // Action Types
 const GET_CURRENCIES = 'GET_CURRENCIES';
 const SET_SELECTED_CURRENCY = 'SET_SELECTED_CURRENCY';
 
 export function getCurrencies() {
   return (dispatch) => {
-    request('http://localhost:4000/', GET_CURRENCIES_QUERY)
+    request(PORT, GET_CURRENCIES_QUERY)
       .then(({ currencies }) => {
         return currencies;
       })
