@@ -6,22 +6,27 @@ import NavBar from 'components/NavBar';
 import { getAllProducts } from 'Redux/ducks/products';
 // Assets
 import 'assets/style/app.css';
-// Redux
-import { addToCart } from 'Redux/ducks/cart';
 // Pages
 import ProductsList from 'components/common/Product/List';
 import Loading from 'components/common/Loading';
 import Modal from 'components/common/Modal';
+import ProductDescription from 'components/common/ProductDescription';
+import Alert from 'components/common/Alert';
 const LazyPageNotFound = React.lazy(() => import('pages/NotFound'));
 const LazyCheckout = React.lazy(() => import('pages/Checkout'));
 const LazyCart = React.lazy(() => import('pages/Cart'));
 const LazyPLP = React.lazy(() => import('pages/PLP'));
+const LazyPDP = React.lazy(() => import('pages/PDP'));
 
 // qty => quantity
 class App extends Component {
-  constructor(props) {
-    super(props);
+  // Continuaslly fetch data from backend till data is fetched.
+  componentDidMount() {
     this.props.getAllProducts();
+    const interval = setInterval(() => {
+      if (!this.props.allProducts) this.props.getAllProducts();
+      else clearInterval(interval);
+    }, 2000);
   }
 
   render() {
@@ -29,17 +34,24 @@ class App extends Component {
       allProducts,
       techProducts,
       clothesProducts,
-      selectedCurrency,
       cartItems,
       cartItemsCount,
-      addToCart,
+      error,
+      clr,
+      alertText,
     } = this.props;
 
-    if (!this.props.allProducts) return <Loading />; //while allProdcuts is not loaded => show Loading.
+    if (!allProducts) return <Loading />; //while allProdcuts is not loaded => show Loading.
 
     return (
       <div className="app">
+        {/* Modal 'overlay' */}
         <Modal />
+        {/* Alert box */}
+        {this.props.notification ? (
+          <Alert error={error} color={clr} text={alertText} />
+        ) : null}
+        {/* Navbar */}
         <NavBar cartItemsCount={cartItemsCount} cartItems={cartItems} />
         <Routes>
           <Route
@@ -47,11 +59,7 @@ class App extends Component {
             element={
               <React.Suspense fallback={<Loading />}>
                 <LazyPLP>
-                  <ProductsList
-                    products={allProducts}
-                    currency={selectedCurrency}
-                    onClick={addToCart}
-                  />
+                  <ProductsList products={allProducts} />
                 </LazyPLP>
               </React.Suspense>
             }
@@ -61,11 +69,7 @@ class App extends Component {
             element={
               <React.Suspense fallback={<Loading />}>
                 <LazyPLP title="All">
-                  <ProductsList
-                    products={allProducts}
-                    currency={selectedCurrency}
-                    onClick={addToCart}
-                  />
+                  <ProductsList products={allProducts} />
                 </LazyPLP>
               </React.Suspense>
             }
@@ -75,11 +79,7 @@ class App extends Component {
             element={
               <React.Suspense fallback={<Loading />}>
                 <LazyPLP title="Clothes">
-                  <ProductsList
-                    products={clothesProducts}
-                    currency={selectedCurrency}
-                    onClick={addToCart}
-                  />
+                  <ProductsList products={clothesProducts} />
                 </LazyPLP>
               </React.Suspense>
             }
@@ -89,15 +89,21 @@ class App extends Component {
             element={
               <React.Suspense fallback={<Loading />}>
                 <LazyPLP title="Tech">
-                  <ProductsList
-                    products={techProducts}
-                    currency={selectedCurrency}
-                    onClick={addToCart}
-                  />
+                  <ProductsList products={techProducts} />
                 </LazyPLP>
               </React.Suspense>
             }
           />
+          <Route
+            path="product"
+            element={
+              <React.Suspense fallback={<Loading />}>
+                <LazyPDP></LazyPDP>
+              </React.Suspense>
+            }
+          >
+            <Route path=":productId" element={<ProductDescription />} />
+          </Route>
           <Route
             path="checkout"
             element={
@@ -136,10 +142,14 @@ const mapStateToProps = (state) => ({
   // cart
   cartItemsCount: state.cart.cartItemsCount,
   cartItems: state.cart.cartItems,
+  // alert
+  notification: state.alert.notification,
+  error: state.alert.error,
+  clr: state.alert.clr,
+  alertText: state.alert.alertText,
 });
 
 export default connect(mapStateToProps, {
   getAllProducts,
-  addToCart,
 })(App);
 

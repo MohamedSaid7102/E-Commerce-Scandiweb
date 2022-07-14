@@ -2,16 +2,22 @@
 
 ## Entry React developer TEST
 
-## Under development 👷
+## V1.0
 
 ## Things I added:
 
-- blurred transparent navbar.
-- bottom border for dropdown cart items.
+- Blurred transparent navbar.
+- Bottom border for dropdown cart items.
+- Remove from cart button, to allow user to remove items from cart
 
----
+## Notes
 
-## Notes 🗒
+- To enable attribute select in cart dropdown & cart 'checkout' just make `disableAttributeChange={false}` in `<CartItem/>` component in both `<Cart />` and `<CartDropdown/>` Components.
+
+## Things I added:
+
+- Removed some images from the product that contains the girl image, For Religious purposes, I'm a Muslim and we as Muslims are not allowed to look at some parts of women's body, because they are our jewels hence we treat them like queens in Islam, and that is applied to any women either Muslim or not, my mom or wife or sister or not,
+  I hope you can understand that with open arms.
 
 ### Style:
 

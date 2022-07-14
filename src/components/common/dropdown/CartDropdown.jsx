@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import CartDropdownItem from 'components/common/dropdown/CartDropdownItem';
+import CartItem from 'components/common/dropdown/CartItem';
 import { getPrice } from 'utils/utilityFunctions';
 import { closeAllDropdowns } from 'Redux/ducks/dropdown';
 import { setModalState } from 'Redux/ducks/modal';
@@ -14,6 +14,7 @@ export class CartDropdown extends Component {
       selectedCurrency,
       closeAllDropdowns,
       setModalState,
+      totalPrice,
     } = this.props;
     return (
       <div className="dropdown cart-list">
@@ -29,9 +30,10 @@ export class CartDropdown extends Component {
         {/* Cart items */}
         <ul className="cart__dropdown-items">
           {cartItems.map((item, index) => (
-            <CartDropdownItem
-              key={item.id || index}
+            <CartItem
+              key={item?.uuid || index}
               id={item.id}
+              uuid={item?.uuid}
               brand={item.brand}
               name={item.name}
               price={getPrice(item.prices, selectedCurrency)}
@@ -39,13 +41,16 @@ export class CartDropdown extends Component {
               attributes={item.attributes}
               selectedAttributes={item.selectedAttributes}
               qty={item.qty}
+              disableAttributeChange={true}
             />
           ))}
         </ul>
         {/* Total */}
         <p className="total">
           <span className="total__label">Total</span>
-          <span>{selectedCurrency.symbol}200</span>
+          <span>
+            {selectedCurrency.symbol} {totalPrice}
+          </span>
         </p>
         {/* Buttons */}
         <div className="cart__btns">
