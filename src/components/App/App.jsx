@@ -26,7 +26,7 @@ class App extends Component {
     const interval = setInterval(() => {
       if (!this.props.allProducts) this.props.getAllProducts();
       else clearInterval(interval);
-    }, 2000);
+    }, 4000);
   }
 
   render() {
