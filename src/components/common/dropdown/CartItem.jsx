@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { increaseProductCount, decreaseProductCount } from 'Redux/ducks/cart';
+import {
+  increaseProductCount,
+  decreaseProductCount,
+  removeItem,
+} from 'Redux/ducks/cart';
 import { updateCartProduct } from 'Redux/ducks/cart';
 
 import { ReactComponent as LeftArrow } from 'assets/svgs/left-arrow.svg';
@@ -168,7 +172,13 @@ export class CartItem extends Component {
                 <span className="price-amount">{price.amount}</span>
               </span>
             </Link>
-            {this.renderAttributes(id, uuid, attributes, selectedAttributes)}
+            {this.renderAttributes(uuid, attributes, selectedAttributes)}
+            <button
+              className="btn-reset item-remove__btn"
+              onClick={() => this.props.removeItem(uuid)}
+            >
+              Remove Product
+            </button>
           </div>
           <div className="item__controllers">
             <button
@@ -242,4 +252,5 @@ export default connect(null, {
   closeAllDropdowns,
   setModalState,
   showNotifcation,
+  removeItem,
 })(CartItem);

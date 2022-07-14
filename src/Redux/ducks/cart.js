@@ -15,6 +15,7 @@ const INCREMENT_PRODUCT_COUNT = 'INCREMENT_PRODUCT_COUNT';
 const DECREMENT_PRODUCT_COUNT = 'DECREMENT_PRODUCT_COUNT';
 const UPDATE_TOTAL_PRICE = 'UPDATE_TOTAL_PRICE';
 const UPDATE_SELECTED_ATTRIBUTES = 'UPDATE_SELECTED_ATTRIBUTES';
+const REMOVE_PRODUCT = 'REMOVE_PRODUCT';
 
 export function addToCart(product) {
   if (typeof product !== 'object')
@@ -28,6 +29,21 @@ export function addToCart(product) {
       product,
     });
 
+    const totalPrice = calcTotalPrice();
+
+    dispatch({
+      type: UPDATE_TOTAL_PRICE,
+      totalPrice,
+    });
+  };
+}
+
+export function removeItem(uuid) {
+  return (dispatch) => {
+    dispatch({
+      type: REMOVE_PRODUCT,
+      payload: { uuid },
+    });
     const totalPrice = calcTotalPrice();
 
     dispatch({
@@ -175,6 +191,26 @@ export default (state = initialState, action) => {
     }
   }
 
+  if (action.type === REMOVE_PRODUCT) {
+    const { uuid } = action.payload;
+    let cartItems = getArrayDeepClone(state.cartItems);
+    let cartItemsCount = state.cartItemsCount;
+    let productQty = 0;
+    cartItems = cartItems.filter((item) => {
+      if (item.uuid === uuid) {
+        productQty = item.qty;
+        return false;
+      }
+      return true;
+    });
+    cartItemsCount = cartItemsCount - productQty;
+    return {
+      ...state,
+      cartItems,
+      cartItemsCount,
+    };
+  }
+
   if (action.type === INCREMENT_PRODUCT_COUNT) {
     const uuid = action.uuid;
     let cartItemsCount = state.cartItemsCount;
@@ -208,16 +244,11 @@ export default (state = initialState, action) => {
 
     for (let i = 0; i < cartItems.length; i++) {
       let product = cartItems[i];
-
+      // Now if item.qty === 1 -> decrementing won't delete it, just 'deleteFromCart' button will do so.
       if (product.uuid === uuid) {
-        cartItemsCount =
-          product.qty !== 0
-            ? cartItemsCount === 0
-              ? 0
-              : cartItemsCount - 1
-            : cartItemsCount;
-        product.qty = product.qty === 0 ? 0 : product.qty - 1;
-        if (product.qty !== 0) newCartItems.push(product);
+        cartItemsCount = product.qty > 1 ? cartItemsCount - 1 : cartItemsCount;
+        product.qty = product.qty <= 1 ? 1 : product.qty - 1;
+        newCartItems.push(product);
         succeeded = true;
       } else {
         newCartItems.push(product);
