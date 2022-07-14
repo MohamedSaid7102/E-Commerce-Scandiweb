@@ -30,9 +30,8 @@ export class CartDropdown extends Component {
         {/* Cart items */}
         <ul className="cart__dropdown-items">
           {cartItems.map((item, index) => (
-            // in case more that one product with the same id and different attributes
             <CartItem
-              key={index}
+              key={item?.uuid || index}
               id={item.id}
               uuid={item?.uuid}
               brand={item.brand}

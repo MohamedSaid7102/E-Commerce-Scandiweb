@@ -51,7 +51,7 @@ export class CartItem extends Component {
     return targetProduct;
   };
 
-  renderAttributes = (id, attributes, selectedAttributes) => {
+  renderAttributes = (uuid, attributes, selectedAttributes) => {
     return attributes.map((attr, index) => {
       // For each attribute, get default selected items from 'selectedAttributes'
       const selectedAttribute = selectedAttributes.filter(
@@ -79,14 +79,10 @@ export class CartItem extends Component {
                   }
                   onClick={() => {
                     try {
-                      this.props.updateCartProduct(
-                        id,
-                        attr,
-                        item,
-                        selectedAttributes
-                      );
+                      this.props.updateCartProduct(uuid, attr, item);
                     } catch (error) {
                       console.log(error);
+                      this.props.showNotifcation(true, error.message);
                     }
                   }}
                 ></button>
@@ -110,14 +106,10 @@ export class CartItem extends Component {
                   }
                   onClick={() => {
                     try {
-                      this.props.updateCartProduct(
-                        id,
-                        attr,
-                        item,
-                        selectedAttributes
-                      );
+                      this.props.updateCartProduct(uuid, attr, item);
                     } catch (error) {
                       console.log(error);
+                      this.props.showNotifcation(true, error.message);
                     }
                   }}
                 >
@@ -176,7 +168,7 @@ export class CartItem extends Component {
                 <span className="price-amount">{price.amount}</span>
               </span>
             </Link>
-            {this.renderAttributes(id, attributes, selectedAttributes)}
+            {this.renderAttributes(id, uuid, attributes, selectedAttributes)}
           </div>
           <div className="item__controllers">
             <button
