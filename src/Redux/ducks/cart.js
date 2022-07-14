@@ -15,6 +15,7 @@ const INCREMENT_PRODUCT_COUNT = 'INCREMENT_PRODUCT_COUNT';
 const DECREMENT_PRODUCT_COUNT = 'DECREMENT_PRODUCT_COUNT';
 const UPDATE_TOTAL_PRICE = 'UPDATE_TOTAL_PRICE';
 const UPDATE_SELECTED_ATTRIBUTES = 'UPDATE_SELECTED_ATTRIBUTES';
+const REMOVE_PRODUCT = 'REMOVE_PRODUCT';
 
 export function addToCart(product) {
   if (typeof product !== 'object')
@@ -33,6 +34,15 @@ export function addToCart(product) {
     dispatch({
       type: UPDATE_TOTAL_PRICE,
       totalPrice,
+    });
+  };
+}
+
+export function removeItem(uuid) {
+  return (dispatch) => {
+    dispatch({
+      type: REMOVE_PRODUCT,
+      payload: { uuid },
     });
   };
 }
@@ -173,6 +183,26 @@ export default (state = initialState, action) => {
         cartItemsCount,
       };
     }
+  }
+
+  if (action.type === REMOVE_PRODUCT) {
+    const { uuid } = action.payload;
+    let cartItems = getArrayDeepClone(state.cartItems);
+    let cartItemsCount = state.cartItemsCount;
+    let productQty = 0;
+    cartItems = cartItems.filter((item) => {
+      if (item.uuid === uuid) {
+        productQty = item.qty;
+        return false;
+      }
+      return true;
+    });
+    cartItemsCount = cartItemsCount - productQty;
+    return {
+      ...state,
+      cartItems,
+      cartItemsCount,
+    };
   }
 
   if (action.type === INCREMENT_PRODUCT_COUNT) {
