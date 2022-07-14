@@ -231,14 +231,16 @@ export class CartItem extends Component {
             />
           </Link>
 
-          <span className="controllers">
-            <button className="btn-reset" onClick={() => this.getPrevPic()}>
-              <LeftArrow />
-            </button>
-            <button className="btn-reset" onClick={() => this.getNextPic()}>
-              <RightArrow />
-            </button>
-          </span>
+          {gallery.length > 1 && (
+            <span className="controllers">
+              <button className="btn-reset" onClick={() => this.getPrevPic()}>
+                <LeftArrow />
+              </button>
+              <button className="btn-reset" onClick={() => this.getNextPic()}>
+                <RightArrow />
+              </button>
+            </span>
+          )}
         </figure>
       </li>
     );
