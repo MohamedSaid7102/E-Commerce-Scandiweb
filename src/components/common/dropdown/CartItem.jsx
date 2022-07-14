@@ -12,6 +12,7 @@ import {
   checkSelectedAttributes,
   getObjectDeepClone,
 } from 'utils/utilityFunctions';
+import { showNotifcation } from 'Redux/ducks/alert';
 
 export class CartItem extends Component {
   constructor(props) {
@@ -133,6 +134,7 @@ export class CartItem extends Component {
   render() {
     const {
       id,
+      uuid,
       brand,
       name,
       price,
@@ -179,18 +181,28 @@ export class CartItem extends Component {
           <div className="item__controllers">
             <button
               className="box qty-controller"
-              onClick={() =>
-                this.props.increaseProductCount(id, selectedAttributes)
-              }
+              onClick={() => {
+                try {
+                  this.props.increaseProductCount(uuid);
+                } catch (error) {
+                  console.log(error);
+                  this.props.showNotifcation(true, error.message);
+                }
+              }}
             >
               +
             </button>
             <span className="quantity">{qty}</span>
             <button
               className="box qty-controller"
-              onClick={() =>
-                this.props.decreaseProductCount(id, selectedAttributes)
-              }
+              onClick={() => {
+                try {
+                  this.props.decreaseProductCount(uuid);
+                } catch (error) {
+                  console.log(error);
+                  this.props.showNotifcation(true, error.message);
+                }
+              }}
             >
               -
             </button>
@@ -217,14 +229,14 @@ export class CartItem extends Component {
             />
           </Link>
 
-            <span className="controllers">
-              <button className="btn-reset" onClick={() => this.getPrevPic()}>
-                <LeftArrow />
-              </button>
-              <button className="btn-reset" onClick={() => this.getNextPic()}>
-                <RightArrow />
-              </button>
-            </span>
+          <span className="controllers">
+            <button className="btn-reset" onClick={() => this.getPrevPic()}>
+              <LeftArrow />
+            </button>
+            <button className="btn-reset" onClick={() => this.getNextPic()}>
+              <RightArrow />
+            </button>
+          </span>
         </figure>
       </li>
     );
@@ -237,4 +249,5 @@ export default connect(null, {
   updateCartProduct,
   closeAllDropdowns,
   setModalState,
+  showNotifcation,
 })(CartItem);

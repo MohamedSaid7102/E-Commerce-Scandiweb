@@ -2,11 +2,7 @@ import withParams from 'HOC/withParams';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { checkSelectedAttributes, getPrice } from 'utils/utilityFunctions';
-import {
-  increaseProductCount,
-  decreaseProductCount,
-  addToCart,
-} from 'Redux/ducks/cart';
+import { addToCart } from 'Redux/ducks/cart';
 import { getObjectDeepClone } from '../../utils/utilityFunctions';
 import { showNotifcation } from 'Redux/ducks/alert';
 export class ProductDescription extends Component {
@@ -230,8 +226,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  increaseProductCount,
-  decreaseProductCount,
   addToCart,
   showNotifcation,
 })(withParams(ProductDescription));

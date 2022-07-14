@@ -34,6 +34,7 @@ export class CartDropdown extends Component {
             <CartItem
               key={index}
               id={item.id}
+              uuid={item?.uuid}
               brand={item.brand}
               name={item.name}
               price={getPrice(item.prices, selectedCurrency)}
