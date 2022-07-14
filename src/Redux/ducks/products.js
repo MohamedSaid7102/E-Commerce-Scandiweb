@@ -2,13 +2,15 @@
 import { request } from 'graphql-request';
 import { GET_ALL_PRODUCTS as GET_ALL_PRODUCTS_QUERY } from 'GraphQL/Queries';
 import { getObjectDeepClone } from 'utils/utilityFunctions';
+import { PORT } from 'Redux/config';
+
 // Action Types
 const GET_ALL_PRODUCTS = 'GET_ALL_PRODUCTS';
 const UPDATE_CARD_SELECTED_ATTRIBUTES = 'UPDATE_CARD_SELECTED_ATTRIBUTES';
 // Action Creators
 export function getAllProducts() {
   return (dispatch) => {
-    request('http://localhost:4000/', GET_ALL_PRODUCTS_QUERY)
+    request(PORT, GET_ALL_PRODUCTS_QUERY)
       .then((data) => {
         let categories = {};
         data.categories.forEach((category) => {
