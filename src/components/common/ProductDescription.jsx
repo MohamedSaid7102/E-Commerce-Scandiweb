@@ -189,9 +189,11 @@ export class ProductDescription extends Component {
             <button
               className="btn-reset btn--filled order-btn"
               onClick={() => {
-                // Now product won't be added from PDP unless user select an attribute, but from PLP will be added with default first selected attributes
+                // Now product won't be added from PDP unless user select an attribute, but from PLP will be added with default first selected attributes, and we can add products that doen't have attributes.
                 if (
-                  typeof this.state.product.selectedAttributes === 'undefined'
+                  typeof this.state.product.selectedAttributes ===
+                    'undefined' &&
+                  this.state.product.attributes.length !== 0
                 ) {
                   this.props.showNotifcation(
                     false,
