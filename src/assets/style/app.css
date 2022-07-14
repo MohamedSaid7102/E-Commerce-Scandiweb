@@ -327,6 +327,10 @@
   font-weight: 500;
 }
 
+.cart__item .item__details a {
+  font-size: 1.2rem;
+}
+
 .item__info {
   text-decoration: none;
 }
@@ -682,6 +686,9 @@
 }
 .cart__dropdown-items .cart__item {
   margin-bottom: 2rem;
+}
+.cart__dropdown-items .cart__item image {
+  flex-shrink: 0;
 }
 /* cart footer */
 .cart-footer .footer__item .item__title {

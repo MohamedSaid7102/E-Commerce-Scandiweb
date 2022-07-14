@@ -1,6 +1,6 @@
 # Scandiweb 🚀
 
-## Entry React developer TEST
+## E-Commerce website: visit it from [here](https://scandiweb-clint-shelf.herokuapp.com/).
 
 ## V1.0
 
@@ -35,4 +35,6 @@ Instead of dividing style into multiple style sheets, I mad basic general styles
 
 and included responsiveness as a sepert file
 so remember to search with the component name for easy access.
+
+## Backend ['GraphQL' endpoint](https://github.com/scandiweb/junior-react-endpoint)
 
