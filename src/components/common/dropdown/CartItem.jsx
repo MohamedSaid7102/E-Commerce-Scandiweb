@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { increaseProductCount, decreaseProductCount } from 'Redux/ducks/cart';
+import {
+  increaseProductCount,
+  decreaseProductCount,
+  removeItem,
+} from 'Redux/ducks/cart';
 import { updateCartProduct } from 'Redux/ducks/cart';
 
 import { ReactComponent as LeftArrow } from 'assets/svgs/left-arrow.svg';
@@ -12,6 +16,7 @@ import {
   checkSelectedAttributes,
   getObjectDeepClone,
 } from 'utils/utilityFunctions';
+import { showNotifcation } from 'Redux/ducks/alert';
 
 export class CartItem extends Component {
   constructor(props) {
@@ -50,7 +55,7 @@ export class CartItem extends Component {
     return targetProduct;
   };
 
-  renderAttributes = (id, attributes, selectedAttributes) => {
+  renderAttributes = (uuid, attributes, selectedAttributes) => {
     return attributes.map((attr, index) => {
       // For each attribute, get default selected items from 'selectedAttributes'
       const selectedAttribute = selectedAttributes.filter(
@@ -78,14 +83,10 @@ export class CartItem extends Component {
                   }
                   onClick={() => {
                     try {
-                      this.props.updateCartProduct(
-                        id,
-                        attr,
-                        item,
-                        selectedAttributes
-                      );
+                      this.props.updateCartProduct(uuid, attr, item);
                     } catch (error) {
                       console.log(error);
+                      this.props.showNotifcation(true,false, error.message);
                     }
                   }}
                 ></button>
@@ -109,14 +110,10 @@ export class CartItem extends Component {
                   }
                   onClick={() => {
                     try {
-                      this.props.updateCartProduct(
-                        id,
-                        attr,
-                        item,
-                        selectedAttributes
-                      );
+                      this.props.updateCartProduct(uuid, attr, item);
                     } catch (error) {
                       console.log(error);
+                      this.props.showNotifcation(true,false, error.message);
                     }
                   }}
                 >
@@ -133,6 +130,7 @@ export class CartItem extends Component {
   render() {
     const {
       id,
+      uuid,
       brand,
       name,
       price,
@@ -174,23 +172,39 @@ export class CartItem extends Component {
                 <span className="price-amount">{price.amount}</span>
               </span>
             </Link>
-            {this.renderAttributes(id, attributes, selectedAttributes)}
+            {this.renderAttributes(uuid, attributes, selectedAttributes)}
+            <button
+              className="btn-reset item-remove__btn"
+              onClick={() => this.props.removeItem(uuid)}
+            >
+              Remove Product
+            </button>
           </div>
           <div className="item__controllers">
             <button
               className="box qty-controller"
-              onClick={() =>
-                this.props.increaseProductCount(id, selectedAttributes)
-              }
+              onClick={() => {
+                try {
+                  this.props.increaseProductCount(uuid);
+                } catch (error) {
+                  console.log(error);
+                  this.props.showNotifcation(true,false, error.message);
+                }
+              }}
             >
               +
             </button>
             <span className="quantity">{qty}</span>
             <button
               className="box qty-controller"
-              onClick={() =>
-                this.props.decreaseProductCount(id, selectedAttributes)
-              }
+              onClick={() => {
+                try {
+                  this.props.decreaseProductCount(uuid);
+                } catch (error) {
+                  console.log(error);
+                  this.props.showNotifcation(true,false, error.message);
+                }
+              }}
             >
               -
             </button>
@@ -217,6 +231,7 @@ export class CartItem extends Component {
             />
           </Link>
 
+          {gallery.length > 1 && (
             <span className="controllers">
               <button className="btn-reset" onClick={() => this.getPrevPic()}>
                 <LeftArrow />
@@ -225,6 +240,7 @@ export class CartItem extends Component {
                 <RightArrow />
               </button>
             </span>
+          )}
         </figure>
       </li>
     );
@@ -237,4 +253,6 @@ export default connect(null, {
   updateCartProduct,
   closeAllDropdowns,
   setModalState,
+  showNotifcation,
+  removeItem,
 })(CartItem);

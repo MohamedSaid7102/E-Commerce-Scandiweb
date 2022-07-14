@@ -49,10 +49,10 @@ export class ProductCard extends Component {
               onClick={() => {
                 try {
                   addToCart(product);
-                  this.props.showNotifcation(false, 'Item added successfully');
+                  this.props.showNotifcation(false,false, 'Item added successfully');
                 } catch (error) {
                   console.log(error);
-                  this.props.showNotifcation(true, 'Error Happened..!');
+                  this.props.showNotifcation(true,false, error.message);
                 }
               }}
               style={{ textDecoration: 'none', zIndex: 2 }}

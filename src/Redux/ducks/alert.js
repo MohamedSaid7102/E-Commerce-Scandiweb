@@ -2,12 +2,13 @@
 const SHOW_ALERT = 'SHOW_ALERT';
 const HIDE_ALERT = 'HIDE_ALERT';
 
-export function showNotifcation(error, text, clr) {
+export function showNotifcation(error, warning, text, clr) {
   return (dispatch) => {
     dispatch({
       type: SHOW_ALERT,
       payload: {
         error,
+        warning,
         text,
         clr,
       },
@@ -24,18 +25,25 @@ export function showNotifcation(error, text, clr) {
 const initialState = {
   notification: false,
   error: false,
+  warning: false,
   clr: '#5ece7cba',
   alertText: '',
 };
 
 export default (state = initialState, action) => {
   if (action.type === SHOW_ALERT) {
-    const { error, text: alertText, clr } = action.payload;
+    const { error, warning, text: alertText, clr } = action.payload;
+    let alertColor = '#5ece7cba';
+    if (error && warning) alertColor = clr;
+    if ((error || warning) && error) alertColor = '#ff0000cf';
+    if ((error || warning) && warning) alertColor = 'rgba(225, 232, 45, 0.807)';
+    if (!error && !warning) alertColor = clr ? clr : '#5ece7cba';
     return {
       ...state,
       notification: true,
       error,
-      clr: clr || error ? '#ff0000cf' : '#5ece7cba',
+      warning,
+      clr: alertColor,
       alertText,
     };
   }
@@ -44,6 +52,7 @@ export default (state = initialState, action) => {
       ...state,
       notification: false,
       error: false,
+      warning: false,
       clr: '#5ece7cba',
       alertText: '',
     };

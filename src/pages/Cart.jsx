@@ -43,8 +43,9 @@ export class Cart extends Component {
         <ul className="cart__dropdown-items">
           {cartItems.map((item, index) => (
             <CartItem
-              key={index}
+              key={item?.uuid || index}
               id={item.id}
+              uuid={item?.uuid}
               brand={item.brand}
               name={item.name}
               price={getPrice(item.prices, selectedCurrency)}

@@ -8,6 +8,11 @@
 
 - Blurred transparent navbar.
 - Bottom border for dropdown cart items.
+- Remove from cart button, to allow user to remove items from cart
+
+## Notes
+
+- To enable attribute select in cart dropdown & cart 'checkout' just make `disableAttributeChange={false}` in `<CartItem/>` component in both `<Cart />` and `<CartDropdown/>` Components.
 
 ## Things I added:
 

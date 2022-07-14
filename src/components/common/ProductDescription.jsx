@@ -2,11 +2,7 @@ import withParams from 'HOC/withParams';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { checkSelectedAttributes, getPrice } from 'utils/utilityFunctions';
-import {
-  increaseProductCount,
-  decreaseProductCount,
-  addToCart,
-} from 'Redux/ducks/cart';
+import { addToCart } from 'Redux/ducks/cart';
 import { getObjectDeepClone } from '../../utils/utilityFunctions';
 import { showNotifcation } from 'Redux/ducks/alert';
 export class ProductDescription extends Component {
@@ -40,7 +36,7 @@ export class ProductDescription extends Component {
     let targetProduct = null;
     this.props.allProducts?.forEach((product) => {
       if (product.id === this.props.params.productId)
-        targetProduct = checkSelectedAttributes(getObjectDeepClone(product));
+        targetProduct = getObjectDeepClone(product);
     });
 
     return targetProduct;
@@ -61,10 +57,10 @@ export class ProductDescription extends Component {
     this.setState({ product });
   };
 
-  renderAttributes = (id, attributes, selectedAttributes, inStock) => {
+  renderAttributes = (attributes, selectedAttributes, inStock) => {
     return attributes.map((attr, index) => {
       // For each attribute, get default selected items from 'selectedAttributes'
-      const selectedAttribute = selectedAttributes.filter(
+      const selectedAttribute = selectedAttributes?.filter(
         (atti) => atti.id === attr.id
       )[0];
 
@@ -79,7 +75,7 @@ export class ProductDescription extends Component {
                   disabled={!inStock}
                   style={{ backgroundColor: item.value }}
                   className={
-                    selectedAttribute.items.id === item.id
+                    selectedAttribute?.items?.id === item.id
                       ? 'swatch box active'
                       : 'swatch box'
                   }
@@ -92,7 +88,7 @@ export class ProductDescription extends Component {
                   key={item.id}
                   disabled={!inStock}
                   className={
-                    selectedAttribute.items.id === item.id
+                    selectedAttribute?.items?.id === item.id
                       ? 'box active'
                       : 'box '
                   }
@@ -126,7 +122,6 @@ export class ProductDescription extends Component {
       );
 
     const {
-      id,
       attributes,
       selectedAttributes,
       brand,
@@ -182,7 +177,7 @@ export class ProductDescription extends Component {
           <div className="product__details">
             <span className="item__brand">{brand}</span>
             <span className="item__name">{name}</span>
-            {this.renderAttributes(id, attributes, selectedAttributes, inStock)}
+            {this.renderAttributes(attributes, selectedAttributes, inStock)}
             <span className="item__price">
               <span className="price-title">Price:</span>
               <span className="price">
@@ -194,12 +189,27 @@ export class ProductDescription extends Component {
             <button
               className="btn-reset btn--filled order-btn"
               onClick={() => {
+                // Now product won't be added from PDP unless user select an attribute, but from PLP will be added with default first selected attributes
+                if (
+                  typeof this.state.product.selectedAttributes === 'undefined'
+                ) {
+                  this.props.showNotifcation(
+                    false,
+                    true,
+                    'Choose attributes first..!'
+                  );
+                  return;
+                }
                 try {
                   addToCart(product);
-                  this.props.showNotifcation(false, 'Item added successfully');
+                  this.props.showNotifcation(
+                    false,
+                    false,
+                    'Item added successfully'
+                  );
                 } catch (error) {
                   console.log(error);
-                  this.props.showNotifcation(true, 'Error Happened..!');
+                  this.props.showNotifcation(true, false, error.message);
                 }
               }}
               style={{ textDecoration: 'none', zIndex: 2 }}
@@ -230,8 +240,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  increaseProductCount,
-  decreaseProductCount,
   addToCart,
   showNotifcation,
 })(withParams(ProductDescription));

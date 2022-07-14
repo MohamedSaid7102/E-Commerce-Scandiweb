@@ -414,6 +414,29 @@
   color: #fff;
 }
 
+.item-remove__btn {
+  background: none;
+  text-align: left;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 1rem;
+  width: max-content;
+  padding: 6px;
+  border: 1px solid transparent;
+  border-radius: 30px;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  -ms-border-radius: 30px;
+  -o-border-radius: 30px;
+  text-decoration: underline;
+}
+.item-remove__btn:hover,
+.item-remove__btn:focus {
+  border: 1px solid red;
+  color: red;
+  text-decoration: none;
+}
+
 /* Cart dropdown End */
 
 /* Dropdowns end */
