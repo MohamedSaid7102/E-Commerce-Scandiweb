@@ -1,3 +1,7 @@
-export const PORT =
-  'https://scandiweb-server-shelf.herokuapp.com/'; /** Production */
-// export const PORT = 'http://localhost:4000/'; /** Development*/
+// Just change this
+export const DEV_MODE = false;
+export const PROD_MODE = !DEV_MODE;
+
+export const PORT = DEV_MODE
+  ? 'http://localhost:4000/'
+  : 'https://scandiweb-server-shelf.herokuapp.com/';
