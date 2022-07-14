@@ -52,7 +52,7 @@ export class ProductCard extends Component {
                   this.props.showNotifcation(false, 'Item added successfully');
                 } catch (error) {
                   console.log(error);
-                  this.props.showNotifcation(true, 'Error Happened..!');
+                  this.props.showNotifcation(true, error.message);
                 }
               }}
               style={{ textDecoration: 'none', zIndex: 2 }}
