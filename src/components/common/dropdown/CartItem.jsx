@@ -86,7 +86,7 @@ export class CartItem extends Component {
                       this.props.updateCartProduct(uuid, attr, item);
                     } catch (error) {
                       console.log(error);
-                      this.props.showNotifcation(true, error.message);
+                      this.props.showNotifcation(true,false, error.message);
                     }
                   }}
                 ></button>
@@ -113,7 +113,7 @@ export class CartItem extends Component {
                       this.props.updateCartProduct(uuid, attr, item);
                     } catch (error) {
                       console.log(error);
-                      this.props.showNotifcation(true, error.message);
+                      this.props.showNotifcation(true,false, error.message);
                     }
                   }}
                 >
@@ -188,7 +188,7 @@ export class CartItem extends Component {
                   this.props.increaseProductCount(uuid);
                 } catch (error) {
                   console.log(error);
-                  this.props.showNotifcation(true, error.message);
+                  this.props.showNotifcation(true,false, error.message);
                 }
               }}
             >
@@ -202,7 +202,7 @@ export class CartItem extends Component {
                   this.props.decreaseProductCount(uuid);
                 } catch (error) {
                   console.log(error);
-                  this.props.showNotifcation(true, error.message);
+                  this.props.showNotifcation(true,false, error.message);
                 }
               }}
             >
@@ -231,14 +231,16 @@ export class CartItem extends Component {
             />
           </Link>
 
-          <span className="controllers">
-            <button className="btn-reset" onClick={() => this.getPrevPic()}>
-              <LeftArrow />
-            </button>
-            <button className="btn-reset" onClick={() => this.getNextPic()}>
-              <RightArrow />
-            </button>
-          </span>
+          {gallery.length > 1 && (
+            <span className="controllers">
+              <button className="btn-reset" onClick={() => this.getPrevPic()}>
+                <LeftArrow />
+              </button>
+              <button className="btn-reset" onClick={() => this.getNextPic()}>
+                <RightArrow />
+              </button>
+            </span>
+          )}
         </figure>
       </li>
     );
