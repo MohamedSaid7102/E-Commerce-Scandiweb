@@ -8,6 +8,7 @@
 
 - Blurred transparent navbar.
 - Bottom border for dropdown cart items.
+- Remove from cart button, to allow user to remove items from cart
 
 ## Notes
 

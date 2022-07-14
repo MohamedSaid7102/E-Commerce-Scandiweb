@@ -44,6 +44,12 @@ export function removeItem(uuid) {
       type: REMOVE_PRODUCT,
       payload: { uuid },
     });
+    const totalPrice = calcTotalPrice();
+
+    dispatch({
+      type: UPDATE_TOTAL_PRICE,
+      totalPrice,
+    });
   };
 }
 
@@ -238,16 +244,11 @@ export default (state = initialState, action) => {
 
     for (let i = 0; i < cartItems.length; i++) {
       let product = cartItems[i];
-
+      // Now if item.qty === 1 -> decrementing won't delete it, just 'deleteFromCart' button will do so.
       if (product.uuid === uuid) {
-        cartItemsCount =
-          product.qty !== 0
-            ? cartItemsCount === 0
-              ? 0
-              : cartItemsCount - 1
-            : cartItemsCount;
-        product.qty = product.qty === 0 ? 0 : product.qty - 1;
-        if (product.qty !== 0) newCartItems.push(product);
+        cartItemsCount = product.qty > 1 ? cartItemsCount - 1 : cartItemsCount;
+        product.qty = product.qty <= 1 ? 1 : product.qty - 1;
+        newCartItems.push(product);
         succeeded = true;
       } else {
         newCartItems.push(product);
