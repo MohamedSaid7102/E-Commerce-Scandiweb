@@ -1,5 +1,5 @@
 // Just change this
-export const DEV_MODE = false;
+export const DEV_MODE = true;
 export const PROD_MODE = !DEV_MODE;
 
 export const PORT = DEV_MODE

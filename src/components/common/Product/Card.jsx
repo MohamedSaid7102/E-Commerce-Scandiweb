@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { ReactComponent as CartSVG } from 'assets/svgs/cart.svg';
-import { getPrice } from 'utils/utilityFunctions';
+import { getPrice, isTouchDevice } from 'utils/utilityFunctions';
 import { connect } from 'react-redux';
 import { addToCart } from 'Redux/ducks/cart';
 import { Link } from 'react-router-dom';
@@ -15,12 +15,15 @@ export class ProductCard extends Component {
   handleMouseEnter = () => {
     this.setState({ showAddToCartBtn: true });
   };
+
   handleMouseLeave = () => {
     this.setState({ showAddToCartBtn: false });
   };
+
   render() {
     const { product, selectedCurrency, addToCart } = this.props;
-    const { showAddToCartBtn } = this.state;
+    let { showAddToCartBtn } = this.state;
+    showAddToCartBtn = isTouchDevice() ? true : showAddToCartBtn;
     // Compose full name
     const fullName = product.brand + ', ' + product.name;
     // pick product selectedCurrency according to selected selectedCurrency
@@ -49,10 +52,14 @@ export class ProductCard extends Component {
               onClick={() => {
                 try {
                   addToCart(product);
-                  this.props.showNotifcation(false,false, 'Item added successfully');
+                  this.props.showNotifcation(
+                    false,
+                    false,
+                    'Item added successfully'
+                  );
                 } catch (error) {
                   console.log(error);
-                  this.props.showNotifcation(true,false, error.message);
+                  this.props.showNotifcation(true, false, error.message);
                 }
               }}
               style={{ textDecoration: 'none', zIndex: 2 }}
