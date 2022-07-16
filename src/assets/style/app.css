@@ -131,13 +131,13 @@
 }
 
 .currencies-list {
-  top: calc(var(--navbar-height) * 0.85);
+  top: calc(var(--navbar-height));
   right: var(--right-space, 7rem);
   width: 100%;
   max-width: max-content;
   box-shadow: 0px 4px 35px rgba(92, 99, 106, 0.19);
   overflow: hidden;
-  /* position children */
+  /*positionchildren*/
   display: flex;
   flex-direction: column;
   padding: 1rem 0;
@@ -145,6 +145,8 @@
   /*Tobeabovemodel*/
   z-index: 2;
   background-color: #fff;
+  filter: drop-shadow(2px 4px 6px rgb(0 0 0 / 0.3));
+  -webkit-filter: drop-shadow(2px 4px 6px rgb(0 0 0 / 0.3));
 }
 
 .currencies-list__item:hover,
@@ -182,6 +184,7 @@
   max-height: 85vh;
   overflow: auto;
   z-index: calc(var(--modal-z-index, 1) + 1); /* To be top */
+  filter: drop-shadow(2px 13px 6px rgba(0, 0, 0, 0.3));
 }
 
 .cart-list .cart__dropdown-items {
@@ -697,6 +700,7 @@
   font-weight: 200;
   text-align: center;
   padding-top: 3rem;
+  font-size: 1.5rem;
 }
 .cart-page .cart__heading {
   border-bottom: 2px solid var(--c-light-border, #eee);
