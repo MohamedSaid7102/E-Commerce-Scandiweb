@@ -60,3 +60,8 @@ export function getAllIndexesInArrayOfObjects(arr, val, attr) {
 export function checkSelectedAttributes(obj) {
   return obj.selectedAttributes ? obj : setDefaults(obj);
 }
+
+// test if touch screen or not
+export function isTouchDevice() {
+  return window.matchMedia('(pointer: coarse)').matches;
+}
