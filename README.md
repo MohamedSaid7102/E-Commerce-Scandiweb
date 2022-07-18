@@ -2,6 +2,8 @@
 
 ## E-Commerce website: visit it from [here](https://scandiweb-clint-shelf.herokuapp.com/).
 
+# For Scandiweb evaluator, please evaluate ``` master ``` branch, not ``` my-own-feature branch ```.
+
 ## V1.0
 
 ## Things I added:
