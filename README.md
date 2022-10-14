@@ -2,6 +2,8 @@
 
 ## E-Commerce website: visit it from [here](https://scandiweb-clint-shelf.herokuapp.com/).
 
+# For Scandiweb evaluator, please evaluate ``` master ``` branch, not ``` my-own-feature branch ```.
+
 ## V1.0
 
 ## Things I added:
@@ -16,8 +18,7 @@
 
 ## Things I added:
 
-- Removed some images from the product that contains the girl image, For Religious purposes, I'm a Muslim and we as Muslims are not allowed to look at some parts of women's body, because they are our jewels hence we treat them like queens in Islam, and that is applied to any women either Muslim or not, my mom or wife or sister or not,
-  I hope you can understand that with open arms.
+- Removed some images from the product that contains the girl image, For Religious purposes.
 
 ### Style:
 
