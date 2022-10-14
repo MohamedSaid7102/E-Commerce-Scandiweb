@@ -3,7 +3,6 @@
 // https://github.com/MohamedSaid7102/reactjs---e-commerce-scandiweb.inc
 
 export const IS_DEV_MODE = false;
-// TODO: Add your github repo link in the header
 
 export const PORT = IS_DEV_MODE
   ? 'http://localhost:4000/'

@@ -6,7 +6,7 @@ export default class Footer extends Component {
       <footer className="footer">
         <ul className="footer__list">
           {/* Copy right */}
-          <li className="footer__list-item">
+          <li className="footer__list-item copyright-link">
             <p>
               Copyright @
               <a
