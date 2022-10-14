@@ -1,13 +1,13 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from 'Redux/ducks';
-import { DEV_MODE } from './config';
+import { IS_DEV_MODE } from './config';
 
 const initialState = {};
 
 const middleware = [thunk];
 
-const store = DEV_MODE
+const store = IS_DEV_MODE
   ? createStore(
       rootReducer,
       initialState,
