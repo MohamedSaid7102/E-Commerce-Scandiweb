@@ -12,6 +12,7 @@ import Loading from 'components/common/Loading';
 import Modal from 'components/common/Modal';
 import ProductDescription from 'components/common/ProductDescription';
 import Alert from 'components/common/Alert';
+import Footer from 'components/Footer';
 const LazyPageNotFound = React.lazy(() => import('pages/NotFound'));
 const LazyCheckout = React.lazy(() => import('pages/Checkout'));
 const LazyCart = React.lazy(() => import('pages/Cart'));
@@ -129,6 +130,7 @@ class App extends Component {
             }
           />
         </Routes>
+        <Footer>dfsd</Footer>
       </div>
     );
   }
